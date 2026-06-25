@@ -1,0 +1,14 @@
+---
+import ArchiveItem from './ArchiveItem.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  meta?: string;
+  text?: string;
+}
+
+const { href, title, meta, text } = Astro.props;
+---
+
+<ArchiveItem title={title} href={href} text={text} left={meta ? [meta] : []} />

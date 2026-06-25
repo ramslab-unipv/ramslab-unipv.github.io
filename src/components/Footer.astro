@@ -1,0 +1,27 @@
+---
+import site from '../content/settings/site.json';
+import { withBase } from '../lib/assets';
+---
+
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-left">
+      <a href={withBase('/')} aria-label="RAMSLAB">
+        <img src={withBase('/images/brand/ramslab-logo-footer.svg')} alt="RAMSLAB" width="132" height="30" />
+      </a>
+    </div>
+    <div class="footer-department">
+      Dipartimento di Ingegneria Industriale e<br/>dell'Informazione
+    </div>
+    <div class="footer-right">
+      <a href="https://portale.unipv.it/it" aria-label="University of Pavia">
+        <img src={withBase('/images/brand/unipv-logo-footer.svg')} alt="University of Pavia" width="276" height="30" />
+      </a>
+    </div>
+  </div>
+
+  <!-- Compliance notice -->
+  <div class="site-footer-legal">
+    This site does not use cookies or collect personal data. Designed to comply with WCAG 2.1 AA. Website Manager: Hermes Giberti.
+  </div>
+</footer>

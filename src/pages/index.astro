@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../lib/assets';
+import { entrySlug } from '../lib/entries';
+import site from '../content/settings/site.json';
+
+const activities = (await getCollection('activities')).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return Number(b.data.featured) - Number(a.data.featured);
+  return (b.data.year ?? 0) - (a.data.year ?? 0);
+});
+const featuredProjects = activities.slice(0, 12);
+const allPeople = (await getCollection('people')).sort((a, b) => a.data.order - b.data.order);
+const people = allPeople.slice(0, 5);
+const otherPeople = allPeople.slice(5).sort((a, b) => {
+  const surnameA = a.data.name.split(' ').pop() || '';
+  const surnameB = b.data.name.split(' ').pop() || '';
+  return surnameA.localeCompare(surnameB);
+});
+const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year).slice(0, 4);
+---
+
+<BaseLayout title={site.siteTitle}>
+  <Header />
+  <main id="main-content" class="projects-page-main">
+    <h1 class="sr-only">RAMSLAB — Research on Advanced Mechanical Systems</h1>
+
+    <!-- ─── Laboratory Section ─── -->
+    <section class="home-intro">
+      <div class="home-intro-grid">
+        <div class="home-intro-label">
+          <div class="text-heading-2">Laboratory</div>
+          <div class="text-link-header" style="color: var(--muted);">Imagine, Build, Automate: pioneering the next era of industrial robotics and simulation</div>
+        </div>
+        <div class="text-body" style="color: var(--text-soft);">
+          <p>Welcome to RAMS lab! Our aim is to bring innovation and creativity to industrial and research applications using cutting-edge robotics and dynamic simulators.</p>
+          <p>Our team of researchers is dedicated to advancing the field of robotics and simulators in order to revolutionize the way industries operate. We are constantly exploring new ways to apply this technology to enhance productivity, improve safety, and reduce costs.</p>
+        </div>
+        <div class="text-body" style="color: var(--text-soft);">
+          <p>One of our main focuses is on developing simulators for sports and driving. Our state-of-the-art simulators are designed to provide athletes and drivers with a realistic training experience, allowing them to improve their skills and performance in a safe and controlled environment. These simulators are also valuable tools for medical researchers, as they can be used to analyse and optimise the performance of people undergoing rehabilitation.</p>
+        </div>
+        <div class="text-body" style="color: var(--text-soft);">
+          <p>In addition to our work in simulators, we also specialize in robotics for industrial applications. Our team is constantly developing new robotic applications that can be used in a wide range of industries, from manufacturing and logistics to healthcare and agriculture. Our goal is to make these systems more efficient, reliable, and cost- effective, so that they can be widely adopted and make a significant impact on the industries they serve.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Activities Section ─── -->
+    <section class="home-projects">
+      <div class="section-heading">
+        <div class="text-heading-2" style="width: 72px;">Activities</div>
+      </div>
+      <div class="media-strip">
+        {featuredProjects.map((project) => (
+          <ProjectCard
+            href={
+              entrySlug(project.id) === 'dynamica-prin' ? withBase('/activities/dynamica/') : 
+              entrySlug(project.id) === 'demetra-nodes' ? withBase('/activities/demetra/') : 
+              entrySlug(project.id) === 'carbon-fiber' ? withBase('/activities/composite-manufacturing/') : 
+              undefined
+            }
+            title={project.data.title}
+            meta={[project.data.year?.toString(), project.data.status].filter(Boolean).join(' · ')}
+            src={project.data.cover}
+            fit={project.data.coverFit}
+          />
+        ))}
+      </div>
+    </section>
+
+    <!-- ─── Bottom 3 Columns ─── -->
+    <section class="home-columns">
+
+      <!-- Publications Column -->
+      <div class="home-column col-1">
+        <div class="home-column-heading col-heading">
+          <h2 class="text-heading-2">Publications</h2>
+        </div>
+        <div class="dense-list">
+          {publications.map((publication, index) => (
+            <article class="dense-item" style={`--row: ${index + 2}`}>
+              <div class="text-list-title" style="color: var(--text);">
+                <a href={(publication.data.doi ? `https://doi.org/${publication.data.doi}` : publication.data.url) || '#'} target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;" class="hover-underline">{publication.data.title}</a>
+              </div>
+              <div class="text-list-meta" style="color: var(--muted);">{publication.data.authors.join(', ')}</div>
+              {publication.data.venue && <div class="text-emphasis" style="color: var(--muted);">{publication.data.venue}</div>}
+            </article>
+          ))}
+          <div class="home-column-footer" style="--row: 6">
+            <a href={withBase('/publications/')} class="text-heading-2 hover-underline" style="color: inherit; text-decoration: none;">browse all publications</a>
+            <span style="font-size: 14px;">➞</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- People Column -->
+      <div class="home-column col-2">
+        <div class="home-column-heading col-heading">
+          <h2 class="text-heading-2">People</h2>
+        </div>
+        <div class="dense-list">
+          {people.map((person, index) => (
+            <article class="dense-item" style={`--row: ${index + 2}`}>
+              <div class="text-list-title"><a href={withBase(`/people/${entrySlug(person.id)}/`)}>{person.data.name}</a></div>
+              <div class="text-list-meta" style="color: var(--muted);">{person.data.role}</div>
+            </article>
+          ))}
+        </div>
+        {otherPeople.length > 0 && (
+          <div class="home-column-phd" style="--row: 7">
+            {otherPeople.map((person, index) => (
+              <Fragment><a href={withBase(`/people/${entrySlug(person.id)}/`)} class="text-link-header" style="color: var(--text);">{person.data.name}</a>{index < otherPeople.length - 1 ? ", " : ""}</Fragment>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>

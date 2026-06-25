@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PublicationItem from '../../components/PublicationItem.astro';
+import { getCollection } from 'astro:content';
+
+const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title));
+const groupedPublications = Object.entries(
+  publications.reduce<Record<string, typeof publications>>((groups, publication) => {
+    const key = String(publication.data.year);
+    groups[key] ??= [];
+    groups[key].push(publication);
+    return groups;
+  }, {})
+).sort((a, b) => Number(b[0]) - Number(a[0]));
+---
+
+<BaseLayout title="Publications — RAMSLAB">
+  <Header />
+  <main class="projects-page-main">
+    <section class="projects-header-section">
+      <div class="projects-header-container">
+        <div class="projects-header-content">
+          <h1 class="projects-title-big">Publications</h1>
+        </div>
+      </div>
+    </section>
+    <section class="archive-section">
+      {groupedPublications.map(([year, items]) => (
+        <div class="archive-group">
+          <div class="container">
+            <h2 class="archive-group-title">{year} <span class="archive-group-count">({items.length})</span></h2>
+            <div class="archive-list">
+              {items.map((publication) => (
+                <PublicationItem
+                  title={publication.data.title}
+                  authors={publication.data.authors}
+                  year={publication.data.year}
+                  venue={publication.data.venue}
+                  url={publication.data.url}
+                  doi={publication.data.doi}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

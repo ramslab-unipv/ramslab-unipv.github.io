@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+  href?: string;
+  text?: string;
+  left?: string[];
+  right?: string[];
+}
+
+const { title, href, text, left = [], right = [] } = Astro.props;
+---
+
+<article class="archive-item">
+  <div class="archive-item-meta">
+    {left.map((line) => <div>{line}</div>)}
+  </div>
+  <div class="archive-item-main">
+    <h2 class="archive-item-title">
+      {href ? <a href={href}>{title}</a> : title}
+    </h2>
+    {text && <div class="archive-item-text">{text}</div>}
+  </div>
+  <div class:list={['archive-item-side', { 'archive-item-side-empty': right.length === 0 }]}>
+    {right.map((line) => <div>{line}</div>)}
+  </div>
+</article>

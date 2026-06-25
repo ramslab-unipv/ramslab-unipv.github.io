@@ -1,0 +1,27 @@
+---
+interface Props {
+  section: string;
+  title: string;
+  description?: string;
+  countText?: string;
+  note?: string;
+}
+
+const { section, title, description, countText, note } = Astro.props;
+---
+
+<section class="page-header">
+  <div class="container page-header-grid">
+    <div class="page-kicker">{section}</div>
+    <div>
+      <h1 class="page-heading">{title}</h1>
+      {description && <p class="page-summary">{description}</p>}
+      {(countText || note) && (
+        <div class="page-toolbar">
+          {countText && <span>{countText}</span>}
+          {note && <span>{note}</span>}
+        </div>
+      )}
+    </div>
+  </div>
+</section>

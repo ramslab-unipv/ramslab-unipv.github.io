@@ -1,0 +1,62 @@
+---
+import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
+import { withBase } from '../../lib/assets';
+
+const project = {
+  title: "COMPOSITE MANUFACTURING",
+  subtitle: "Advanced Carbon Fiber & Robotic Fabrication",
+  accentColor: "#dc2626",
+  description: "This research focuses on the intersection of robotics and composite materials. We develop novel manufacturing strategies for carbon fiber reinforced polymers (CFRP), leveraging robotic arms for precise fiber placement, automated layup, and in-situ monitoring to achieve unprecedented performance in aerospace and automotive applications.",
+  publications: [
+    {
+      title: "Dynamic Modeling of Robotic Fiber Placement",
+      url: "#",
+      authors: "Carnevale M., Sergenti C., Giberti H.",
+      venue: "Journal of Advanced Manufacturing Technology, vol. 118, pp. 1245-1256"
+    },
+    {
+      title: "Soft Robotic Grippers for Composite Material Handling",
+      url: "#",
+      authors: "Sergenti C., Fabiocchi D., Carnevale M.",
+      venue: "IEEE International Conference on Robotics and Automation (ICRA) 2024"
+    },
+    {
+      title: "In-Situ Thermal Monitoring for Defect Prediction in CFRP",
+      url: "#",
+      authors: "Massimiliani F., Carnevale M., Spazzini F.",
+      venue: "Composite Structures, vol. 312, art. no. 116842"
+    }
+  ],
+  funding: "University of Pavia — RAMS Lab — DIII Department of Industrial and Information Engineering. Principal Investigator: Marco Carnevale. Researchers: RAMS Lab Team, Carol Sergenti.",
+};
+---
+
+<ProjectImmersiveLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  accentColor={project.accentColor}
+  heroVideo={withBase('/videos/projects/CF.mp4')}
+  sectionA={{
+    label: "Material Deposition",
+    text: "Robotic arms enable precise fiber placement, optimizing structural integrity and minimizing material waste during the layup process.",
+    bgVideo: withBase('/videos/projects/CF.mp4'),
+    sideVideo: withBase('/videos/projects/CF.mp4'),
+  }}
+  sectionB={{
+    label: "Pushing the Boundaries",
+    text: "Pushing the boundaries of structural efficiency through automated material deposition and intelligent process control.",
+    bgImage: withBase('/images/projects/carbon-fiber-bg.png'),
+    model3d: withBase('/models/CF_motion.glb'),
+  }}
+  sectionC={{
+    label: "In-Situ Monitoring",
+    text: "Real-time thermal and stress analytics guide the manufacturing process, ensuring high-performance composite structures and rapid defect detection.",
+    bgImage: withBase('/images/projects/carbon-fiber-bg.png'),
+    model3d: withBase('/models/CF_motion.glb'),
+  }}
+  description={project.description}
+  publications={project.publications}
+  funding={project.funding}
+  prevActivity={{ label: "Demetra", href: withBase('/activities/demetra/') }}
+  nextActivity={{ label: "Dynamica", href: withBase('/activities/dynamica/') }}
+/>

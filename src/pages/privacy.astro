@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { withBase } from '../lib/assets';
+---
+
+<BaseLayout title="Privacy & Cookie Policy — RAMSLAB">
+  <Header />
+  <main id="main-content" class="container" style="padding: 48px 0 80px;">
+    <h1 style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 32px;">Privacy & Cookie Policy</h1>
+
+    <div class="detail-content" style="max-width: 640px;">
+
+      <h2>Titolare del trattamento</h2>
+      <p>
+        Università degli Studi di Pavia<br/>
+        Corso Strada Nuova, 65 — 27100 Pavia (PV), Italia<br/>
+        <a href="https://portale.unipv.it">portale.unipv.it</a>
+      </p>
+      <p>
+        Il presente sito è gestito dal laboratorio <strong>RAMSLAB</strong> (Research on Advanced Mechanical Systems), afferente al Dipartimento di Ingegneria Industriale e dell'Informazione dell'Università di Pavia.
+      </p>
+
+      <h2>Dati raccolti</h2>
+      <p>
+        Questo sito <strong>non raccoglie dati personali</strong> dei visitatori. Non sono presenti form di contatto, sistemi di registrazione, newsletter, né alcun meccanismo di profilazione.
+      </p>
+
+      <h2>Cookie</h2>
+      <p>
+        Questo sito <strong>non utilizza cookie</strong> di alcun tipo — né tecnici, né analitici, né di profilazione. Non vengono installati cookie di terze parti.
+      </p>
+      <p>
+        L'eventuale funzionalità di accesso riservato utilizza esclusivamente <code>sessionStorage</code>, un meccanismo di memorizzazione temporanea del browser che non costituisce un cookie ai sensi della Direttiva ePrivacy (2002/58/CE) e non persiste alla chiusura della sessione del browser.
+      </p>
+
+      <h2>Analytics e tracciamento</h2>
+      <p>
+        Questo sito <strong>non utilizza strumenti di web analytics</strong> di alcun tipo. Non è presente Google Analytics, né altri sistemi di tracciamento. Non vengono effettuate chiamate a servizi di terze parti che possano raccogliere dati degli utenti.
+      </p>
+
+      <h2>Risorse esterne</h2>
+      <p>
+        Tutte le risorse (font, immagini, script) sono servite localmente dal server del sito. Non vengono effettuate richieste a CDN o servizi esterni che potrebbero trattare dati degli utenti.
+      </p>
+
+      <h2>Diritti dell'interessato</h2>
+      <p>
+        Non essendo raccolti dati personali, non si configurano trattamenti ai sensi del Regolamento (UE) 2016/679 (GDPR). Per qualsiasi domanda relativa alla presente informativa è possibile contattare:
+      </p>
+      <p>
+        <a href="mailto:ai.rams@unipv.it">ai.rams@unipv.it</a>
+      </p>
+      <p>
+        Per la Privacy Policy generale dell'Università di Pavia si rimanda a:<br/>
+        <a href="https://portale.unipv.it/it/ateneo/privacy" target="_blank" rel="noopener">portale.unipv.it/it/ateneo/privacy</a>
+      </p>
+
+      <h2>Aggiornamenti</h2>
+      <p>
+        La presente informativa può essere soggetta ad aggiornamenti. L'ultima modifica è stata effettuata in data <strong>19 maggio 2026</strong>.
+      </p>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

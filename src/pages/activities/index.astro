@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/assets';
+import { entrySlug } from '../../lib/entries';
+
+const activities = (await getCollection('activities')).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return Number(b.data.featured) - Number(a.data.featured);
+  return (b.data.year ?? 0) - (a.data.year ?? 0);
+});
+
+const getActivityHref = (activityId: string) => {
+  const slug = entrySlug(activityId);
+  if (slug === 'demetra-nodes') return withBase('/activities/demetra/');
+  if (slug === 'carbon-fiber') return withBase('/activities/composite-manufacturing/');
+  if (slug === 'dynamica-prin') return withBase('/activities/dynamica/');
+  return withBase(`/activities/${slug}/`);
+};
+---
+
+<BaseLayout title="Activities — RAMSLAB">
+  <Header />
+  <main class="projects-page-main">
+    <section class="projects-header-section">
+      <div class="projects-header-container">
+        <div class="projects-header-content">
+          <h1 class="projects-title-big">Activities</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects-list-section">
+      <div class="activities-grid-container">
+        {activities.map((activity) => (
+          <article class="activity-card">
+            {activity.data.cover && (
+              <a href={getActivityHref(activity.id)} class="activity-card-image-link">
+                <img 
+                  src={withBase(activity.data.cover)} 
+                  alt={activity.data.title} 
+                  class={activity.data.coverFit === 'contain' ? 'fit-contain' : 'fit-cover'}
+                  loading="lazy"
+                />
+              </a>
+            )}
+            <div class="activity-card-info">
+              <div class="activity-card-meta">
+                <span>{activity.data.year ? String(activity.data.year) : 'Undated'}</span>
+                <span>·</span>
+                <span>{activity.data.status ?? 'Activity'}</span>
+              </div>
+              <h2 class="activity-card-title">
+                <a href={getActivityHref(activity.id)}>{activity.data.title}</a>
+              </h2>
+              {activity.data.excerpt && <p class="activity-card-excerpt">{activity.data.excerpt}</p>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

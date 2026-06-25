@@ -1,0 +1,13 @@
+---
+interface Props {
+  title: string;
+  note?: string;
+}
+
+const { title, note } = Astro.props;
+---
+
+<div class="section-heading">
+  <div class="text-heading-2">{title}</div>
+  {note && <div class="text-list-meta" style="color: var(--muted);">{note}</div>}
+</div>

@@ -1,0 +1,32 @@
+---
+interface Props {
+  href?: string;
+  title: string;
+  meta?: string;
+  src?: string;
+  alt?: string;
+  fit?: 'cover' | 'contain';
+}
+
+const { href, title, meta, src, alt = title, fit = 'cover' } = Astro.props;
+import { withBase } from '../lib/assets';
+---
+
+<article class="media-tile">
+  {href ? (
+    <a class="media-thumb" href={href}>
+      {src ? <img class={`fit-${fit}`} src={withBase(src)} alt={alt} loading="lazy" /> : <div class="media-thumb-placeholder" aria-hidden="true"></div>}
+    </a>
+  ) : (
+    <div class="media-thumb">
+      {src ? <img class={`fit-${fit}`} src={withBase(src)} alt={alt} loading="lazy" /> : <div class="media-thumb-placeholder" aria-hidden="true"></div>}
+    </div>
+  )}
+  <div class="media-caption">
+    <div class="text-list-title">
+      {href ? <a href={href}>{title}</a> : title}
+    </div>
+    {meta && <div class="text-list-meta" style="color: var(--muted);">{meta}</div>}
+  </div>
+</article>
+

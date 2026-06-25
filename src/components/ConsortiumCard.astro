@@ -1,0 +1,13 @@
+---
+import ArchiveItem from './ArchiveItem.astro';
+
+interface Props {
+  title: string;
+  text?: string;
+  href?: string;
+}
+
+const { title, text, href } = Astro.props;
+---
+
+<ArchiveItem title={title} href={href} text={text} left={['Consortium partner']} right={href ? ['External website'] : []} />

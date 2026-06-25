@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { getCollection, render } from 'astro:content';
+import { withBase } from '../../lib/assets';
+import { entrySlug } from '../../lib/entries';
+
+import CarbonFiberProject from '../../components/CarbonFiberProject.astro';
+
+export async function getStaticPaths() {
+  const activities = await getCollection('activities');
+  return activities.map((activity) => ({ params: { slug: entrySlug(activity.id) }, props: { activity } }));
+}
+
+const { activity } = Astro.props;
+const { Content } = await render(activity);
+const people = await getCollection('people');
+const publications = await getCollection('publications');
+const relatedPeople = people.filter((person) => activity.data.people.includes(entrySlug(person.id)));
+const relatedPublications = publications.filter((publication) => activity.data.publications.includes(entrySlug(publication.id)));
+const note = [activity.data.year ? String(activity.data.year) : '', activity.data.status].filter(Boolean).join(' · ');
+---
+{activity.id === 'carbon-fiber' ? (
+  <CarbonFiberProject 
+    project={activity} 
+    Content={Content}
+    relatedPeople={relatedPeople} 
+    relatedPublications={relatedPublications} 
+  />
+) : (
+<BaseLayout title={`${activity.data.title} — RAMSLAB`}>
+  <div class="project-page-layout">
+    <Header />
+    <main>
+      <PageHeader
+        section="Activities"
+        title={activity.data.title}
+        description={activity.data.excerpt}
+        note={note}
+      />
+      <section class="detail-section">
+        <div class="container detail-layout">
+          <aside class="detail-aside">
+            <div class="detail-block">
+              <div class="detail-block-label">Record</div>
+              {activity.data.year && <div>{activity.data.year}</div>}
+              {activity.data.status && <div>{activity.data.status}</div>}
+            </div>
+
+            {activity.data.tags.length > 0 && (
+              <div class="detail-block">
+                <div class="detail-block-label">Tags</div>
+                {activity.data.tags.map((tag) => <div>{tag}</div>)}
+              </div>
+            )}
+
+            {relatedPeople.length > 0 && (
+              <div class="detail-block">
+                <div class="detail-block-label">People</div>
+                {relatedPeople.map((person) => <a href={withBase(`/people/${entrySlug(person.id)}/`)}>{person.data.name}</a>)}
+              </div>
+            )}
+
+            {relatedPublications.length > 0 && (
+              <div class="detail-block">
+                <div class="detail-block-label">Publications</div>
+                {relatedPublications.map((publication) => (
+                  publication.data.url ? <a href={publication.data.url}>{publication.data.title}</a> : <div>{publication.data.title}</div>
+                ))}
+              </div>
+            )}
+
+
+          </aside>
+
+          <article class="detail-main">
+            {activity.data.cover && (
+              <figure class="detail-media">
+                <img src={withBase(activity.data.cover)} alt={activity.data.title} />
+              </figure>
+            )}
+            <div class="detail-content">
+              <Content />
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
+)}

@@ -1,0 +1,175 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+import { withBase } from '../../lib/assets';
+import { entrySlug } from '../../lib/entries';
+
+export async function getStaticPaths() {
+  const people = await getCollection('people');
+  return people.map((person) => ({ params: { slug: entrySlug(person.id) }, props: { person } }));
+}
+
+const { person } = Astro.props;
+const { Content } = await render(person);
+---
+
+<BaseLayout title={`${person.data.name} — RAMSLAB`}>
+  <Header />
+  <main class="projects-page-main">
+    <section class="projects-header-section">
+      <div class="projects-header-container">
+        <div class="projects-header-content">
+          <h1 class="projects-title-big" style="color: var(--text);">{person.data.name}</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-bio-section">
+      <div class="profile-bio-container">
+        
+        <div class="profile-bio-content-row">
+          <div class="profile-role-sidebar">
+            {person.data.role && (
+              <span class="projects-text-little-text profile-role-box" style="font-weight: 700; text-transform: uppercase; color: var(--text);">
+                {person.data.role}
+              </span>
+            )}
+          </div>
+          <div class="profile-text-content">
+            <div class="text-body" style="color: var(--text);">
+              <Content />
+            </div>
+          </div>
+        </div>
+
+        <aside class="profile-meta-aside">
+          {person.data.email && (
+            <div class="profile-meta-block">
+              <span class="projects-text-little-text" style="font-weight: 700; text-transform: uppercase; color: var(--text);">Contact</span>
+              <a href={`mailto:${person.data.email}`} class="projects-text-little-text hover-underline" style="color: var(--muted); word-break: break-all;">
+                {person.data.email}
+              </a>
+            </div>
+          )}
+
+          {person.data.areas && person.data.areas.length > 0 && (
+            <>
+              {person.data.email && <div class="profile-meta-divider"></div>}
+              <div class="profile-meta-block">
+                <span class="projects-text-little-text" style="font-weight: 700; text-transform: uppercase; color: var(--text);">Areas</span>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  {person.data.areas.map((area: string) => (
+                    <span class="projects-text-little-text" style="color: var(--muted);">{area}</span>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {person.data.links && person.data.links.length > 0 && (
+            <>
+              {(person.data.email || (person.data.areas && person.data.areas.length > 0)) && <div class="profile-meta-divider"></div>}
+              <div class="profile-meta-block">
+                <span class="projects-text-little-text" style="font-weight: 700; text-transform: uppercase; color: var(--text);">Links</span>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  {person.data.links.map((link: { url: string; label: string }) => (
+                    <a href={link.url} class="projects-text-little-text hover-underline" style="color: var(--muted);">{link.label}</a>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </aside>
+
+      </div>
+    </section>
+  </main>
+
+  <style>
+    .profile-bio-section {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 40px var(--pad);
+      width: 100%;
+    }
+    .profile-bio-container {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 30px;
+      width: 100%;
+    }
+    .profile-bio-content-row {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      align-items: flex-start;
+      width: 100%;
+    }
+    .profile-role-box {
+      width: 150px;
+    }
+    .profile-role-sidebar {
+      width: 150px;
+      flex-shrink: 0;
+    }
+    .profile-text-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding-right: 166px;
+    }
+    .profile-meta-aside {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      padding-top: 30px;
+      padding-left: 166px; /* 150px sidebar + 16px gap to align with text (total 266px from screen edge) */
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    .profile-meta-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      min-width: 150px;
+    }
+    .profile-meta-divider {
+      width: 1px;
+      background: var(--line-soft, #e5e5e5);
+    }
+
+    @media (max-width: 1200px) {
+      .profile-text-content {
+        padding-right: 0;
+      }
+    }
+    @media (max-width: 768px) {
+      .profile-bio-section {
+        padding: 32px 20px;
+      }
+      .profile-bio-container {
+        width: 100%;
+      }
+      .profile-bio-content-row {
+        flex-direction: column;
+      }
+      .profile-role-sidebar {
+        width: 100%;
+      }
+      .profile-meta-aside {
+        flex-direction: column;
+        gap: 32px;
+        padding-left: 0;
+      }
+      .profile-meta-divider {
+        display: none;
+      }
+    }
+  </style>
+  <Footer />
+</BaseLayout>

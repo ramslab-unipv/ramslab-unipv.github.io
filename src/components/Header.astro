@@ -1,0 +1,34 @@
+---
+import site from '../content/settings/site.json';
+import { withBase } from '../lib/assets';
+
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const links = [
+  { href: '/activities/', label: 'Activities' },
+  { href: '/people/', label: 'People' },
+  { href: '/publications/', label: 'Publications' },
+];
+
+const isActive = (href: string) =>
+  pathname === withBase(href).replace(/\/+$/, '') || (href !== '/' && pathname.startsWith(withBase(href)));
+---
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-brand">
+      <a href={withBase('/')} class="site-brand-link" aria-label="RAMSLAB">
+        <img src={withBase('/images/brand/ramslab-logo-white.svg')} alt="RAMSLAB Logo" />
+      </a>
+    </div>
+    <nav class="site-nav" aria-label="Primary">
+      {links.map((link) => (
+        <a href={withBase(link.href)} class="text-link-header" aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
+      ))}
+    </nav>
+    <div class="site-indicator">
+      <a href="https://portale.unipv.it/it" aria-label="University of Pavia">
+        <img src={withBase('/images/brand/unipv-logo-footer.svg')} alt="University of Pavia" />
+      </a>
+    </div>
+  </div>
+</header>

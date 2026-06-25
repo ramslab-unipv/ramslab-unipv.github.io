@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { withBase } from '../lib/assets';
+---
+
+<BaseLayout title="Dichiarazione di Accessibilità — RAMSLAB">
+  <Header />
+  <main id="main-content" class="container" style="padding: 48px 0 80px;">
+    <h1 style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 32px;">Dichiarazione di Accessibilità</h1>
+
+    <div class="detail-content" style="max-width: 640px;">
+
+      <h2>Stato di conformità</h2>
+      <p>
+        Il presente sito web del laboratorio <strong>RAMSLAB</strong>, afferente all'Università degli Studi di Pavia, si impegna a rendere i propri contenuti accessibili conformemente alla <strong>Legge 9 gennaio 2004, n. 4</strong> (Legge Stanca), al <strong>D.Lgs. 10 agosto 2018, n. 106</strong>, e alle <strong>Linee Guida sull'accessibilità degli strumenti informatici</strong> emanate da AgID.
+      </p>
+      <p>
+        Il sito è stato progettato con l'obiettivo di rispettare il livello di conformità <strong>AA</strong> delle <strong>Web Content Accessibility Guidelines (WCAG) 2.1</strong>.
+      </p>
+
+      <h2>Contenuti non accessibili</h2>
+      <p>
+        Nonostante l'impegno per garantire l'accessibilità, alcune parti del sito potrebbero non essere ancora pienamente conformi. In particolare:
+      </p>
+      <ul style="list-style: disc; padding-left: 1.5rem;">
+        <li>Alcuni modelli 3D interattivi (Three.js) potrebbero non essere completamente fruibili tramite tecnologie assistive.</li>
+        <li>Il sito è attualmente in fase di sviluppo attivo; eventuali carenze verranno progressivamente corrette.</li>
+      </ul>
+
+      <h2>Misure adottate</h2>
+      <ul style="list-style: disc; padding-left: 1.5rem;">
+        <li>Utilizzo di HTML semantico con gerarchia heading corretta</li>
+        <li>Attributi ARIA per la navigazione e le aree interattive</li>
+        <li>Skip-link per la navigazione da tastiera</li>
+        <li>Rapporti di contrasto conformi a WCAG 2.1 AA per tutti i testi</li>
+        <li>Testi alternativi per le immagini</li>
+        <li>Layout responsive per tutte le dimensioni di schermo</li>
+      </ul>
+
+      <h2>Feedback e contatti</h2>
+      <p>
+        Se si riscontrano problemi di accessibilità o se si desidera richiedere informazioni in formato accessibile, è possibile contattare:
+      </p>
+      <p>
+        <strong>RAMSLAB — Università di Pavia</strong><br/>
+        Email: <a href="mailto:ai.rams@unipv.it">ai.rams@unipv.it</a>
+      </p>
+
+      <h2>Procedura di attuazione</h2>
+      <p>
+        In caso di risposta insoddisfacente o di mancata risposta entro 30 giorni, è possibile rivolgersi al <strong>Difensore civico per il digitale</strong> tramite il portale AgID:<br/>
+        <a href="https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212571547f74" target="_blank" rel="noopener">Segnalazione al Difensore civico per il digitale</a>
+      </p>
+
+      <h2>Informazioni sulla dichiarazione</h2>
+      <p>
+        La presente dichiarazione è stata redatta il <strong>19 maggio 2026</strong> sulla base di un'autovalutazione effettuata dal laboratorio RAMSLAB.
+      </p>
+      <p>
+        La dichiarazione di accessibilità ufficiale dell'Università di Pavia è disponibile su:<br/>
+        <a href="https://form.agid.gov.it/" target="_blank" rel="noopener">form.agid.gov.it</a>
+      </p>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

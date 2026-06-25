@@ -1,0 +1,15 @@
+---
+import MediaTile from './MediaTile.astro';
+
+interface Props {
+  href?: string;
+  title: string;
+  meta?: string;
+  src?: string;
+  fit?: 'cover' | 'contain';
+}
+
+const { href, title, meta, src, fit } = Astro.props;
+---
+
+<MediaTile href={href} title={title} meta={meta} src={src} fit={fit} />

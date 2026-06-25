@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/assets';
+import { entrySlug } from '../../lib/entries';
+
+const people = (await getCollection('people')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="People — RAMSLAB">
+  <Header />
+  <main class="projects-page-main">
+    <section class="projects-header-section">
+      <div class="projects-header-container">
+        <div class="projects-header-content">
+          <h1 class="projects-title-big">People</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects-list-section">
+      <div class="projects-list-container">
+        {people.map((person, index) => (
+          <article class={`project-item-row ${index === 0 ? 'first-row' : ''}`}>
+            <div class="project-meta-left">
+              <span class="projects-text-little-text">{person.data.role}</span>
+            </div>
+            <div class="project-content-middle">
+              <h2 class="projects-text-link-bold-plus project-title-link">
+                <a href={withBase(`/people/${entrySlug(person.id)}/`)}>{person.data.name}</a>
+              </h2>
+              {person.data.shortBio && <p class="projects-text-link-header">{person.data.shortBio}</p>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

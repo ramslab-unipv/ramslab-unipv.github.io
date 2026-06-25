@@ -1,0 +1,62 @@
+---
+import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
+import { withBase } from '../../lib/assets';
+
+const project = {
+  title: "DYNAMICA",
+  subtitle: "Collaborative Robotics & Mixed Reality",
+  accentColor: "#0ea5e9", // Light blue color
+  description: "DYNAMICA represents a paradigm shift in human-robot collaboration. By combining advanced AI agents with immersive mixed reality interfaces, the project enables operators to interact with robotic systems through natural gestures and intuitive commands. This research bridges the gap between complex industrial automation and human-centric operation, featuring real-time intent prediction algorithms, virtual training simulators, and seamless physical-digital integration. DYNAMICA redefines how we teach, control, and collaborate with autonomous systems in dynamic environments.",
+  publications: [
+    { 
+      title: "Predictive AI Agents for Human-Robot Collaboration in Dynamic Environments", 
+      url: "#",
+      authors: "Doe J., Smith J., Turing A.",
+      venue: "International Journal of Social Robotics, vol. 16, pp. 245-256"
+    },
+    { 
+      title: "Mixed Reality Interfaces for Intuitive Robotic Arm Programming", 
+      url: "#",
+      authors: "Lovelace A., Doe J., Smith J.",
+      venue: "IEEE Transactions on Visualization and Computer Graphics, vol. 30, no. 4"
+    },
+    { 
+      title: "Towards Seamless Integration of Digital Twins and Physical Manipulation", 
+      url: "#",
+      authors: "Smith J., Turing A., Lovelace A.",
+      venue: "Computer-Aided Design, vol. 154, art. no. 103412"
+    }
+  ],
+  funding: "Produced within the PRIN project framework, focused on dynamic interactions and control in multi-agent robotic systems."
+};
+---
+
+<ProjectImmersiveLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  accentColor={project.accentColor}
+  heroImage={withBase('/images/projects/Dynamica.png')}
+  sectionA={{
+    label: "Intuitive Programming",
+    text: "Break down the barriers of traditional coding. Operators can now manage robotic actions through natural hand gestures and AI-assisted interpretation, translating human intent directly into machine execution.",
+    bgImage: withBase('/images/projects/carbon-fiber-bg.png'),
+    sideImage: withBase('/images/projects/dynamica_programming.png'),
+  }}
+  sectionB={{
+    label: "Mixed Reality Training",
+    text: "Safely master complex robotic operations within highly immersive virtual simulators. The boundaries between physical hardware and digital environments dissolve, providing a realistic, risk-free training arena.",
+    bgImage: withBase('/images/projects/carbon-fiber-bg.png'),
+    sideImage: withBase('/images/projects/dynamica_training.png'),
+  }}
+  sectionC={{
+    label: "AI Agents",
+    text: "Equipped with advanced machine learning algorithms, the system actively anticipates operator movements. By predicting human intentions in real-time, the robotic system seamlessly adapts, ensuring perfectly synchronized collaboration.",
+    bgImage: withBase('/images/projects/carbon-fiber-bg.png'),
+    sideImage: withBase('/images/projects/dynamica_ai.png'),
+  }}
+  description={project.description}
+  publications={project.publications}
+  funding={project.funding}
+  prevActivity={{ label: "Composite Manufacturing", href: withBase('/activities/composite-manufacturing/') }}
+  nextActivity={{ label: "Demetra", href: withBase('/activities/demetra/') }}
+/>

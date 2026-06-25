@@ -1,0 +1,25 @@
+---
+interface Props {
+  title: string;
+  authors: string[];
+  year: number;
+  venue?: string;
+  url?: string;
+  doi?: string;
+}
+
+const { title, authors, year, venue, url, doi } = Astro.props;
+const href = doi ? `https://doi.org/${doi}` : url;
+---
+
+<article class="dense-item">
+  <div class="text-list-title" style="color: var(--text);">
+    {href ? (
+      <a href={href} target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;" class="hover-underline">{title}</a>
+    ) : (
+      title
+    )}
+  </div>
+  <div class="text-list-meta" style="color: var(--muted);">{authors.join(', ')}</div>
+  {venue && <div class="text-emphasis" style="color: var(--muted);">{venue}</div>}
+</article>
