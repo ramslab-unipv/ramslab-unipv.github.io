@@ -16,7 +16,7 @@ const getActivityHref = (activityId: string) => {
   if (slug === 'demetra-nodes') return withBase('/activities/demetra/');
   if (slug === 'carbon-fiber') return withBase('/activities/composite-manufacturing/');
   if (slug === 'dynamica-prin') return withBase('/activities/dynamica/');
-  return withBase(`/activities/${slug}/`);
+  return null;
 };
 ---
 
@@ -33,17 +33,30 @@ const getActivityHref = (activityId: string) => {
 
     <section class="projects-list-section">
       <div class="activities-grid-container">
-        {activities.map((activity) => (
+        {activities.map((activity) => {
+          const href = getActivityHref(activity.id);
+          return (
           <article class="activity-card">
             {activity.data.cover && (
-              <a href={getActivityHref(activity.id)} class="activity-card-image-link">
-                <img 
-                  src={withBase(activity.data.cover)} 
-                  alt={activity.data.title} 
-                  class={activity.data.coverFit === 'contain' ? 'fit-contain' : 'fit-cover'}
-                  loading="lazy"
-                />
-              </a>
+              href ? (
+                <a href={href} class="activity-card-image-link">
+                  <img 
+                    src={withBase(activity.data.cover)} 
+                    alt={activity.data.title} 
+                    class={activity.data.coverFit === 'contain' ? 'fit-contain' : 'fit-cover'}
+                    loading="lazy"
+                  />
+                </a>
+              ) : (
+                <div class="activity-card-image-link">
+                  <img 
+                    src={withBase(activity.data.cover)} 
+                    alt={activity.data.title} 
+                    class={activity.data.coverFit === 'contain' ? 'fit-contain' : 'fit-cover'}
+                    loading="lazy"
+                  />
+                </div>
+              )
             )}
             <div class="activity-card-info">
               <div class="activity-card-meta">
@@ -52,12 +65,12 @@ const getActivityHref = (activityId: string) => {
                 <span>{activity.data.status ?? 'Activity'}</span>
               </div>
               <h2 class="activity-card-title">
-                <a href={getActivityHref(activity.id)}>{activity.data.title}</a>
+                {href ? <a href={href}>{activity.data.title}</a> : <span>{activity.data.title}</span>}
               </h2>
               {activity.data.excerpt && <p class="activity-card-excerpt">{activity.data.excerpt}</p>}
             </div>
           </article>
-        ))}
+        )})}
       </div>
     </section>
   </main>
