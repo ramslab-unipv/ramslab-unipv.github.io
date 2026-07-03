@@ -1,7 +1,7 @@
 ---
 name: "Davide Fabiocchi"
 role: "PhD Candidate"
-shortBio: "PhD student working on collaborative robotics, agentic AI, augmented reality, and virtual simulation."
+shortBio: "PhD candidate at the University of Pavia working on collaborative robotics, agentic AI, augmented reality, and virtual simulation."
 areas: ["Collaborative Robotics", "Agentic AI", "Augmented Reality", "Virtual Simulation"]
 order: 9
 links:

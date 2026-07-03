@@ -1,7 +1,7 @@
 ---
 name: "Francesco Bottino"
 role: "PhD Candidate"
-shortBio: "PhD candidate working on virtual reality experiences, immersiveness, and simulator sickness."
+shortBio: "PhD candidate at the University of Pavia working on virtual reality, immersive simulators, and motion sickness."
 areas: ["Virtual Reality", "Augmented Reality", "Simulator Sickness", "Human-Machine Interaction"]
 order: 9
 links:

@@ -2,7 +2,7 @@
 name: "Valentina Furlan"
 role: "Associate Professor"
 email: "valentina.furlan@unipv.it"
-shortBio: "Associate Professor at the University of Pavia, working on additive manufacturing, laser processes, and robotized surface finishing of complex shapes."
+shortBio: "Associate Professor at the University of Pavia working on additive manufacturing, laser processes, and robotized surface finishing."
 areas: ["manufacturing technologies", "production systems", "industrial laser applications"]
 order: 3
 links:

@@ -1,7 +1,7 @@
 ---
 name: "Davide Todesca"
 role: "PhD Candidate"
-shortBio: "PhD candidate in Electronics, Computer Science, and Electrical Engineering working on human-in-the-loop simulation, multibody modeling, and computer vision."
+shortBio: "PhD candidate at the University of Pavia working on human-in-the-loop simulation, multibody modeling, and computer vision."
 areas: ["Computer Vision", "Human-in-the-loop Simulation", "Multibody Modeling"]
 order: 10
 links:

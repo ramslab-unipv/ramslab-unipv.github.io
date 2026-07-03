@@ -2,7 +2,7 @@
 name: "Carol Sergenti"
 role: "Assistant Professor"
 email: "carol.sergenti@unipv.it"
-shortBio: "Assistant Professor specializing in Human-in-the-loop simulations and human-machine interaction, with a focus on sports and rehabilitation."
+shortBio: "Assistant Professor at the University of Pavia working on human-in-the-loop simulation, human-machine interaction, and biorobotics."
 areas: ["human-in-the-loop", "human-machine interaction", "sports simulation", "rehabilitation"]
 order: 5
 links:

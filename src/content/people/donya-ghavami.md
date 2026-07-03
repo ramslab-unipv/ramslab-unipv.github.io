@@ -1,7 +1,7 @@
 ---
 name: "Donya Ghavami"
 role: "PhD Candidate"
-shortBio: "PhD candidate working on robotic technologies for industrial manufacturing and pharmaceutical production environments."
+shortBio: "PhD candidate at the University of Pavia working on industrial robotics, automation, computer vision, and biomedical manufacturing."
 areas: ["Industrial Robotics", "Automation", "Computer Vision", "Biomedical Manufacturing", "Pharmaceutical Production"]
 order: 9
 links:

@@ -2,7 +2,7 @@
 name: "Fabio Spazzini"
 role: "Technical Administrative Staff"
 email: "fabio.spazzini@unipv.it"
-shortBio: "Technical Administrative Staff at the University of Pavia, involved in engineering research, mechatronic systems for rehabilitation, and robotics."
+shortBio: "Technical staff member at the University of Pavia supporting robotics, mechatronic systems, and rehabilitation engineering."
 areas: ["mechatronic systems", "robotics", "rehabilitation engineering"]
 order: 6
 links:

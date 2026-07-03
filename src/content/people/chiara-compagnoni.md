@@ -1,7 +1,7 @@
 ---
 name: "Chiara Compagnoni"
 role: "Research Fellow"
-shortBio: "Research Fellow working on interaction design, virtual reality, and immersive responsive environments."
+shortBio: "Research Fellow at the University of Pavia working on interaction design, virtual reality, and immersive responsive environments."
 areas: ["Interaction Design", "User-Centered Design", "Virtual Reality"]
 order: 1000
 links:

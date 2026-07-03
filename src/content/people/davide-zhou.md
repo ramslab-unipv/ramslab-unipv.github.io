@@ -1,7 +1,7 @@
 ---
 name: "Davide Zhou"
 role: "PhD Candidate"
-shortBio: "PhD candidate working on robotics for manufacturing and future-oriented production systems."
+shortBio: "PhD candidate at the University of Pavia working on manufacturing robotics and future-oriented production systems."
 areas: ["manufacturing robotics", "production systems", "industrial engineering"]
 order: 11
 links:

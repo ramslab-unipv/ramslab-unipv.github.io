@@ -1,7 +1,7 @@
 ---
 name: "Francesco D'Orazio"
 role: "PhD Candidate"
-shortBio: "PhD candidate working on intelligent robotic manufacturing, composite processing, and autonomous production systems."
+shortBio: "PhD candidate at the University of Pavia working on intelligent robotic manufacturing, composite processing, and autonomous production systems."
 areas: ["Robotic Manufacturing", "Composite Processing", "Motion Planning", "Digital Twins"]
 order: 9
 links:

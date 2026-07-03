@@ -1,7 +1,7 @@
 ---
 name: "Filippo Massimiliani"
 role: "PhD Candidate"
-shortBio: "PhD candidate specializing in human-in-the-loop sports simulation."
+shortBio: "PhD candidate at the University of Pavia working on human-in-the-loop sports simulation and performance analysis."
 areas: ["sports simulation", "human-in-the-loop"]
 order: 9
 links:

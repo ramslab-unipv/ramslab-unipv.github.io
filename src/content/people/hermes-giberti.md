@@ -2,7 +2,7 @@
 name: "Hermes Giberti"
 role: "Full Professor"
 email: "hermes.giberti@unipv.it"
-shortBio: "Full Professor at the University of Pavia and founder and member of RAMSLAB, working in applied mechanics, mechatronic systems, and industrial automation."
+shortBio: "Full Professor at the University of Pavia working on applied mechanics, mechatronic systems, and industrial automation."
 areas: ["applied mechanics", "robotics", "mechanical system design"]
 order: 1
 links:

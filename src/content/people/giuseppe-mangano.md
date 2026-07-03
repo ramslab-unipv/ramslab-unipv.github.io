@@ -2,7 +2,7 @@
 name: "Giuseppe Mangano"
 role: "PhD Candidate"
 email: "giuseppe.mangano02@universitadipavia.it"
-shortBio: "PhD candidate focused on simulation systems for sport and rehabilitation, with experience in driving simulator design."
+shortBio: "PhD candidate at the University of Pavia working on simulation systems for sport, rehabilitation, and driving simulator design."
 areas: ["simulation systems", "sport and rehabilitation", "driving simulators"]
 order: 8
 links:

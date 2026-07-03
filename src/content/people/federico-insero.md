@@ -1,7 +1,7 @@
 ---
 name: "Federico Insero"
 role: "PhD Candidate"
-shortBio: "PhD candidate associated with robot-assisted additive manufacturing and robotic 3D printing workflows."
+shortBio: "PhD candidate working on robot-assisted additive manufacturing and robotic 3D printing workflows."
 areas: ["additive manufacturing", "robotic systems", "industrial engineering"]
 order: 5
 links:

@@ -2,7 +2,7 @@
 name: "José Alfonso Farias Fuentes"
 role: "PhD Candidate"
 email: "josealfonso.fariasfuentes01@universitadipavia.it"
-shortBio: "PhD candidate working on dynamic simulation, motion cueing, and hardware-in-the-loop environments for industrial engineering applications."
+shortBio: "PhD candidate working on dynamic simulation, motion cueing, and hardware-in-the-loop environments."
 areas: ["dynamic simulation", "motion cueing", "hardware-in-the-loop"]
 order: 7
 links:

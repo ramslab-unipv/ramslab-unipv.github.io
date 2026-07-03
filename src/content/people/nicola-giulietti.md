@@ -2,7 +2,7 @@
 name: "Nicola Giulietti"
 role: "Assistant Professor"
 email: "nicola.giulietti@unipv.it"
-shortBio: "Assistant Professor working on computer-vision-based measurement systems, artificial intelligence, and data-driven models."
+shortBio: "Assistant Professor at the University of Pavia working on computer vision, AI-driven measurement systems, and data-driven models."
 areas: ["Measurement Systems", "Computer Vision", "Mechanical and Thermal Measurements"]
 order: 4
 links:

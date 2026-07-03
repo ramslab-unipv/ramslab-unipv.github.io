@@ -2,7 +2,7 @@
 name: "Marco Carnevale"
 role: "Associate Professor"
 email: "marco.carnevale@unipv.it"
-shortBio: "Associate Professor at the University of Pavia, working on railway dynamics, condition monitoring, multibody modeling, and industrial robotics."
+shortBio: "Associate Professor at the University of Pavia working on railway dynamics, condition monitoring, multibody modeling, and industrial robotics."
 areas: ["applied mechanics", "machine design", "biorobotics"]
 order: 2
 links:

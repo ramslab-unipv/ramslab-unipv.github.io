@@ -1,7 +1,7 @@
 ---
 name: "Michele Bedodi"
 role: "PhD Candidate"
-shortBio: "PhD candidate specializing in artificial vision for pharmaceutical robotics."
+shortBio: "PhD candidate at the University of Pavia working on computer vision and robotics for pharmaceutical applications."
 areas: ["artificial vision", "pharmaceutical applications"]
 order: 9
 links:
