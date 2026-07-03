@@ -7,7 +7,8 @@ import { withBase } from '../../lib/assets';
 import { entrySlug } from '../../lib/entries';
 
 export async function getStaticPaths() {
-  const people = await getCollection('people');
+  const hiddenPeople = new Set(['federico-insero', 'jose-alfonso-farias-fuentes']);
+  const people = (await getCollection('people')).filter((person) => !hiddenPeople.has(entrySlug(person.id)));
   return people.map((person) => ({ params: { slug: entrySlug(person.id) }, props: { person } }));
 }
 

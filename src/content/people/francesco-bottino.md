@@ -6,9 +6,7 @@ areas: ["virtual reality", "augmented reality", "simulator sickness"]
 order: 9
 links:
   - label: "LinkedIn"
-    url: "#"
-  - label: "PhD Students"
-    url: "https://phdieie.unipv.it/phd-students/"
+    url: "https://www.linkedin.com/in/francesco-bottino-03113a306/"
 ---
 
 Francesco Bottino is a PhD student in Industrial Engineering with Hermes Giberti and Marco Carnevale as tutors.

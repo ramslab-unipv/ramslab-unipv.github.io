@@ -13,7 +13,10 @@ const activities = (await getCollection('activities')).sort((a, b) => {
   return (b.data.year ?? 0) - (a.data.year ?? 0);
 });
 const featuredProjects = activities.slice(0, 12);
-const allPeople = (await getCollection('people')).sort((a, b) => a.data.order - b.data.order);
+const hiddenPeople = new Set(['federico-insero', 'jose-alfonso-farias-fuentes']);
+const allPeople = (await getCollection('people'))
+  .filter((person) => !hiddenPeople.has(entrySlug(person.id)))
+  .sort((a, b) => a.data.order - b.data.order);
 const people = allPeople.slice(0, 5);
 const otherPeople = allPeople.slice(5).sort((a, b) => {
   const surnameA = a.data.name.split(' ').pop() || '';

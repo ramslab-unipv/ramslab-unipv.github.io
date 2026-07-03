@@ -7,9 +7,7 @@ areas: ["simulation systems", "sport and rehabilitation", "driving simulators"]
 order: 8
 links:
   - label: "LinkedIn"
-    url: "#"
-  - label: "PhD Students"
-    url: "https://phdieie.unipv.it/phd-students/"
+    url: "https://www.linkedin.com/in/g-mangano/"
   - label: "PhD Profile PDF"
     url: "https://phdieie.unipv.it/wp-content/uploads/2023/02/Mangano.pdf"
 ---

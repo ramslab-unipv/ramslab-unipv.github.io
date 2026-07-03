@@ -2,16 +2,12 @@
 name: "Hermes Giberti"
 role: "Full Professor"
 email: "hermes.giberti@unipv.it"
-shortBio: "Full Professor at the University of Pavia working in applied mechanics, robotics, and automated mechanical system design."
+shortBio: "Full Professor at the University of Pavia and founder and member of RAMSLAB, working in applied mechanics, mechatronic systems, and industrial automation."
 areas: ["applied mechanics", "robotics", "mechanical system design"]
 order: 1
 links:
-  - label: "LinkedIn"
-    url: "#"
   - label: "UNIFIND Profile"
     url: "https://unipv.unifind.cineca.it/get/person/038900"
 ---
 
-Hermes Giberti is part of the Department of Industrial and Information Engineering at the University of Pavia, where the official UNIFIND profile lists him as Full Professor in the disciplinary area of applied mechanics.
-
-Within the RAMSLAB context, his profile is closely associated with robotics, automated mechanical system design, and machine drawing. These themes also align with the teaching activities currently listed on the university profile, including Applied Robotics Technologies and Automated Mechanical System Design.
+Hermes Giberti received the M.Sc. degree in Mechanical Engineering and the Ph.D. degree in Applied Mechanics from Politecnico di Milano, Milan, Italy, in 1998 and 2002, respectively. He is currently Full Professor with the Department of Electronics, Computer Science, and Electrical Engineering, University of Pavia, Pavia, Italy, where he is a member and founder of RAMSLAB (Research on Advanced Mechanical Systems). He teaches courses in "Theoretical and Applied Mechanics," "Machine Dynamics," and "Functional Mechanical Design." His research interests include the synthesis and design of mechatronic systems, parallel manipulators, and methodologies for selecting and using actuators in industrial automation. He has led multiple research projects and authored numerous publications in international journals and conferences.

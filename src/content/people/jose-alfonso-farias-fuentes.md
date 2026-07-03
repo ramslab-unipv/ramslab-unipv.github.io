@@ -8,8 +8,6 @@ order: 7
 links:
   - label: "LinkedIn"
     url: "#"
-  - label: "PhD Students"
-    url: "https://phdieie.unipv.it/phd-students/"
   - label: "PhD Profile PDF"
     url: "https://phdieie.unipv.it/wp-content/uploads/2023/02/Farias-Fuentes.pdf"
 ---

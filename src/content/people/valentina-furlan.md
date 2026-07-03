@@ -2,16 +2,14 @@
 name: "Valentina Furlan"
 role: "Associate Professor"
 email: "valentina.furlan@unipv.it"
-shortBio: "Associate Professor working on manufacturing technologies, integrated production systems, and industrial laser applications."
+shortBio: "Associate Professor at the University of Pavia, working on additive manufacturing, laser processes, and robotized surface finishing of complex shapes."
 areas: ["manufacturing technologies", "production systems", "industrial laser applications"]
 order: 3
 links:
   - label: "LinkedIn"
-    url: "#"
+    url: "https://www.linkedin.com/in/valentina-furlan-6a03101a6/"
   - label: "UNIFIND Profile"
     url: "https://unipv.unifind.cineca.it/get/person/058179"
 ---
 
-Valentina Furlan is an Associate Professor at the University of Pavia in the Department of Industrial and Information Engineering. Her official profile places her in the disciplinary area of manufacturing technologies and processing systems.
-
-The teaching activities listed on the university profile include Mechanical Technology, Integrated Production Systems, and Industrial Laser Applications and Safety. These topics make her profile especially relevant to RAMSLAB work on industrial processes, manufacturing environments, and production-oriented robotics.
+Valentina Furlan received the M.Sc. degree in Mechanical Engineering from Politecnico di Milano, Milan, Italy, in 2013, and the Ph.D. degree in Mechanical Engineering from the same institution in 2018. She is currently Associate Professor with the Department of Industrial and Information Engineering, University of Pavia, Pavia, Italy, and a member of RAMSLAB (Research on Advanced Mechanical Systems). Her research interests include additive manufacturing of polymers, composite and natural-fiber composite materials, micro and macro laser processes, laser safety, and robotized surface finishing of complex shapes. She has contributed to several research projects, including EU H2020 activities, and has authored numerous publications in international journals and conference proceedings.

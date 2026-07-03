@@ -6,9 +6,7 @@ areas: ["sports simulation", "human-in-the-loop"]
 order: 9
 links:
   - label: "LinkedIn"
-    url: "#"
-  - label: "PhD Students"
-    url: "https://phdieie.unipv.it/phd-students/"
+    url: "https://www.linkedin.com/in/filippo-massimiliani-b937462b7/"
 ---
 
 Filippo Massimiliani is a PhD student in Industrial Engineering with Hermes Giberti and Marco Carnevale as tutors.

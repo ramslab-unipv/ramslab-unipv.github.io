@@ -6,7 +6,7 @@ areas: ["robotic manufacturing", "composite materials", "process planning"]
 order: 9
 links:
   - label: "LinkedIn"
-    url: "#"
+    url: "https://www.linkedin.com/in/francesco-d-orazio-287b09233"
 ---
 
 Francesco D'Orazio is a PhD Candidate at RAMSLAB.

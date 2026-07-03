@@ -1,16 +1,12 @@
 ---
 name: "Davide Fabiocchi"
 role: "PhD Candidate"
-shortBio: "PhD candidate working on extended reality and artificial intelligence in collaborative robotics."
-areas: ["extended reality", "artificial intelligence", "collaborative robotics"]
+shortBio: "PhD student working on collaborative robotics, agentic AI, augmented reality, and virtual simulation."
+areas: ["Collaborative Robotics", "Agentic AI", "Augmented Reality", "Virtual Simulation"]
 order: 9
 links:
   - label: "LinkedIn"
-    url: "#"
-  - label: "PhD Students"
-    url: "https://phdieie.unipv.it/phd-students/"
+    url: "https://www.linkedin.com/in/davide-fabiocchi-75b98727a/"
 ---
 
-Davide Fabiocchi is a PhD student in Industrial Engineering with Hermes Giberti and Marco Carnevale as tutors.
-
-His research focuses on Extended Reality (XR) and Artificial Intelligence (AI) applied to collaborative robotics. His profile perfectly aligns with RAMSLAB's work on advanced human-robot interaction, digital environments, and smart industrial processes.
+Davide Fabiocchi received the M.Sc. degree (cum laude) in Mechanical Engineering from Politecnico di Milano, Italy, in 2023. He is currently a PhD student at the Department of Electronics, Computer Science, and Electrical Engineering, University of Pavia, Pavia, Italy, and a member of RAMSLAB. His primary research interests lie in collaborative robotics, specifically exploring the application of agentic AI, large language models (LLMs), augmented reality, and virtual simulation to enhance human-robot interaction. He has contributed to multiple publications in international journals and conferences in the fields of robotics, virtual reality, and human-in-the-loop systems.

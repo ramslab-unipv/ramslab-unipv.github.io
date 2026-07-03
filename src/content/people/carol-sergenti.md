@@ -7,11 +7,9 @@ areas: ["human-in-the-loop", "human-machine interaction", "sports simulation", "
 order: 5
 links:
   - label: "LinkedIn"
-    url: "#"
+    url: "https://www.linkedin.com/in/carol-sergenti/"
   - label: "UNIFIND Profile"
     url: "https://unipv.unifind.cineca.it/get/person/055935"
-  - label: "PhD Students"
-    url: "https://phdieie.unipv.it/phd-students/"
 ---
 
 Carol Sergenti is an Assistant Professor at the University of Pavia in the Department of Industrial and Information Engineering, in the disciplinary area of applied mechanics.

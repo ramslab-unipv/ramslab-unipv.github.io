@@ -7,7 +7,7 @@ areas: ["mechatronic systems", "robotics", "rehabilitation engineering"]
 order: 6
 links:
   - label: "LinkedIn"
-    url: "#"
+    url: "https://www.linkedin.com/in/fabio-spazzini-4916b8233"
 ---
 
 Fabio Spazzini serves as Technical Administrative Staff at the University of Pavia. He is actively involved in engineering research and development within the university's laboratories.

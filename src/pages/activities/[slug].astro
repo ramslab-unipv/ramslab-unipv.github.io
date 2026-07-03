@@ -9,6 +9,8 @@ import { entrySlug } from '../../lib/entries';
 
 import CarbonFiberProject from '../../components/CarbonFiberProject.astro';
 
+const hiddenPeople = new Set(['federico-insero', 'jose-alfonso-farias-fuentes']);
+
 export async function getStaticPaths() {
   const activities = await getCollection('activities');
   return activities.map((activity) => ({ params: { slug: entrySlug(activity.id) }, props: { activity } }));
@@ -18,7 +20,7 @@ const { activity } = Astro.props;
 const { Content } = await render(activity);
 const people = await getCollection('people');
 const publications = await getCollection('publications');
-const relatedPeople = people.filter((person) => activity.data.people.includes(entrySlug(person.id)));
+const relatedPeople = people.filter((person) => activity.data.people.includes(entrySlug(person.id)) && !hiddenPeople.has(entrySlug(person.id)));
 const relatedPublications = publications.filter((publication) => activity.data.publications.includes(entrySlug(publication.id)));
 const note = [activity.data.year ? String(activity.data.year) : '', activity.data.status].filter(Boolean).join(' · ');
 ---

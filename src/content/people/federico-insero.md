@@ -5,8 +5,6 @@ shortBio: "PhD candidate associated with robot-assisted additive manufacturing a
 areas: ["additive manufacturing", "robotic systems", "industrial engineering"]
 order: 5
 links:
-  - label: "PhD Students"
-    url: "https://phdieie.unipv.it/phd-students/"
   - label: "IEIE Minutes 2025"
     url: "https://phdieie.unipv.it/wp-content/uploads/2025/05/Verbale_IEIE_2025_04_14-_firma.pdf"
 ---
