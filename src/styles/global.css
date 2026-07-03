@@ -988,6 +988,12 @@ ol {
     white-space: normal;
     min-width: 0;
   }
+
+  .footer-department img {
+    height: 16px !important;
+    width: auto;
+    display: inline-block;
+  }
 }
 
 /* ─── Projects Page (Pixel-Perfect Figma SSoT) ─── */

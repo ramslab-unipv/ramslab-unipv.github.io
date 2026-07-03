@@ -280,12 +280,12 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
             </div>
             <footer class="info-footer">
               {prevActivity ? (
-                <a href={prevActivity.href} class="footer-nav-link">← Previous Activity</a>
+                <a href={prevActivity.href} class="footer-nav-link">← <span class="nav-text">Previous Activity</span></a>
               ) : (
                 <div />
               )}
               {nextActivity && (
-                <a href={nextActivity.href} class="footer-nav-link">Next Activity →</a>
+                <a href={nextActivity.href} class="footer-nav-link"><span class="nav-text">Next Activity</span> →</a>
               )}
             </footer>
           </div>
@@ -424,10 +424,33 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
     box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
   }
 
+  @media (max-width: 1024px) {
+    .content-grid { gap: 2rem; padding: 0 2rem; }
+    .alternate .content-grid { grid-template-columns: 1fr 1fr; }
+    .info-grid { gap: 40px; }
+    .info-box { padding: 40px; }
+    .title-main { font-size: clamp(3rem, 8vw, 6rem); }
+  }
+
   @media (max-width: 768px) {
+    .section { height: auto; min-height: 100vh; padding: 4rem 0; }
+    .hero-section { padding: 0; }
+    .title-main { font-size: clamp(2rem, 10vw, 4rem); word-wrap: break-word; }
+    .content-grid { grid-template-columns: 1fr; gap: 3rem; padding: 0 1.5rem; }
+    .alternate .content-grid { grid-template-columns: 1fr; }
+    .text-block { width: 100%; text-align: center; }
+    .text-block-right { justify-self: center; }
+    .text-block p { font-size: 1.125rem; }
     .side-sync-video { width: 240px !important; }
-    .content-grid { grid-template-columns: 1fr; }
-    .tree-3d-container { width: 100%; height: 600px; }
+    .tree-3d-container { width: 100%; height: 450px; }
+    
+    .recap-section { padding: 60px 1rem; }
+    .info-box { padding: 30px 20px; }
+    .info-grid { grid-template-columns: 1fr; gap: 40px; }
+    .info-description { font-size: 1.25rem; }
+    .info-footer { flex-direction: row; justify-content: space-between; align-items: center; }
+    .nav-text { display: none; }
+    .footer-nav-link { font-size: 1.5rem; }
   }
 </style>
 
