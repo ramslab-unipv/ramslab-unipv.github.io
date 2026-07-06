@@ -12,8 +12,7 @@ import CarbonFiberProject from '../../components/CarbonFiberProject.astro';
 const hiddenPeople = new Set(['federico-insero', 'jose-alfonso-farias-fuentes']);
 
 export async function getStaticPaths() {
-  const activities = await getCollection('activities');
-  return activities.map((activity) => ({ params: { slug: entrySlug(activity.id) }, props: { activity } }));
+  return [];
 }
 
 const { activity } = Astro.props;

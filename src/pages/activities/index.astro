@@ -34,7 +34,7 @@ const getActivityHref = (activityId: string) => {
         {activities.map((activity) => {
           const href = getActivityHref(activity.id);
           return (
-          <article class="activity-card">
+          <article class={`activity-card ${href ? 'activity-card-clickable' : 'activity-card-disabled'}`}>
             {activity.data.cover && (
               href ? (
                 <a href={href} class="activity-card-image-link">

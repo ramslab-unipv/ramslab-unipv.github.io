@@ -1259,9 +1259,13 @@ ol {
   padding: 0;
 }
 
-.activity-card:hover .activity-card-image-link img {
+.activity-card-clickable:hover .activity-card-image-link img {
   opacity: 1;
   transform: scale(1.03);
+}
+
+.activity-card-disabled .activity-card-image-link {
+  cursor: default;
 }
 
 .activity-card-info {
