@@ -148,8 +148,8 @@ const project = {
               </div>
             </div>
             <footer class="info-footer">
-              <a href={withBase('/activities/dynamica/')} class="footer-nav-link">← <span class="nav-text">Previous Activity</span></a>
-              <a href={withBase('/activities/composite-manufacturing/')} class="footer-nav-link"><span class="nav-text">Next Activity</span> →</a>
+              <span class="footer-nav-link footer-nav-link-disabled">← <span class="nav-text">Previous Activity</span></span>
+              <span class="footer-nav-link footer-nav-link-disabled"><span class="nav-text">Next Activity</span> →</span>
             </footer>
           </div>
         </div>
@@ -232,6 +232,8 @@ const project = {
   .info-footer { margin-top: 60px; padding-top: 32px; border-top: 1px solid rgba(0, 0, 0, 0.08); display: flex; justify-content: space-between; }
   .footer-nav-link { color: #666; text-decoration: none; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; transition: color 0.2s ease; }
   .footer-nav-link:hover { color: #000; text-decoration: underline !important; text-underline-offset: 0.2em; }
+  .footer-nav-link-disabled { opacity: 0.45; cursor: default; }
+  .footer-nav-link-disabled:hover { color: #666; text-decoration: none !important; }
 
   /* ANIMATIONS */
   .parallax-bg { transition: transform 0.1s ease-out; }

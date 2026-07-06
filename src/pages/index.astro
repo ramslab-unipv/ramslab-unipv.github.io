@@ -60,10 +60,9 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
         {featuredProjects.map((project) => (
           <ProjectCard
             href={
-              entrySlug(project.id) === 'dynamica-prin' ? withBase('/activities/dynamica/') : 
-              entrySlug(project.id) === 'demetra-nodes' ? withBase('/activities/demetra/') : 
-              entrySlug(project.id) === 'carbon-fiber' ? withBase('/activities/composite-manufacturing/') : 
-              undefined
+              entrySlug(project.id) === 'demetra-nodes'
+                ? withBase('/activities/demetra/')
+                : undefined
             }
             title={project.data.title}
             meta={[project.data.year?.toString(), project.data.status].filter(Boolean).join(' · ')}

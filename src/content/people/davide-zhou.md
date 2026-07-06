@@ -7,10 +7,6 @@ order: 11
 links:
   - label: "LinkedIn"
     url: "https://www.linkedin.com/in/davide-zhou-575b89188/"
-  - label: "IEIE Minutes 2023"
-    url: "https://phdieie.unipv.it/wp-content/uploads/2023/11/Verbale_IEIE_10_10_2023.pdf"
 ---
 
-Davide Zhou is listed in the IEIE PhD student archive in Industrial Engineering with Valentina Furlan and Hermes Giberti as tutors.
-
-The doctoral documentation for the XXXIX cycle describes his fellowship topic as robotics in the manufacturing industry and the future of production. His profile therefore aligns with RAMSLAB work at the intersection of industrial robotics, production innovation, and digital manufacturing environments.
+Davide Zhou received the M.Sc. degree in Mechanical Engineering from Politecnico di Milano, Milan, Italy, in 2023. He is currently pursuing the Ph.D. degree in Industrial Engineering at the University of Pavia, Pavia, Italy, where he is a member of RAMSLAB. His research focuses on the development of automated robotic solutions for advanced manufacturing, with particular emphasis on collaborative and industrial robotics, computer vision, artificial intelligence, and sensor integration for composite material processing and surface finishing. He has been involved in research on robotic contact and non-contact measurement systems, defect detection, and intelligent manufacturing technologies, contributing to several international conference proceedings and journal publications in the fields of robotics, metrology, and industrial automation.

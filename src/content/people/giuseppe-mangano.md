@@ -8,10 +8,6 @@ order: 8
 links:
   - label: "LinkedIn"
     url: "https://www.linkedin.com/in/g-mangano/"
-  - label: "PhD Profile PDF"
-    url: "https://phdieie.unipv.it/wp-content/uploads/2023/02/Mangano.pdf"
 ---
 
-Giuseppe Mangano is listed by the IEIE PhD School among the Industrial Engineering doctoral students supervised by Hermes Giberti and Marco Carnevale.
-
-His official PhD profile highlights simulation systems in sport and rehabilitation and notes previous work on the development and design of a three-degree-of-freedom driving simulator. This makes his profile strongly aligned with RAMSLAB activity on simulators, rehabilitation environments, and human performance analysis.
+Giuseppe Mangano received the M.Sc. degree in Mechatronics Engineering from Politecnico di Milano, Milan, Italy, in 2022, and the Ph.D. degree (cum laude) in Electronics, Computer Science, and Electrical Engineering from the University of Pavia, Pavia, Italy. His work focuses on the development of human-in-the-loop simulation systems, with emphasis on real-time multibody dynamic models, virtual environments, and sensor data acquisition, communication, and processing. His research interests include dynamic simulation, parallel kinematic machines, rehabilitation technologies, sport simulation, and sensor-based interactive systems. He has authored publications in international journals and conferences on exergaming platforms, kinematic crosstalk analysis, dynamic driving simulators, and human-in-the-loop facilities for sport and rehabilitation.
