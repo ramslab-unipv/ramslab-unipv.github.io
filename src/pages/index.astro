@@ -62,6 +62,8 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
             href={
               entrySlug(project.id) === 'demetra-nodes'
                 ? withBase('/activities/demetra/')
+                : entrySlug(project.id) === 'air-flow-dynamic'
+                ? withBase('/activities/air-flow-dynamic/')
                 : undefined
             }
             title={project.data.title}

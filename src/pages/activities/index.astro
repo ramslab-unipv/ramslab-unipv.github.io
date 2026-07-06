@@ -14,6 +14,7 @@ const activities = (await getCollection('activities')).sort((a, b) => {
 const getActivityHref = (activityId: string) => {
   const slug = entrySlug(activityId);
   if (slug === 'demetra-nodes') return withBase('/activities/demetra/');
+  if (slug === 'air-flow-dynamic') return withBase('/activities/air-flow-dynamic/');
   return null;
 };
 ---

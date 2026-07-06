@@ -1,0 +1,54 @@
+---
+import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
+import { withBase } from '../../lib/assets';
+
+const project = {
+  title: "AIRFLOW DYNAMICS IN ROBOTIC PHARMACEUTICAL ISOLATORS",
+  subtitle: "What if an isolator could see how every robotic motion reshapes its protective airflow—and choose a safer path before sterility is put at risk?",
+  accentColor: "#ccff00", // Fluo yellow-green
+  description: "Automation is transforming pharmaceutical manufacturing. Robots can reduce direct human presence in critical areas, improve process repeatability and support more flexible production of sterile products. This transformation is particularly important in aseptic processes and in the manufacturing of products that must remain inside a controlled environment throughout production.\n\nIn these environments, filtered unidirectional airflow acts as a protective aerodynamic barrier. It continuously supplies clean air to critical regions and carries particles away from exposed products. Introducing a moving robot into the isolator, however, creates a new interaction: robotic motion can reshape the airflow and locally weaken its protective action.\n\nThis research activity focuses on building a connection between airflow observation and robotic decision-making. Smoke makes invisible air motion visible, while vision-based analysis turns it into information that can support the comparison of different movements and the identification of critical regions. The goal is not simply to display vortices, but to understand how a robot should move within a sterile environment.\n\nThe future vision is to evaluate and optimize robotic trajectories according to their effect on the protective airflow. An airflow-aware system could compare different motions before execution, detect unsuitable trajectories and select a solution that balances speed, accuracy and sterility. This approach can support a new generation of adaptive isolators that do not simply execute the process, but actively protect their sterile environment.",
+  publications: [],
+  funding: "Research activity developed at RAMSLAB, University of Pavia"
+};
+---
+
+<ProjectImmersiveLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  accentColor={project.accentColor}
+  heroVideo={withBase('/videos/projects/hero_robotic_airflow.mp4')}
+  sectionA={{
+    label: "THE INVISIBLE BARRIER OF STERILITY",
+    text: "Inside a pharmaceutical isolator, filtered air does more than ventilate the workspace: it creates an invisible protective barrier around the product and the critical process area. This airflow must remain clean, stable and directional to carry particles away from sensitive regions. Seeing and understanding this invisible barrier is the first step towards safer and more controllable sterile environments.",
+    bgImage: withBase('/images/projects/cover_robotic_airflow.png'),
+    sideImage: withBase('/images/projects/airflow_visualization_inside_isolator.jpg'),
+  }}
+  sectionB={{
+    label: "A ROBOT ALSO MOVES THE AIR",
+    text: "Robots can reduce human intervention and make pharmaceutical operations more precise and repeatable. However, a moving robotic arm also moves the air around it. Every motion can bend the protective flow, create a wake behind the robot or generate vortices and recirculation zones. The safety of a robotic operation therefore depends not only on the cleanliness of the robot, but also on how it moves through the sterile environment.",
+    bgImage: withBase('/images/projects/cover_robotic_airflow.png'),
+    sideImage: withBase('/images/projects/robot_airflow_interaction.png'),
+  }}
+  sectionC={{
+    label: "MAKING THE INVISIBLE MEASURABLE",
+    text: "Smoke can reveal airflow that would otherwise remain invisible. The vision of this project, however, goes beyond simple observation: smoke patterns become information that can be used to detect flow deviations, vortices and critical regions. In this way, a traditional smoke study can evolve into an objective and repeatable tool for understanding how air actually behaves inside the isolator.",
+    bgImage: withBase('/images/projects/cover_robotic_airflow.png'),
+    sideImage: withBase('/images/projects/structured_smoke_visualization.png'),
+  }}
+  sectionD={{
+    label: "THE SAFEST PATH IS NOT ALWAYS THE SHORTEST",
+    text: "Different robotic motions do not have the same effect on airflow. A trajectory that appears optimal in terms of distance or cycle time may disturb the protective barrier more than another path. Robotic motion should therefore be designed not only for speed and accuracy, but also for airflow quality. The best trajectory is the one that preserves both process performance and sterile protection.",
+    bgImage: withBase('/images/projects/cover_robotic_airflow.png'),
+    sideImage: withBase('/images/projects/robot_motion_field_comparison.png'),
+  }}
+  sectionE={{
+    label: "TOWARDS AIRFLOW-AWARE ISOLATORS",
+    text: "The long-term vision is to develop isolators capable of observing, evaluating and predicting how robotic motion affects the sterile environment. Such a system could assess new trajectories before execution, identify critical movements and support the selection of safer speeds, accelerations and directions. In the future, a robot will not simply execute a motion command: it will move with awareness of the airflow surrounding it.",
+    bgImage: withBase('/images/projects/cover_robotic_airflow.png'),
+    sideVideo: withBase('/videos/projects/hero_robotic_airflow.mp4'),
+  }}
+  description={project.description}
+  publications={project.publications}
+  funding={project.funding}
+  prevActivity={{ label: "Demetra", href: withBase('/activities/demetra/') }}
+/>

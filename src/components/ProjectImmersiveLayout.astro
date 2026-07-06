@@ -51,16 +51,40 @@ interface SectionB {
   label: string;
   text: string;
   bgImage?: string;
+  bgVideo?: string;
   model3d?: string;
   sideImage?: string;
+  sideVideo?: string;
 }
 
 interface SectionC {
   label: string;
   text: string;
   bgImage?: string;
+  bgVideo?: string;
   model3d?: string;
   sideImage?: string;
+  sideVideo?: string;
+}
+
+interface SectionD {
+  label: string;
+  text: string;
+  bgImage?: string;
+  bgVideo?: string;
+  model3d?: string;
+  sideImage?: string;
+  sideVideo?: string;
+}
+
+interface SectionE {
+  label: string;
+  text: string;
+  bgImage?: string;
+  bgVideo?: string;
+  model3d?: string;
+  sideImage?: string;
+  sideVideo?: string;
 }
 
 interface TeamMember {
@@ -74,9 +98,11 @@ interface Props {
   accentColor?: string;
   heroVideo?: string;
   heroImage?: string;
-  sectionA: SectionA;
-  sectionB: SectionB;
-  sectionC: SectionC;
+  sectionA?: SectionA;
+  sectionB?: SectionB;
+  sectionC?: SectionC;
+  sectionD?: SectionD;
+  sectionE?: SectionE;
   description: string;
   publications?: Publication[];
   funding?: string;
@@ -94,6 +120,8 @@ const {
   sectionA,
   sectionB,
   sectionC,
+  sectionD,
+  sectionE,
   description,
   publications = [],
   funding,
@@ -135,7 +163,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           <div class="bg-overlay"></div>
         </div>
         <div class="content">
-          <h1 class="title-main">{title}</h1>
+          <h1 class={`title-main ${title.length > 30 ? 'title-long' : ''}`}>{title}</h1>
           {subtitle && <p class="subtitle">{subtitle}</p>}
         </div>
       </section>
@@ -179,9 +207,16 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
       </section>
 
       <!-- SECTION 3: IMAGE BG + 3D MODEL (tipo "Digital Twin") -->
+      <!-- SECTION 3: IMAGE BG + 3D MODEL (tipo "Digital Twin") -->
+      {sectionB && (
       <section class="section content-section nature-bg">
         <div class="bg-media">
-          {sectionB.bgImage && <img src={sectionB.bgImage} alt="" class="parallax-bg" />}
+          {sectionB.bgVideo ? (
+            <video src={sectionB.bgVideo} autoplay loop muted playsinline class="hero-bg-video"></video>
+          ) : sectionB.bgImage ? (
+            <img src={sectionB.bgImage} alt="" class="parallax-bg" />
+          ) : null}
+          <div class="bg-overlay"></div>
         </div>
         <div class="content-grid container">
           <div class="text-block reveal">
@@ -190,11 +225,11 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           </div>
           <div class="visual-block reveal">
             {sectionB.model3d ? (
-              <div
-                id="primary-canvas-container"
-                class="tree-3d-container"
-                data-model={sectionB.model3d}
-              ></div>
+              <div id="primary-canvas-container" class="tree-3d-container" data-model={sectionB.model3d}></div>
+            ) : sectionB.sideVideo ? (
+              <div class="tech-video-container side-sync-video">
+                <video src={sectionB.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
+              </div>
             ) : sectionB.sideImage ? (
               <div class="tech-image-container">
                 <img src={sectionB.sideImage} alt="" class="tech-image" />
@@ -204,20 +239,27 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           </div>
         </div>
       </section>
+      )}
 
       <!-- SECTION 4: IMAGE BG + 3D MODEL FLIPPED (tipo "Real-Tool Integration") -->
+      {sectionC && (
       <section class="section content-section alternate">
         <div class="bg-media">
-          {sectionC.bgImage && <img src={sectionC.bgImage} alt="" class="parallax-bg" />}
+          {sectionC.bgVideo ? (
+            <video src={sectionC.bgVideo} autoplay loop muted playsinline class="hero-bg-video"></video>
+          ) : sectionC.bgImage ? (
+            <img src={sectionC.bgImage} alt="" class="parallax-bg" />
+          ) : null}
+          <div class="bg-overlay"></div>
         </div>
         <div class="content-grid container">
           <div class="visual-block reveal">
             {sectionC.model3d ? (
-              <div
-                id="secondary-canvas-container"
-                class="shear-3d-container"
-                data-model={sectionC.model3d}
-              ></div>
+              <div id="secondary-canvas-container" class="shear-3d-container" data-model={sectionC.model3d}></div>
+            ) : sectionC.sideVideo ? (
+              <div class="tech-video-container side-sync-video">
+                <video src={sectionC.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
+              </div>
             ) : sectionC.sideImage ? (
               <div class="tech-image-container">
                 <img src={sectionC.sideImage} alt="" class="tech-image" />
@@ -231,6 +273,75 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           </div>
         </div>
       </section>
+      )}
+
+      <!-- SECTION D (Optional) -->
+      {sectionD && (
+      <section class="section content-section">
+        <div class="bg-media">
+          {sectionD.bgVideo ? (
+            <video src={sectionD.bgVideo} autoplay loop muted playsinline class="hero-bg-video"></video>
+          ) : sectionD.bgImage ? (
+            <img src={sectionD.bgImage} alt="" class="parallax-bg" />
+          ) : null}
+          <div class="bg-overlay"></div>
+        </div>
+        <div class="content-grid container">
+          <div class="text-block reveal">
+            <h2 class="section-label">{sectionD.label}</h2>
+            <p>{sectionD.text}</p>
+          </div>
+          <div class="visual-block reveal">
+            {sectionD.model3d ? (
+              <div class="tree-3d-container" data-model={sectionD.model3d}></div>
+            ) : sectionD.sideVideo ? (
+              <div class="tech-video-container side-sync-video">
+                <video src={sectionD.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
+              </div>
+            ) : sectionD.sideImage ? (
+              <div class="tech-image-container">
+                <img src={sectionD.sideImage} alt="" class="tech-image" />
+                <div class="glow-border"></div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </section>
+      )}
+
+      <!-- SECTION E (Optional) -->
+      {sectionE && (
+      <section class="section content-section alternate">
+        <div class="bg-media">
+          {sectionE.bgVideo ? (
+            <video src={sectionE.bgVideo} autoplay loop muted playsinline class="hero-bg-video"></video>
+          ) : sectionE.bgImage ? (
+            <img src={sectionE.bgImage} alt="" class="parallax-bg" />
+          ) : null}
+          <div class="bg-overlay"></div>
+        </div>
+        <div class="content-grid container">
+          <div class="visual-block reveal">
+            {sectionE.model3d ? (
+              <div class="shear-3d-container" data-model={sectionE.model3d}></div>
+            ) : sectionE.sideVideo ? (
+              <div class="tech-video-container side-wide-video">
+                <video src={sectionE.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
+              </div>
+            ) : sectionE.sideImage ? (
+              <div class="tech-image-container">
+                <img src={sectionE.sideImage} alt="" class="tech-image" />
+                <div class="glow-border"></div>
+              </div>
+            ) : null}
+          </div>
+          <div class="text-block text-block-right reveal">
+            <h2 class="section-label">{sectionE.label}</h2>
+            <p>{sectionE.text}</p>
+          </div>
+        </div>
+      </section>
+      )}
 
       <!-- SECTION 5: RECAP -->
       <section class="recap-section">
@@ -359,6 +470,12 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
     text-transform: uppercase;
     color: var(--color-green-primary);
   }
+  .title-main.title-long {
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    max-width: 1400px;
+    margin: 0 auto;
+    line-height: 1.1;
+  }
   .subtitle {
     font-family: var(--font-sans);
     font-size: 1.1rem;
@@ -422,6 +539,15 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
     width: 280px !important;
     border: 2px solid var(--color-green-primary) !important;
     box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+  }
+  .side-wide-video {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    max-width: 560px;
+    border: 2px solid var(--color-green-primary);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
   }
 
   @media (max-width: 1024px) {
