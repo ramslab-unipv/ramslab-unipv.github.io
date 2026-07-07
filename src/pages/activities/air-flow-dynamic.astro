@@ -8,7 +8,7 @@ const project = {
   accentColor: "#ccff00", // Fluo yellow-green
   description: "Automation is transforming pharmaceutical manufacturing. Robots can reduce direct human presence in critical areas, improve process repeatability and support more flexible production of sterile products. This transformation is particularly important in aseptic processes and in the manufacturing of products that must remain inside a controlled environment throughout production.\n\nIn these environments, filtered unidirectional airflow acts as a protective aerodynamic barrier. It continuously supplies clean air to critical regions and carries particles away from exposed products. Introducing a moving robot into the isolator, however, creates a new interaction: robotic motion can reshape the airflow and locally weaken its protective action.\n\nThis research activity focuses on building a connection between airflow observation and robotic decision-making. Smoke makes invisible air motion visible, while vision-based analysis turns it into information that can support the comparison of different movements and the identification of critical regions. The goal is not simply to display vortices, but to understand how a robot should move within a sterile environment.\n\nThe future vision is to evaluate and optimize robotic trajectories according to their effect on the protective airflow. An airflow-aware system could compare different motions before execution, detect unsuitable trajectories and select a solution that balances speed, accuracy and sterility. This approach can support a new generation of adaptive isolators that do not simply execute the process, but actively protect their sterile environment.",
   publications: [],
-  funding: "Research activity developed at RAMSLAB, University of Pavia"
+  funding: "Research activity developed at RAMSLAB, University of Pavia. This research was funded by MED4REPAIR - Smart advanced medical devices for tissue repair “Collabora e Innova” , R1.2024.0005575 27/11/2024, PR FESR 2021–2027 Regione Lombardia (Project ID 6064179)."
 };
 ---
 
@@ -21,7 +21,7 @@ const project = {
     label: "THE INVISIBLE BARRIER OF STERILITY",
     text: "Inside a pharmaceutical isolator, filtered air does more than ventilate the workspace: it creates an invisible protective barrier around the product and the critical process area. This airflow must remain clean, stable and directional to carry particles away from sensitive regions. Seeing and understanding this invisible barrier is the first step towards safer and more controllable sterile environments.",
     bgImage: withBase('/images/projects/cover_robotic_airflow.png'),
-    sideImage: withBase('/images/projects/airflow_visualization_inside_isolator.jpg'),
+    sideVideoWide: withBase('/videos/projects/Robotic_airflow_2.mp4'),
   }}
   sectionB={{
     label: "A ROBOT ALSO MOVES THE AIR",
@@ -51,4 +51,5 @@ const project = {
   publications={project.publications}
   funding={project.funding}
   prevActivity={{ label: "Demetra", href: withBase('/activities/demetra/') }}
+  nextActivity={{ label: "Robotic Liquid Handling", href: withBase('/activities/robotic-liquid-handling/') }}
 />

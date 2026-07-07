@@ -44,6 +44,7 @@ interface SectionA {
   bgVideo?: string;
   bgImage?: string;
   sideVideo?: string;
+  sideVideoWide?: string;
   sideImage?: string;
 }
 
@@ -55,6 +56,7 @@ interface SectionB {
   model3d?: string;
   sideImage?: string;
   sideVideo?: string;
+  sideVideoWide?: string;
 }
 
 interface SectionC {
@@ -65,6 +67,7 @@ interface SectionC {
   model3d?: string;
   sideImage?: string;
   sideVideo?: string;
+  sideVideoWide?: string;
 }
 
 interface SectionD {
@@ -75,6 +78,7 @@ interface SectionD {
   model3d?: string;
   sideImage?: string;
   sideVideo?: string;
+  sideVideoWide?: string;
 }
 
 interface SectionE {
@@ -85,6 +89,7 @@ interface SectionE {
   model3d?: string;
   sideImage?: string;
   sideVideo?: string;
+  sideVideoWide?: string;
 }
 
 interface TeamMember {
@@ -188,7 +193,15 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
             <p>{sectionA.text}</p>
           </div>
           <div class="visual-block reveal">
-            {sectionA.sideVideo ? (
+            {sectionA.sideVideoWide ? (
+              <div class="tech-video-container side-wide-video">
+                <video
+                  src={sectionA.sideVideoWide}
+                  autoplay loop muted playsinline
+                  class="tech-video"
+                ></video>
+              </div>
+            ) : sectionA.sideVideo ? (
               <div class="tech-video-container side-sync-video">
                 <video
                   src={sectionA.sideVideo}
@@ -294,6 +307,10 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           <div class="visual-block reveal">
             {sectionD.model3d ? (
               <div class="tree-3d-container" data-model={sectionD.model3d}></div>
+            ) : sectionD.sideVideoWide ? (
+              <div class="tech-video-container side-wide-video">
+                <video src={sectionD.sideVideoWide} autoplay loop muted playsinline class="tech-video"></video>
+              </div>
             ) : sectionD.sideVideo ? (
               <div class="tech-video-container side-sync-video">
                 <video src={sectionD.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
@@ -480,9 +497,11 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
     font-family: var(--font-sans);
     font-size: 1.1rem;
     font-weight: 300;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-top: 1.2rem;
+    margin: 1.2rem auto 0;
+    max-width: 800px;
+    line-height: 1.6;
     opacity: 0.75;
   }
 

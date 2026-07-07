@@ -6,17 +6,21 @@ import { getCollection } from 'astro:content';
 import { withBase } from '../../lib/assets';
 import { entrySlug } from '../../lib/entries';
 
-const activities = (await getCollection('activities')).sort((a, b) => {
-  if (a.data.featured !== b.data.featured) return Number(b.data.featured) - Number(a.data.featured);
-  return (b.data.year ?? 0) - (a.data.year ?? 0);
-});
-
 const getActivityHref = (activityId: string) => {
   const slug = entrySlug(activityId);
   if (slug === 'demetra-nodes') return withBase('/activities/demetra/');
   if (slug === 'air-flow-dynamic') return withBase('/activities/air-flow-dynamic/');
+  if (slug === 'robotic-liquid-handling') return withBase('/activities/robotic-liquid-handling/');
   return null;
 };
+
+const activities = (await getCollection('activities')).sort((a, b) => {
+  const hrefA = getActivityHref(a.id);
+  const hrefB = getActivityHref(b.id);
+  
+  if (!!hrefA !== !!hrefB) return hrefA ? -1 : 1;
+  return (b.data.year ?? 0) - (a.data.year ?? 0);
+});
 ---
 
 <BaseLayout title="Activities — RAMSLAB">
