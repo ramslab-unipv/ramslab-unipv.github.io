@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "rating": 0,
+  "adjustments": null,
+  "tags": null,
+  "exif": {
+    "Orientation": "row 0 at top and column 0 at left",
+    "YResolution": "100 pixels per inch",
+    "Software": "\"Matplotlib version3.10.0, https://matplotlib.org/\"",
+    "ColorSpace": "sRGB",
+    "PixelYDimension": "704 pixels",
+    "XResolution": "100 pixels per inch",
+    "PixelXDimension": "1920 pixels",
+    "ResolutionUnit": "inch"
+  }
+}

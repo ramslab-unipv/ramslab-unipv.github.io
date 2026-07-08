@@ -1,0 +1,86 @@
+---
+import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
+import { withBase } from '../../lib/assets';
+
+const project = {
+  title: "Human in the Loop Skeleton Simulator",
+  subtitle: "Train Smarter. Slide Faster. Perform Better",
+  accentColor: "#0ea5e9", // Sky blue for ice/winter theme
+  description: `This project brings skeleton training into a new era by combining immersive simulation, realistic sled dynamics, and advanced athlete monitoring in a single training environment.
+
+Access to high-quality skeleton training is often limited by the small number of tracks worldwide, seasonal conditions, travel costs, and the safety risks of high-speed descents. The simulator is designed to reduce these barriers, giving athletes the possibility to train more frequently, in safer, controlled, and repeatable conditions.
+
+Athletes interact with a physical sled mounted on a motion platform while sliding through virtual tracks that can replicate real-world courses or be custom-designed for specific training goals. This creates a realistic Human-in-the-Loop experience, where the athlete’s movements, posture, and steering actions directly influence the simulation.
+
+During each run, markerless cameras and load cells capture body motion, pressure inputs, and athlete–sled interaction. This data gives coaches a detailed view of the athlete’s technique, helping them analyze performance, identify recurring patterns, and detect areas for improvement.
+
+By transforming each simulated descent into a measurable training session, the system allows feedback to be supported by objective data rather than observation alone. The result is a safer, smarter, and more accessible way to improve skeleton performance.`
+};
+---
+
+<ProjectImmersiveLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  accentColor={project.accentColor}
+  heroVideo={withBase('/videos/projects/POV_track.mp4')}
+  sectionA={{
+    label: "Train Beyond Track Limitations",
+    text: "Slide through iconic tracks around the world from a single training environment. Move freely, experience every second of sessions, and train beyond the geographical limits.",
+    bgImage: withBase('/images/projects/Pista_Sfondo.png'),
+    sideImage: withBase('/images/projects/Sim_skeleton.png'),
+  }}
+  sectionB={{
+    label: "Capture Human Behaviour",
+    text: "Capture the athlete’s behavior in real time. Body movements and pressure inputs are tracked through cameras and load cells, allowing coaches to understand exactly how the athlete performed during the simulation and provide sharper, data-driven feedback.",
+    bgImage: withBase('/images/projects/Pista_Sfondo_2.png'),
+    sideVideoWide: withBase('/videos/projects/skeleton_animation.mp4'),
+  }}
+  sectionC={{
+    label: "Build the Track",
+    text: "From satellite data to virtual tracks. Each course can be recreated from GPS and satellite data, transforming real-world geometry into an accurate digital mesh. Coaches can also design custom tracks tailored to specific training objectives, creating controlled environments built around the athlete’s needs.",
+    bgVideo: withBase('/videos/projects/POV_track.mp4'),
+    model3d: withBase('/models/Cortina_track.glb'), 
+  }}
+  description={project.description}
+  prevActivity={{ label: "Demetra", href: withBase('/activities/demetra/') }}
+  nextActivity={{ label: "Robotic Liquid Handling", href: withBase('/activities/robotic-liquid-handling/') }}
+/>
+
+<style is:global>
+  /* Modifiche specifiche per la pagina Skeleton Simulator */
+  
+  /* Blocco 1: Rimpicciolisce e raddrizza la foto */
+  .locomotion-bg .tech-image-container {
+    max-width: 85%; 
+    margin: 0 auto;
+    transform: rotate(0deg); 
+    border-radius: 12px;
+  }
+
+  /* Blocco 2: Video quadrato e zoommato */
+  .section:nth-of-type(3) .side-wide-video {
+    aspect-ratio: 1 / 1 !important;
+    max-width: 500px; 
+    margin: 0 auto;
+  }
+  
+  .section:nth-of-type(3) .side-wide-video video {
+    transform: scale(1.6) translateY(12%); /* Effetto zoom + sposta l'inquadratura per centrare il soggetto più in basso */
+  }
+
+  /* Blocco 1 e 2: Sfondo più visibile */
+  .section:nth-of-type(2) .bg-media img,
+  .section:nth-of-type(3) .bg-media img {
+    opacity: 0.75 !important; 
+  }
+  
+  .section:nth-of-type(2) .bg-overlay,
+  .section:nth-of-type(3) .bg-overlay {
+    opacity: 0.6 !important; /* Rende il filtro nero meno pesante */
+  }
+
+  /* Blocco 2: Rimuove l'animazione di scorrimento (parallax) dallo sfondo */
+  .section:nth-of-type(3) .parallax-bg {
+    transform: none !important;
+  }
+</style>

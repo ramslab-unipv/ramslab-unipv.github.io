@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "rating": 0,
+  "adjustments": null,
+  "tags": null,
+  "exif": {
+    "ResolutionUnit": "inch",
+    "ColorSpace": "sRGB",
+    "PixelXDimension": "1920 pixels",
+    "PixelYDimension": "1214 pixels",
+    "YResolution": "144 pixels per inch",
+    "XResolution": "144 pixels per inch",
+    "Orientation": "row 0 at top and column 0 at left",
+    "UserComment": "0x415343494900000053637265656e73686f74"
+  }
+}

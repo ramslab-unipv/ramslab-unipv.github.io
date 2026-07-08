@@ -8,7 +8,7 @@ import { withBase } from '../lib/assets';
 import { entrySlug } from '../lib/entries';
 import site from '../content/settings/site.json';
 
-const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes'];
+const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes', 'human-centric-skeleton-simulator'];
 const activities = (await getCollection('activities')).sort((a, b) => {
   const isClickableA = clickableSlugs.includes(entrySlug(a.id));
   const isClickableB = clickableSlugs.includes(entrySlug(b.id));
@@ -70,6 +70,8 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
                 ? withBase('/activities/air-flow-dynamic/')
                 : entrySlug(project.id) === 'robotic-liquid-handling'
                 ? withBase('/activities/robotic-liquid-handling/')
+                : entrySlug(project.id) === 'human-centric-skeleton-simulator'
+                ? withBase('/activities/human-centric-skeleton-simulator/')
                 : undefined
             }
             title={project.data.title}

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "rating": 0,
+  "adjustments": null,
+  "tags": null,
+  "exif": {
+    "PixelXDimension": "1920 pixels",
+    "PixelYDimension": "1920 pixels",
+    "XResolution": "300 pixels per inch",
+    "YResolution": "300 pixels per inch",
+    "ColorSpace": "sRGB",
+    "ResolutionUnit": "inch"
+  }
+}

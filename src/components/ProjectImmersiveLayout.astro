@@ -239,6 +239,10 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           <div class="visual-block reveal">
             {sectionB.model3d ? (
               <div id="primary-canvas-container" class="tree-3d-container" data-model={sectionB.model3d}></div>
+            ) : sectionB.sideVideoWide ? (
+              <div class="tech-video-container side-wide-video">
+                <video src={sectionB.sideVideoWide} autoplay loop muted playsinline class="tech-video"></video>
+              </div>
             ) : sectionB.sideVideo ? (
               <div class="tech-video-container side-sync-video">
                 <video src={sectionB.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
@@ -269,6 +273,10 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           <div class="visual-block reveal">
             {sectionC.model3d ? (
               <div id="secondary-canvas-container" class="shear-3d-container" data-model={sectionC.model3d}></div>
+            ) : sectionC.sideVideoWide ? (
+              <div class="tech-video-container side-wide-video">
+                <video src={sectionC.sideVideoWide} autoplay loop muted playsinline class="tech-video"></video>
+              </div>
             ) : sectionC.sideVideo ? (
               <div class="tech-video-container side-sync-video">
                 <video src={sectionC.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
@@ -623,10 +631,8 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
 
   // 2. THREE.JS LOGIC
   async function initThree() {
-    const container = document.getElementById('primary-canvas-container');
-    if (!container) return;
-
     try {
+      const container = document.getElementById('primary-canvas-container');
       const THREE = await import('three');
       const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
       const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
@@ -772,8 +778,10 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         }
       }
 
-      const modelPath = container.getAttribute('data-model') || '';
-      if (modelPath) new TreeAnimation(modelPath);
+      if (container) {
+        const modelPath = container.getAttribute('data-model') || '';
+        if (modelPath) new TreeAnimation(modelPath);
+      }
 
       // ── SECONDARY MODEL: ShearAnimation (articulated, metallic) ──
       const shearContainer = document.getElementById('secondary-canvas-container');
@@ -793,6 +801,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           
           private targetClose = 0;
           private currentClose = 0;
+          private controls: any;
 
           constructor(private container: HTMLElement, private modelPath: string) {
             this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
@@ -816,6 +825,12 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
             const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
             dirLight.position.set(2, 5, 5);
             this.scene.add(dirLight);
+
+            this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+            this.controls.enableDamping = true;
+            this.controls.dampingFactor = 0.05;
+            this.controls.autoRotate = true;
+            this.controls.autoRotateSpeed = 1.0;
 
             this.setupEventListeners();
             this.animate();
@@ -875,10 +890,12 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
             obs.observe(this.container);
 
             this.container.addEventListener('wheel', (e) => {
-              e.preventDefault();
-              const sensitivity = 0.0015;
-              this.targetClose += e.deltaY * sensitivity;
-              this.targetClose = Math.max(0, Math.min(1, this.targetClose));
+              if (this.bladeMesh) {
+                e.preventDefault();
+                const sensitivity = 0.0015;
+                this.targetClose += e.deltaY * sensitivity;
+                this.targetClose = Math.max(0, Math.min(1, this.targetClose));
+              }
             }, { passive: false });
             
             window.addEventListener('resize', () => {
@@ -902,7 +919,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               this.triggerMesh.rotation.z = -this.currentClose * (Math.PI / 7);
             }
 
-            this.modelGroup.rotation.y += 0.002;
+            this.controls.update();
             this.renderer.render(this.scene, this.camera);
           }
         }
