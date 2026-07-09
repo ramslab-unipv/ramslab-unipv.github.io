@@ -46,34 +46,48 @@ By linking vision-based measurement with trajectory optimization, we eliminate t
     label: "MOVING LIQUIDS IS NOT JUST MOVING CONTAINERS",
     text: "Liquids are not rigid bodies. They oscillate, resonate, and spill. Yet, industrial robots still move them blindly. We give robots the ability to measure and anticipate fluid dynamics, turning chaotic sloshing into a controlled variable.",
     sideVideoWide: withBase('/videos/projects/Media2.mp4'),
+    bgImage: withBase('/images/projects/liquid-handling-bg.png')
   }}
   sectionB={{
     label: "CHARACTERIZE BEFORE OPTIMIZING",
     text: "Forget slow manual tuning. When handling an unknown liquid, the robot performs a rapid set of exploratory motions. Through vision-based observation, it identifies the system's dynamic signature in seconds, extracting the exact parameters needed for optimization.",
     sideImage: withBase('/images/projects/Picture2.png'),
+    bgImage: withBase('/images/projects/liquid-handling-bg.png')
   }}
   sectionC={{
     label: "OPTIMIZE THE MOTION FOR THE TASK",
     text: "With the dynamics mapped, motion is no longer guesswork. Trajectories are numerically optimized to push physical limits: minimize transfer time without spilling, cancel out residual vibrations at the target, or deliberately excite resonance for controlled mixing.",
     sideImage: withBase('/images/projects/Picture3.png'),
+    bgImage: withBase('/images/projects/liquid-handling-bg.png')
   }}
   sectionD={{
     label: "FROM SAFE TRANSFER TO CONTROLLED MIXING",
     text: "Sloshing is treated as a defect, but it is just energy. We use it. While most approaches try to suppress fluid motion, we actively shape it. The same robotic trajectory that guarantees zero-spill transport can be re-engineered to induce vigorous, controlled mixing.",
     sideVideoWide: withBase('/videos/projects/Media1.mp4'),
+    bgImage: withBase('/images/projects/liquid-handling-bg.png')
   }}
   sectionE={{
     label: "TOWARDS ADAPTIVE LIQUID-HANDLING ROBOTS",
     text: "Hardcoded trajectories are obsolete. By integrating vision, dynamic modeling, and optimization, we build adaptive liquid-handling systems. The robot observes, models the physics, and computes the optimal path—regardless of the container or the fluid.",
     sideImage: withBase('/images/projects/Picture4.png'),
+    bgImage: withBase('/images/projects/liquid-handling-bg.png')
   }}
   description={project.description}
   publications={project.publications}
   funding={project.funding}
   prevActivity={{ label: "Airflow Dynamics", href: withBase('/activities/air-flow-dynamic/') }}
+  nextActivity={{ label: "Human-Centric Skeleton Simulator", href: withBase('/activities/human-centric-skeleton-simulator/') }}
 />
 
 <style is:global>
+  /* Aumenta la visibilità dello sfondo e adatta i colori */
+  .bg-media img {
+    opacity: 0.7 !important;
+  }
+  .bg-overlay {
+    background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.5)) !important;
+  }
+
   /* Shrink Picture 4 in Block 5 */
   .section:nth-of-type(6) .tech-image-container {
     max-width: 60%;

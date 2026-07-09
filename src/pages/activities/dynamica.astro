@@ -1,0 +1,64 @@
+---
+import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
+import { withBase } from '../../lib/assets';
+
+const project = {
+  title: "DYNAMICA",
+  subtitle: "Intuitive AI & AR Interface for Collaborative Robotics",
+  accentColor: "#3b82f6", // Blue
+  description: `DYNAMICA is an advanced human-robot collaboration platform dedicated to making robot programming accessible to non-expert users while optimizing shared industrial workflows. At its core, the project integrates Large Language Models (LLMs) with immersive technologies, allowing operators to instruct collaborative robots using intuitive natural language. By seamlessly combining spatial augmented reality with a precise digital twin, DYNAMICA enables users to visualize AI-generated manipulation points directly within the physical workspace, granting them the ability to manually grasp, adjust, and refine virtual trajectories prior to real-world execution. Beyond providing an accessible, zero-code programming environment, the platform serves as an intelligent orchestrator for human-robot teams. By coupling execution-time optimization algorithms for cycle-by-cycle AR task allocation with a robust, four-camera markerless pose estimation system for dynamic Speed and Separation Monitoring (SSM), DYNAMICA ensures both operational efficiency and safety in dynamic manufacturing environments.`,
+  publications: [],
+  funding: `This research was funded by PIANO NAZIONALE DI RIPRESA E RESILIENZA (PNRR); Missione 4 "Istruzione e Ricerca"—Componente C2; Investimento 1.1, "Fondo per il Programma Nazionale di Ricerca e Progetti di Rilevante Interesse Nazionale (PRIN)" -D.D. n. 104 del 2 febbraio 2022, Bando PRIN 2022—CUP I53D23001930006—Cod. prog: 2022XXH9JZ_002/ERC: PE8— Project title: "DYNamic Assessment and Mitigation of the Impact of Collaborative Applications (DYNAMICA)".`,
+  team: [
+    { name: "Università Politecnica delle Marche", role: "Partner" },
+    { name: "Università degli Studi di Padova", role: "Partner" }
+  ]
+};
+---
+
+<ProjectImmersiveLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  accentColor={project.accentColor}
+  heroVideo={withBase('/videos/projects/Hero_DYNAMICA.mp4')}
+  sectionA={{
+    label: "AI-Driven Programming & Refinement",
+    text: "An AR-based programming interface that translates natural language commands into simulated robot actions via a digital twin. AI-generated manipulation points are projected directly into the physical workspace, allowing users to manually grasp, adjust, and correct virtual waypoints with their hands prior to real-world execution.",
+    sideVideoWide: withBase('/videos/projects/Blocco1_DYNAMICA.mp4'),
+    bgImage: withBase('/images/projects/dynamica-bg.png')
+  }}
+  sectionB={{
+    label: "Augmented Reality-Driven Task Allocation",
+    text: "A cycle-by-cycle task allocation system governed by execution-time optimization algorithms. Augmented reality provides the human operator with real-time visual instructions for manual operations, while the robot simultaneously executes its assigned tasks, ensuring an optimized and continuous collaborative workflow.",
+    sideVideoWide: withBase('/videos/projects/Blocco2_DYNAMICA.mp4'),
+    bgImage: withBase('/images/projects/dynamica-bg.png')
+  }}
+  sectionC={{
+    label: "Markerless Pose Estimation for Safety",
+    text: "A dynamic safety monitoring framework that leverages 3D markerless human pose estimation via a four-camera triangulation setup. While designated operators collaborate at nominal speeds, the system tracks any additional personnel entering the workspace, automatically scaling the robot's speed to comply with the Speed and Separation Monitoring (SSM) paradigm.",
+    sideVideoWide: withBase('/videos/projects/Blocco3_DYNAMICA.mp4'),
+    bgImage: withBase('/images/projects/dynamica-bg.png')
+  }}
+  description={project.description}
+  publications={project.publications}
+  funding={project.funding}
+  team={project.team}
+  prevActivity={{ label: "Demetra", href: withBase('/activities/demetra/') }}
+  nextActivity={{ label: "Airflow Dynamics", href: withBase('/activities/air-flow-dynamic/') }}
+/>
+
+<style is:global>
+  /* Aumenta la visibilità dello sfondo per Dynamica */
+  .bg-media img {
+    opacity: 0.7 !important;
+  }
+  .bg-overlay {
+    background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.5)) !important;
+  }
+
+  /* Rimuove la riga nera a sinistra dal video del blocco 3 (Section C) effettuando un leggero zoom */
+  .section:nth-of-type(4) .side-wide-video video {
+    object-fit: cover;
+    transform: scale(1.02);
+  }
+</style>

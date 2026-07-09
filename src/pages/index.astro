@@ -8,7 +8,7 @@ import { withBase } from '../lib/assets';
 import { entrySlug } from '../lib/entries';
 import site from '../content/settings/site.json';
 
-const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes', 'human-centric-skeleton-simulator'];
+const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes', 'human-centric-skeleton-simulator', 'dynamica'];
 const activities = (await getCollection('activities')).sort((a, b) => {
   const isClickableA = clickableSlugs.includes(entrySlug(a.id));
   const isClickableB = clickableSlugs.includes(entrySlug(b.id));
@@ -66,6 +66,8 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
             href={
               entrySlug(project.id) === 'demetra-nodes'
                 ? withBase('/activities/demetra/')
+                : entrySlug(project.id) === 'dynamica'
+                ? withBase('/activities/dynamica/')
                 : entrySlug(project.id) === 'air-flow-dynamic'
                 ? withBase('/activities/air-flow-dynamic/')
                 : entrySlug(project.id) === 'robotic-liquid-handling'
