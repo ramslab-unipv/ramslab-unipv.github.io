@@ -1,0 +1,64 @@
+---
+import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
+import { withBase } from '../../lib/assets';
+
+const project = {
+  title: "DRIVING SIMULATOR",
+  subtitle: "Driving Simulator for Rehabilitation",
+  accentColor: "#dc2626", // Rosso
+  description: "DriveSim represents a significant asset to rehabilitation therapy pathways for patients suffering from psychophysical pathologies. The objective is to present an immersive and effective experience, enabling patients to rebuild confidence in their coordination and reflexes within a familiar daily-life context. The immersive environment and multi-sensory (haptic and visual) feedback provide an enhanced sense of presence, faithfully reproducing urban driving scenarios. The three available modes allow for a differentiated experience across sessions: Free Driving, to navigate without obstacles and gain familiarity with the vehicle; Test Mode, which introduces four distinct mini-games (exergames) designed to evaluate user performance; and Traffic Mode, to re-accustom the patient to actual road driving with active traffic and road signs. Every component of the system and its operational modes can be calibrated to accommodate the precise requirements of both the therapist and the user. This operates within a totally secure, controlled environment that guarantees trial replicability for tracking performance and learning progress, which are available via a detailed data collection system.",
+  publications: [
+    {
+      title: "Integration and Evaluation of Head Mounted Display in a Dynamic Driving Simulator for Rehabilitation Therapies",
+      url: "https://doi.org/10.1109/MetroXRAINE66377.2025.11340535",
+      authors: "G. Mangano, F. Bottino, D. Zhou, N. Giulietti, M. Carnevale and H. Giberti",
+      venue: "2025 IEEE International Conference on Metrology for eXtended Reality, Artificial Intelligence and Neural Engineering (MetroXRAINE), Ancona, Italy, 2025, pp. 788-793"
+    }
+  ],
+  funding: "Supported by Fit4MedRob framework"
+};
+---
+
+<ProjectImmersiveLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  accentColor={project.accentColor}
+  heroVideo={withBase('/videos/projects/DriveSim_POV.mp4')}
+  sectionA={{
+    label: "A MULTI-MODE EXPERIENCE",
+    text: "Whether you wish to drive freely around the streets, engage in mini exergames, or circulate within realistic traffic, the driving experience can be tailored to meet your specific needs and rehabilitation objectives.",
+    sideImage: withBase('/images/projects/DriveSim_principale_blocco1.png'),
+    bgVideo: withBase('/videos/projects/DriveSim_Sfondo1.mp4')
+  }}
+  sectionB={{
+    label: "ADAPTIVE MULTI_FEEDBACK SYSTEM",
+    text: "To accommodate every specific need of both you and your patient, the system features a fully adjustable multi-feedback system. The 3 DOF platform, steering wheel, and pedals replicate all the sensations experienced during actual driving, while the virtual environment is completely visualized on the screen.",
+    model3d: withBase('/models/DriveSim_seat_blocco2.glb'),
+    bgImage: withBase('/images/projects/DriveSim_Sfondo2.png')
+  }}
+  sectionC={{
+    label: "TRACK YOUR PERFORMANCE",
+    text: "In any selected mode and scenario, the system enables the measurement of all metrics. Through high-frequency sampling of steering and pedal inputs, it records your performance during exergames as well as your driving behavior in realistic traffic.",
+    model3d: withBase('/models/DriveSim_fiat_blocco3.glb'),
+    bgImage: withBase('/images/projects/DriveSim_Sfondo3.png')
+  }}
+  description={project.description}
+  publications={project.publications}
+  funding={project.funding}
+  prevActivity={{ label: "Human-Centric Skeleton Simulator", href: withBase('/activities/human-centric-skeleton-simulator/') }}
+  nextActivity={{ label: "AHBI", href: withBase('/activities/ahbi/') }}
+/>
+
+<style is:global>
+  /* Aumenta la visibilità dello sfondo */
+  .bg-media img, .bg-media video {
+    opacity: 0.6 !important;
+  }
+  .bg-overlay {
+    background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.6)) !important;
+  }
+  /* Taglia il bordo nero in alto del video Hero */
+  .hero-section .hero-bg-video {
+    transform: translate(-50%, -50%) scale(1.15) !important;
+  }
+</style>

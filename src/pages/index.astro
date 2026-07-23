@@ -8,12 +8,17 @@ import { withBase } from '../lib/assets';
 import { entrySlug } from '../lib/entries';
 import site from '../content/settings/site.json';
 
-const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes', 'human-centric-skeleton-simulator', 'dynamica'];
+const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes', 'human-centric-skeleton-simulator', 'dynamica', 'ahbi', 'drivesim'];
 const activities = (await getCollection('activities')).sort((a, b) => {
   const isClickableA = clickableSlugs.includes(entrySlug(a.id));
   const isClickableB = clickableSlugs.includes(entrySlug(b.id));
   
   if (isClickableA !== isClickableB) return isClickableA ? -1 : 1;
+
+  const isOngoingA = a.data.status?.toUpperCase().includes('ONGOING');
+  const isOngoingB = b.data.status?.toUpperCase().includes('ONGOING');
+  if (isOngoingA !== isOngoingB) return isOngoingA ? -1 : 1;
+
   return (b.data.year ?? 0) - (a.data.year ?? 0);
 });
 const featuredProjects = activities.slice(0, 12);
@@ -74,10 +79,14 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
                 ? withBase('/activities/robotic-liquid-handling/')
                 : entrySlug(project.id) === 'human-centric-skeleton-simulator'
                 ? withBase('/activities/human-centric-skeleton-simulator/')
+                : entrySlug(project.id) === 'ahbi'
+                ? withBase('/activities/ahbi/')
+                : entrySlug(project.id) === 'drivesim'
+                ? withBase('/activities/drivesim/')
                 : undefined
             }
             title={project.data.title}
-            meta={[project.data.year?.toString(), project.data.status].filter(Boolean).join(' · ')}
+            meta={[project.data.year?.toString(), project.data.status?.replace(/ongoing/i, 'ONGOING')].filter(Boolean).join(' · ')}
             src={project.data.cover}
             fit={project.data.coverFit}
           />

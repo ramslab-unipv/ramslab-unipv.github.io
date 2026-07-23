@@ -620,6 +620,8 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
 
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     
+    // Parallax removed as requested
+    /*
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
       document.querySelectorAll('.parallax-bg').forEach(bg => {
@@ -627,306 +629,44 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         (bg as HTMLElement).style.transform = `translateY(${scrollY * speed}px)`;
       });
     });
+    */
   }
 
   // 2. THREE.JS LOGIC
   async function initThree() {
     try {
-      const container = document.getElementById('primary-canvas-container');
-      const THREE = await import('three');
-      const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
-      const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
-      const { default: gsap } = await import('gsap');
-
-      // ── PRIMARY MODEL: TreeAnimation (points → wireframe → solid) ──
-      class TreeAnimation {
-        private scene = new THREE.Scene();
-        private camera = new THREE.PerspectiveCamera(45, container!.clientWidth / container!.clientHeight, 0.1, 2000);
-        private renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        private controls = new OrbitControls(this.camera, this.renderer.domElement);
-        private modelGroup = new THREE.Group();
-        private pointsGroup = new THREE.Group();
-        private wireframeGroup = new THREE.Group();
-        private finalGroup = new THREE.Group();
-        private timeline: gsap.core.Timeline | null = null;
-        private isAnimating = false;
-        private modelLoaded = false;
-
-        constructor(private modelPath: string) {
-          this.init();
+      
+        const container = document.getElementById('primary-canvas-container');
+        if (container) {
+          const modelPath = container.getAttribute('data-model') || '';
+          if (modelPath) {
+            if (modelPath.includes('Demetra') || modelPath.includes('tree')) {
+              new TreeAnimation(modelPath);
+            } else {
+              new StandardAnimation(container, modelPath);
+            }
+          }
         }
 
-        private init() {
-          this.renderer.setSize(container!.clientWidth, container!.clientHeight);
-          this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-          container!.appendChild(this.renderer.domElement);
-
-          this.camera.position.set(0, -1, 10);
-          this.scene.add(this.modelGroup);
-          this.modelGroup.add(this.pointsGroup, this.wireframeGroup, this.finalGroup);
-
-          this.controls.enableDamping = true;
-          this.controls.dampingFactor = 0.05;
-          this.controls.enablePan = false;
-          this.controls.minPolarAngle = Math.PI / 2.2;
-          this.controls.maxPolarAngle = Math.PI / 1.8;
-          this.controls.enabled = false;
-
-          const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
-          this.scene.add(ambientLight);
-          const pointLight = new THREE.PointLight(0xffffff, 2.0);
-          pointLight.position.set(10, 20, 10);
-          this.scene.add(pointLight);
-
-          this.setupEventListeners();
-          this.animate();
+        const shearContainer = document.getElementById('secondary-canvas-container') || document.querySelector('.shear-3d-container');
+        if (shearContainer) {
+          const shearModelPath = shearContainer.getAttribute('data-model') || '';
+          if (shearModelPath) {
+            if (shearModelPath.includes('Dynamica') || shearModelPath.includes('tool')) {
+              new ShearAnimation(shearContainer as HTMLElement, shearModelPath);
+            } else {
+              new StandardAnimation(shearContainer as HTMLElement, shearModelPath);
+            }
+          }
         }
-
-        private loadModel() {
-          const loader = new GLTFLoader();
-          loader.load(this.modelPath, (gltf) => {
-            const model = gltf.scene;
-            const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
-
-            const computedStyle = getComputedStyle(container!);
-            const accentColorStr = computedStyle.getPropertyValue('--color-green-primary').trim() || '#10b981';
-            const accentColor = new THREE.Color(accentColorStr);
-
-            model.traverse((child) => {
-              if ((child as THREE.Mesh).isMesh) {
-                const mesh = child as THREE.Mesh;
-                mesh.updateMatrixWorld();
-                const geometry = mesh.geometry.clone();
-                geometry.applyMatrix4(mesh.matrixWorld);
-
-                const pMat = new THREE.PointsMaterial({ color: accentColor, size: 0.015, transparent: true, opacity: 0 });
-                this.pointsGroup.add(new THREE.Points(geometry, pMat));
-
-                const wMat = new THREE.MeshBasicMaterial({ color: accentColor, wireframe: true, transparent: true, opacity: 0 });
-                this.wireframeGroup.add(new THREE.Mesh(geometry, wMat));
-
-                const final = mesh.clone();
-                final.geometry = geometry;
-                final.position.set(0, 0, 0);
-                final.rotation.set(0, 0, 0);
-                final.scale.set(1, 1, 1);
-                if (Array.isArray(final.material)) {
-                  final.material = final.material.map(m => {
-                    const newM = m.clone();
-                    newM.transparent = true;
-                    newM.opacity = 0;
-                    return newM;
-                  });
-                } else {
-                  final.material = final.material.clone();
-                  final.material.transparent = true;
-                  final.material.opacity = 0;
-                }
-                this.finalGroup.add(final);
-              }
-            });
-
-            this.modelGroup.position.sub(center);
-            const scaleFactor = 15 / Math.max(size.x, size.y, size.z);
-            this.modelGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
-            this.modelGroup.position.y -= (size.y * scaleFactor) * 0.4;
-
-            this.setupTimeline();
-            if (this.isAnimating) this.timeline?.play();
-          });
-        }
-
-        private setupTimeline() {
-          this.timeline = gsap.timeline({ paused: true, onComplete: () => { this.controls.enabled = true; } });
-          const pMats: any[] = []; this.pointsGroup.traverse(c => { if((c as any).isPoints) pMats.push((c as any).material); });
-          const wMats: any[] = []; this.wireframeGroup.traverse(c => { if((c as any).isMesh) wMats.push((c as any).material); });
-          const fMats: any[] = []; this.finalGroup.traverse(c => { if((c as any).isMesh) {
-            if(Array.isArray((c as any).material)) fMats.push(...(c as any).material);
-            else fMats.push((c as any).material);
-          }});
-
-          this.timeline.to(this.camera.position, { z: 24, duration: 8, ease: "power1.inOut" }, 0);
-          this.timeline.to(pMats, { opacity: 1, duration: 2.5, stagger: 0.1 }, 0);
-          this.timeline.to(wMats, { opacity: 0.3, duration: 2.5, stagger: 0.1 }, 1.5);
-          this.timeline.to(fMats, { opacity: 1, duration: 4, stagger: 0.15 }, 3.5);
-          this.timeline.to([...pMats, ...wMats], { opacity: 0.1, duration: 3 }, 5);
-        }
-
-        private setupEventListeners() {
-          const obs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                this.isAnimating = true;
-                if (!this.modelLoaded) { this.modelLoaded = true; this.loadModel(); }
-                this.timeline?.play();
-              } else {
-                this.isAnimating = false;
-              }
-            });
-          }, { threshold: 0.1 });
-          obs.observe(container!);
-        }
-
-        private animate() {
-          requestAnimationFrame(() => this.animate());
-          if (!this.isAnimating) return;
-          this.controls.update();
-          if (!this.controls.enabled) this.modelGroup.rotation.y += 0.0008;
-          this.renderer.render(this.scene, this.camera);
-        }
-      }
-
-      if (container) {
-        const modelPath = container.getAttribute('data-model') || '';
-        if (modelPath) new TreeAnimation(modelPath);
-      }
-
-      // ── SECONDARY MODEL: ShearAnimation (articulated, metallic) ──
-      const shearContainer = document.getElementById('secondary-canvas-container');
-      if (shearContainer) {
-        const { RoomEnvironment } = await import('three/examples/jsm/environments/RoomEnvironment.js');
         
-        class ShearAnimation {
-          private scene = new THREE.Scene();
-          private camera: THREE.PerspectiveCamera;
-          private renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-          private modelGroup = new THREE.Group();
-          private isAnimating = false;
-          private modelLoaded = false;
-          
-          private bladeMesh: THREE.Object3D | null = null;
-          private triggerMesh: THREE.Object3D | null = null;
-          
-          private targetClose = 0;
-          private currentClose = 0;
-          private controls: any;
+        // Find any other 3D containers in section D or E
+        document.querySelectorAll('.tree-3d-container, .shear-3d-container').forEach(cont => {
+          if (cont.id === 'primary-canvas-container' || cont.id === 'secondary-canvas-container') return;
+          const modelPath = cont.getAttribute('data-model') || '';
+          if (modelPath) new StandardAnimation(cont as HTMLElement, modelPath);
+        });
 
-          constructor(private container: HTMLElement, private modelPath: string) {
-            this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-            this.init();
-          }
-
-          private init() {
-            this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            this.container.appendChild(this.renderer.domElement);
-
-            this.camera.position.set(0, 0, 5);
-            this.scene.add(this.modelGroup);
-
-            const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-            this.scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
-            
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            this.scene.add(ambientLight);
-            
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
-            dirLight.position.set(2, 5, 5);
-            this.scene.add(dirLight);
-
-            this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-            this.controls.enableDamping = true;
-            this.controls.dampingFactor = 0.05;
-            this.controls.autoRotate = true;
-            this.controls.autoRotateSpeed = 1.0;
-
-            this.setupEventListeners();
-            this.animate();
-          }
-
-          private loadModel() {
-            const loader = new GLTFLoader();
-            loader.load(this.modelPath, (gltf) => {
-              const model = gltf.scene;
-              
-              model.traverse((child) => {
-                const name = child.name.toLowerCase();
-                if (name.includes('blade') && !this.bladeMesh) this.bladeMesh = child;
-                if (name.includes('trigger') && !this.triggerMesh) this.triggerMesh = child;
-                
-                if ((child as THREE.Mesh).isMesh) {
-                  const mesh = child as THREE.Mesh;
-                  if (mesh.material instanceof THREE.MeshStandardMaterial) {
-                    mesh.material.metalness = 0.9;
-                    mesh.material.roughness = 0.2;
-                    mesh.material.envMapIntensity = 1.0;
-                    mesh.material.needsUpdate = true;
-                  }
-                }
-              });
-
-              const box = new THREE.Box3().setFromObject(model);
-              const center = box.getCenter(new THREE.Vector3());
-              const size = box.getSize(new THREE.Vector3());
-              
-              this.modelGroup.add(model);
-              model.position.sub(center);
-              
-              const maxDim = Math.max(size.x, size.y, size.z);
-              const scaleFactor = 4.5 / maxDim;
-              this.modelGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
-              this.modelGroup.rotation.y = Math.PI / 4;
-              this.modelGroup.rotation.x = Math.PI / 12;
-            });
-          }
-
-          private setupEventListeners() {
-            const obs = new IntersectionObserver((entries) => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  this.isAnimating = true;
-                  if (!this.modelLoaded) { 
-                    this.modelLoaded = true; 
-                    this.loadModel(); 
-                  }
-                } else {
-                  this.isAnimating = false;
-                }
-              });
-            }, { threshold: 0.1 });
-            obs.observe(this.container);
-
-            this.container.addEventListener('wheel', (e) => {
-              if (this.bladeMesh) {
-                e.preventDefault();
-                const sensitivity = 0.0015;
-                this.targetClose += e.deltaY * sensitivity;
-                this.targetClose = Math.max(0, Math.min(1, this.targetClose));
-              }
-            }, { passive: false });
-            
-            window.addEventListener('resize', () => {
-              if (!this.container) return;
-              this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
-              this.camera.updateProjectionMatrix();
-              this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-            });
-          }
-
-          private animate() {
-            requestAnimationFrame(() => this.animate());
-            if (!this.isAnimating) return;
-
-            this.currentClose += (this.targetClose - this.currentClose) * 0.1;
-
-            if (this.bladeMesh) {
-              this.bladeMesh.rotation.z = -this.currentClose * (Math.PI / 3.5);
-            }
-            if (this.triggerMesh) {
-              this.triggerMesh.rotation.z = -this.currentClose * (Math.PI / 7);
-            }
-
-            this.controls.update();
-            this.renderer.render(this.scene, this.camera);
-          }
-        }
-
-        const shearModelPath = shearContainer.getAttribute('data-model') || '';
-        if (shearModelPath) new ShearAnimation(shearContainer, shearModelPath);
-      }
 
     } catch (e) {
       console.error("Three.js failed to load:", e);

@@ -13,6 +13,8 @@ const getActivityHref = (activityId: string) => {
   if (slug === 'air-flow-dynamic') return withBase('/activities/air-flow-dynamic/');
   if (slug === 'robotic-liquid-handling') return withBase('/activities/robotic-liquid-handling/');
   if (slug === 'human-centric-skeleton-simulator') return withBase('/activities/human-centric-skeleton-simulator/');
+  if (slug === 'ahbi') return withBase('/activities/ahbi/');
+  if (slug === 'drivesim') return withBase('/activities/drivesim/');
   return null;
 };
 
@@ -21,6 +23,11 @@ const activities = (await getCollection('activities')).sort((a, b) => {
   const hrefB = getActivityHref(b.id);
   
   if (!!hrefA !== !!hrefB) return hrefA ? -1 : 1;
+
+  const isOngoingA = a.data.status?.toUpperCase().includes('ONGOING');
+  const isOngoingB = b.data.status?.toUpperCase().includes('ONGOING');
+  if (isOngoingA !== isOngoingB) return isOngoingA ? -1 : 1;
+
   return (b.data.year ?? 0) - (a.data.year ?? 0);
 });
 ---
@@ -67,7 +74,7 @@ const activities = (await getCollection('activities')).sort((a, b) => {
               <div class="activity-card-meta">
                 <span>{activity.data.year ? String(activity.data.year) : 'Undated'}</span>
                 <span>·</span>
-                <span>{activity.data.status ?? 'Activity'}</span>
+                <span>{activity.data.status?.replace(/ongoing/i, 'ONGOING') ?? 'Activity'}</span>
               </div>
               <h2 class="activity-card-title">
                 {href ? <a href={href}>{activity.data.title}</a> : <span>{activity.data.title}</span>}
