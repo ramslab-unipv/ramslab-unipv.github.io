@@ -1,0 +1,51 @@
+---
+import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
+import { withBase } from '../../lib/assets';
+
+const project = {
+  title: "BALANCE PLATFORM SIMULATOR",
+  subtitle: "A robotic 3-DOF platform for balance and proprioception rehabilitation and training.",
+  accentColor: "#3b82f6", // Blue
+};
+---
+
+<ProjectImmersiveLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  accentColor={project.accentColor}
+  heroVideo={withBase('/videos/projects/VideoCopertina.mp4')}
+  sectionA={{
+    label: "Three Degrees of Freedom",
+    text: "A 3-degree-of-freedom motion platform (roll, pitch, heave), ideal for challenging human equilibrium and testing responses to perturbation, with exercises delivered in a controlled setting and tailored to each individual user.",
+    sideImage: withBase('/images/projects/cad_sistema_schermo.png')
+  }}
+  sectionB={{
+    label: "Markerless Motion Tracking",
+    text: "Four cameras, powered by AI, capture the patient's joints and reconstruct their center of mass in real time through dedicated algorithms, feeding the system's control loop.",
+    sideImage: withBase('/images/projects/4cameras.png')
+  }}
+  sectionC={{
+    label: "Human-Machine Interaction Model",
+    text: "A mathematical model describes the interaction between the person and the platform, allowing the machine to be controlled in a way that is coherent with the simulation being performed. The person's movement, together with the platform's current state, feeds into the model as input; the model, in turn, generates the platform's motion references as output. The platform's motion then acts back on the person—closing the loop."
+  }}
+  sectionD={{
+    label: "Virtual Environment Exergame",
+    text: "Inside the virtual environment, patients complete task-based exergames that push them just beyond their comfort zone, turning every session into a controlled challenge to their equilibrium, and every challenge into progress.",
+    sideImage: withBase('/images/projects/avatar_skii.png')
+  }}
+  sectionE={{
+    label: "For Sport and Rehabilitation",
+    text: "Born to train balance for sport and rehabilitation. Combined with virtual reality, the platform turns physical exercise into an exergame that trains body, proprioception, and cognition all together."
+  }}
+  description={"Balance and proprioception are essential for safe, independent movement, yet are often compromised by natural aging and neurological conditions such as stroke, Parkinson's disease, ALS, and mild cognitive impairment. The Balance Platform Simulator responds with a 3-degree-of-freedom robotic system, controlled in real time and driven by markerless motion tracking. Patient movement is captured without wearable sensors and fed into a mathematical model that dynamically shapes the platform's response to each patient's abilities. Integrated with virtual reality, the platform allows patients to play exergames that merge physical exercise with cognitive challenges, supporting motor recovery while stimulating brain plasticity. Born from a collaboration between clinicians and engineers, the system offers greater versatility than conventional two-DOF devices and can also be reconfigured as a driving simulator."}
+  funding={"Developed within the PNC-PNRR project Fit4MedRob (PNC0000007)."}
+  prevActivity={{ label: "DriveSim", href: withBase('/activities/drivesim/') }}
+  nextActivity={{ label: "3D Human Poses Estimation", href: withBase('/activities/3d-human-poses-estimation/') }}
+/>
+
+<style is:global>
+  .bg-media img, .bg-media video { display: none; }
+  .section .bg-media { background-color: #000; width: 100vw; height: 100vh; }
+  .section.content-section { background-color: #000; color: #fff; }
+  .section.hero-section { background-color: initial; color: inherit; }
+</style>
