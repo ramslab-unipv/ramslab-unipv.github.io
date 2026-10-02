@@ -5,6 +5,6 @@ year: 2023
 status: "2026"
 tags: ["robotics", "AI", "AR", "collaboration"]
 featured: true
-cover: "/images/projects/Copertina_DYNAMICA.png"
+cover: "/images/projects/Dynamica_cover.jpeg"
 coverFit: "cover"
 ---

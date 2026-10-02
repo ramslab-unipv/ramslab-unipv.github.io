@@ -5,6 +5,6 @@ year: 2024
 status: "2025"
 tags: ["smart agriculture", "virtual-reality", "haptic"]
 featured: true
-cover: "/images/projects/demetra.png"
+cover: "/images/projects/Demetra_cover.jpeg"
 coverFit: "cover"
 ---
