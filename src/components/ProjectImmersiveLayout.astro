@@ -468,7 +468,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
     z-index: 0;
   }
 
-  .bg-media img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+  .bg-media img { width: 100%; height: 100%; object-fit: contain; object-position: top; opacity: 0.4; }
 
   .bg-overlay {
     position: absolute;
@@ -695,7 +695,6 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               const scaleFactor = 3.5 / (maxDim || 1);
               this.modelGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-              // Position camera to view whole object properly
               this.camera.position.set(0, size.y * scaleFactor * 0.2, 5);
               this.controls.target.set(0, 0, 0);
               this.controls.update();
@@ -739,12 +738,12 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         }
       }
 
-      // ── Tree Animation (Demetra particle/wireframe reveal) ──
+      // ── PRIMARY MODEL: TreeAnimation (points → wireframe → solid) ──
       class TreeAnimation {
         private scene = new THREE.Scene();
-        private camera: THREE.PerspectiveCamera;
+        private camera = new THREE.PerspectiveCamera(45, 860 / 1050, 0.1, 2000);
         private renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        private controls: InstanceType<typeof OrbitControls>;
+        private controls = new OrbitControls(this.camera, this.renderer.domElement);
         private modelGroup = new THREE.Group();
         private pointsGroup = new THREE.Group();
         private wireframeGroup = new THREE.Group();
@@ -752,14 +751,15 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         private timeline: gsap.core.Timeline | null = null;
         private isAnimating = false;
         private modelLoaded = false;
+        private container: HTMLElement | null = null;
 
-        constructor(private modelPath: string, private container: HTMLElement = document.getElementById('primary-canvas-container')!) {
-          this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 2000);
-          this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        constructor(private modelPath: string) {
+          this.container = document.getElementById('primary-canvas-container');
           this.init();
         }
 
         private init() {
+          if (!this.container) return;
           this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
           this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
           this.container.appendChild(this.renderer.domElement);
@@ -771,6 +771,8 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           this.controls.enableDamping = true;
           this.controls.dampingFactor = 0.05;
           this.controls.enablePan = false;
+          this.controls.minPolarAngle = Math.PI / 2.2;
+          this.controls.maxPolarAngle = Math.PI / 1.8;
           this.controls.enabled = false;
 
           const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
@@ -784,6 +786,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         }
 
         private loadModel() {
+          if (!this.container) return;
           const loader = new GLTFLoader();
           loader.load(this.modelPath, (gltf) => {
             const model = gltf.scene;
@@ -791,7 +794,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
             const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
 
-            const computedStyle = getComputedStyle(this.container);
+            const computedStyle = getComputedStyle(this.container!);
             const greenPrimary = computedStyle.getPropertyValue('--color-green-primary').trim() || '#16a34a';
             const accentColor = new THREE.Color(greenPrimary);
 
@@ -856,6 +859,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         }
 
         private setupEventListeners() {
+          if (!this.container) return;
           const obs = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
               if (entry.isIntersecting) {
@@ -879,7 +883,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         }
       }
 
-      // ── Shear/Tool Articulated Animation ──
+      // ── SECONDARY MODEL: ShearAnimation (articulated, metallic) ──
       class ShearAnimation {
         private scene = new THREE.Scene();
         private camera: THREE.PerspectiveCamera;
@@ -912,6 +916,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
 
           const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
           this.scene.add(ambientLight);
+
           const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
           dirLight.position.set(2, 5, 5);
           this.scene.add(dirLight);
@@ -929,6 +934,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           const loader = new GLTFLoader();
           loader.load(this.modelPath, (gltf) => {
             const model = gltf.scene;
+
             model.traverse((child) => {
               const name = child.name.toLowerCase();
               if (name.includes('blade') && !this.bladeMesh) this.bladeMesh = child;
@@ -999,40 +1005,46 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           if (!this.isAnimating) return;
 
           this.currentClose += (this.targetClose - this.currentClose) * 0.1;
-          if (this.bladeMesh) this.bladeMesh.rotation.z = -this.currentClose * (Math.PI / 3.5);
-          if (this.triggerMesh) this.triggerMesh.rotation.z = -this.currentClose * (Math.PI / 7);
+
+          if (this.bladeMesh) {
+            this.bladeMesh.rotation.z = -this.currentClose * (Math.PI / 3.5);
+          }
+          if (this.triggerMesh) {
+            this.triggerMesh.rotation.z = -this.currentClose * (Math.PI / 7);
+          }
 
           this.controls.update();
           this.renderer.render(this.scene, this.camera);
         }
       }
 
-      // ── Container Initialization ──
-      const primaryContainer = document.getElementById('primary-canvas-container');
-      if (primaryContainer) {
-        const modelPath = primaryContainer.getAttribute('data-model') || '';
+      // ── INIT PRIMARY CONTAINER ──
+      const container = document.getElementById('primary-canvas-container');
+      if (container) {
+        const modelPath = container.getAttribute('data-model') || '';
         if (modelPath) {
-          if (modelPath.includes('Demetra') || modelPath.includes('tree')) {
-            new TreeAnimation(modelPath, primaryContainer);
+          if (modelPath.includes('tree') || modelPath.includes('Demetra')) {
+            new TreeAnimation(modelPath);
           } else {
-            new StandardAnimation(primaryContainer, modelPath);
+            new StandardAnimation(container, modelPath);
           }
         }
       }
 
-      const secondaryContainer = document.getElementById('secondary-canvas-container') || document.querySelector('.shear-3d-container');
-      if (secondaryContainer) {
-        const shearModelPath = secondaryContainer.getAttribute('data-model') || '';
+      // ── INIT SECONDARY CONTAINER ──
+      const shearContainer = document.getElementById('secondary-canvas-container');
+      if (shearContainer) {
+        const shearModelPath = shearContainer.getAttribute('data-model') || '';
         if (shearModelPath) {
-          if (shearModelPath.includes('Dynamica') || shearModelPath.includes('shear')) {
-            new ShearAnimation(secondaryContainer as HTMLElement, shearModelPath);
+          if (shearModelPath.includes('shear') || shearModelPath.includes('Dynamica')) {
+            new ShearAnimation(shearContainer, shearModelPath);
           } else {
-            new StandardAnimation(secondaryContainer as HTMLElement, shearModelPath);
+            new StandardAnimation(shearContainer, shearModelPath);
           }
         }
       }
 
-      // Find any other 3D containers
+      // ── INIT EXTRA CONTAINERS (sections D, E, etc.) ──
       document.querySelectorAll('.tree-3d-container, .shear-3d-container').forEach(cont => {
         if (cont.id === 'primary-canvas-container' || cont.id === 'secondary-canvas-container') return;
         const modelPath = cont.getAttribute('data-model') || '';
@@ -1048,3 +1060,4 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
   initReveal();
   initThree();
 </script>
+

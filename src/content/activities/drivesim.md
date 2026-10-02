@@ -5,6 +5,6 @@ year: 2024
 status: "ONGOING"
 tags: ["simulation", "rehabilitation", "virtual reality", "haptics"]
 featured: true
-cover: "/images/projects/DriveSim_copertina.png"
-coverFit: "contain"
+cover: "/images/projects/DriveSim_Card.jpeg"
+coverFit: "cover"
 ---

@@ -8,7 +8,7 @@ const project = {
   accentColor: "#a78bfa", // Violetto più chiaro
   description: "The Advancing Human-Centric Bicycle Innovation (AHBI) project develops a human-centred framework for understanding and reproducing rider–bicycle interaction. The project addresses the challenge of simulating cycling as a dynamic task in which the rider must simultaneously maintain balance and control direction. AHBI combines multibody modelling, experimental data, advanced sensing, markerless human motion capture and artificial intelligence. A biomechanical rider model was integrated into bicycle dynamics to improve the reproduction of balance, while experimental cycling data were used to develop data-driven models capable of predicting bicycle roll and yaw in real time. A hybrid physics–AI approach was also investigated to capture effects that are difficult to represent analytically while preserving adaptability to different bicycle geometries and rider properties. Together with the instrumented experimental setup, the framework provides a foundation for future human-in-the-loop bicycle simulators capable of reproducing balance, steering resistance and pedalling resistance for research, training and bicycle design.",
   publications: [],
-  funding: "Finanziamenti e Partner: MOST – National Center for Sustainable Mobility, Spoke No. 5."
+  funding: "MOST – National Center for Sustainable Mobility, Spoke No. 5.",
 };
 ---
 
@@ -21,31 +21,31 @@ const project = {
     label: "MULTIBODY MODELLING OF THE RIDER–BICYCLE SYSTEM",
     text: "Cycling requires the rider to maintain balance while controlling direction in an inherently unstable system. Since the rider accounts for more than 80% of the combined rider–bicycle mass but is often simplified in existing models, AHBI extends the nonlinear Carvallo–Whipple model with a biomechanical multibody rider representation based on the Yeadon formulation.",
     sideVideoWide: withBase('/videos/projects/Animation_MB_rider.mp4'),
-    bgImage: withBase('/images/projects/font_1.png')
+    bgImage: withBase('/images/projects/ahbi_bg_abstract.png')
   }}
   sectionB={{
     label: "BALANCE AS A VALIDATION CRITERION",
     text: "To assess how accurately the models reproduce real cycling balance, AHBI introduced a metric based on the corrective torque applied within the model about the bicycle’s roll axis to align its response with experimental motion. Across the analysed treadmill-cycling tests, the multibody rider model reduced the RMS corrective torque by approximately 5–65% compared with the fixed-rider model, indicating a more realistic representation of balance.",
     sideImage: withBase('/images/projects/T_roll.png'),
-    bgImage: withBase('/images/projects/font_1.png')
+    bgImage: withBase('/images/projects/ahbi_bg_abstract.png')
   }}
   sectionC={{
     label: "DATA-DRIVEN MODELLING OF BICYCLE DYNAMICS",
     text: "To assess the ability of data-driven methods to reproduce cycling dynamics, an optimised LSTM model was trained on an openly available treadmill-cycling dataset. Bicycle speed, steering and crank motion, together with rider kinematics, were used to predict bicycle roll and yaw. On unseen tests, the model achieved normalised RMS errors of 0.058–0.106 and Pearson correlation coefficients of 0.78–0.89. With an inference latency of approximately 1 ms, it is suitable for future real-time human-in-the-loop simulation.",
     sideVideoWide: withBase('/videos/projects/comp_ref_AI.mp4'),
-    bgImage: withBase('/images/projects/font_1.png')
+    bgImage: withBase('/images/projects/ahbi_bg_abstract.png')
   }}
   sectionD={{
     label: "HYBRID INTELLIGENCE FOR REALISTIC CYCLING SIMULATION",
     text: "AHBI combines physics-based modelling with data-driven corrections. The physical model adapts to different bicycle geometries and rider inertial properties, while the data-driven component captures effects that are difficult to represent analytically. This hybrid approach preserves physical interpretability and adaptability while reducing the amount of training data needed to cover different rider and bicycle configurations.",
-    sideImage: withBase('/images/projects/hibrido.png'),
-    bgImage: withBase('/images/projects/font_1.png')
+    sideImage: withBase('/images/projects/setup1.jpg'),
+    bgImage: withBase('/images/projects/ahbi_bg_abstract.png')
   }}
   sectionE={{
     label: "EXPERIMENTAL SETUP — TOWARDS FULL RIDER–BICYCLE INTERACTION",
     text: "Within AHBI, an experimental setup was designed to enable future extensions of the framework. It combines markerless human motion capture with bicycle-mounted load cells, IMUs, smart pedals and motion-tracking systems to measure rider kinematics and rider–bicycle interaction forces. The AHBI framework improves the reproduction of balance dynamics, while its integration with the experimental setup lays the foundation for reproducing realistic steering and pedalling resistance. Together, they enable a more complete rider–bicycle interaction in future human-in-the-loop simulators.",
     sideImage: withBase('/images/projects/bike_HPE.jpg'),
-    bgImage: withBase('/images/projects/font_1.png')
+    bgImage: withBase('/images/projects/ahbi_bg_abstract.png')
   }}
   description={project.description}
   publications={project.publications}
@@ -55,12 +55,12 @@ const project = {
 />
 
 <style is:global>
-  /* Fix opacity for background images in AHBI */
+  /* Abstract bg: via di mezzo */
   .bg-media img {
-    opacity: 0.7 !important;
+    opacity: 0.55 !important;
   }
   .bg-overlay {
-    background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.5)) !important;
+    background: linear-gradient(to right, rgba(4,4,20,0.65) 40%, rgba(4,4,20,0.40) 100%) !important;
   }
 
   /* Blocco 1: Rendi la scheda quadrata e alza il soggetto */

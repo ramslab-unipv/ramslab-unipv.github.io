@@ -5,6 +5,6 @@ year: 2024
 status: "2025"
 tags: ["cycling", "biomechanics", "simulation", "AI"]
 featured: true
-cover: "/images/projects/Copertina_AHBI.png"
+cover: "/images/projects/AHBI_Card.jpeg"
 coverFit: "cover"
 ---
