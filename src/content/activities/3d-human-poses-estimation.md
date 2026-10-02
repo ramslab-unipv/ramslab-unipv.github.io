@@ -5,6 +5,6 @@ year: 2024
 status: "ONGOING"
 tags: ["3D", "human pose", "computer vision", "simulation", "rehabilitation"]
 featured: true
-cover: "/images/projects/Tode_copertina.png"
+cover: "/images/projects/3D_human poses_ cover.jpeg"
 coverFit: "cover"
 ---

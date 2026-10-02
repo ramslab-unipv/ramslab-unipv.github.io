@@ -5,6 +5,6 @@ year: 2025
 status: "Ongoing"
 tags: ["simulation", "biomechanics", "human-robot interaction"]
 featured: false
-cover: "/images/projects/Sim_skeleton.png"
+cover: "/images/projects/Skeleton_Cover.jpeg"
 coverFit: "cover"
 ---
