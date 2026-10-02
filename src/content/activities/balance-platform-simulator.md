@@ -1,5 +1,5 @@
 ---
-title: "BALANCE PLATFORM SIMULATOR"
+title: "Balance Platform Simulator"
 excerpt: "A robotic 3-DOF platform for balance and proprioception rehabilitation and training."
 year: 2024
 status: "ONGOING"

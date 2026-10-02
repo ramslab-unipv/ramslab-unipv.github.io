@@ -8,7 +8,7 @@ import { withBase } from '../lib/assets';
 import { entrySlug } from '../lib/entries';
 import site from '../content/settings/site.json';
 
-const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes', 'human-centric-skeleton-simulator', 'dynamica', 'ahbi', 'drivesim', '3d-human-poses-estimation'];
+const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes', 'human-centric-skeleton-simulator', 'dynamica', 'ahbi', 'drivesim', '3d-human-poses-estimation', 'balance-platform-simulator'];
 const activities = (await getCollection('activities')).sort((a, b) => {
   const isClickableA = clickableSlugs.includes(entrySlug(a.id));
   const isClickableB = clickableSlugs.includes(entrySlug(b.id));
@@ -85,6 +85,8 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
                 ? withBase('/activities/drivesim/')
                 : entrySlug(project.id) === '3d-human-poses-estimation'
                 ? withBase('/activities/3d-human-poses-estimation/')
+                : entrySlug(project.id) === 'balance-platform-simulator'
+                ? withBase('/activities/balance-platform-simulator/')
                 : undefined
             }
             title={project.data.title}
