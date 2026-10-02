@@ -1,0 +1,59 @@
+---
+import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
+import { withBase } from '../../lib/assets';
+
+const project = {
+  title: "3D Real-time Human Poses Estimation",
+  subtitle: "Markerless vision‑based human motion capture",
+  accentColor: "#3ba776",
+};
+---
+
+<ProjectImmersiveLayout
+  title={project.title}
+  subtitle={project.subtitle}
+  accentColor={project.accentColor}
+  heroVideo={withBase('/videos/projects/VideoCopertina.mp4')}
+  sectionA={{
+    label: "Camera Acquisition",
+    text: "Cameras are the starting point of the entire reconstruction process. Each camera is synchronized through a digital trigger that starts the sensor exposure at the same acquisition instant, keeping the inter‑camera delay below 0.4 ms. Reliable and temporally aligned frames allow 2D detections from different viewpoints to be converted into consistent 3D body keypoints. After being positioned around the subject to minimize joint occlusions, the cameras are calibrated to define their relative positions and orientations.",
+
+    sideVideoWide: withBase('/videos/projects/CameraAcquisition.mp4')
+  }}
+  sectionB={{
+    label: "2D Pose Detection",
+    text: "Each acquired frame is processed to identify the main body keypoints of the subject. A YOLO‑pose model is used to detect joints directly from the camera images, combining short inference time with reliable accuracy. These 2D keypoints represent the visual foundation of the system, allowing the same joint observed from different viewpoints to be later matched and reconstructed in 3D.",
+
+    sideVideoWide: withBase('/videos/projects/2DPoseDetection.mp4'),
+    sideVideo: withBase('/videos/projects/2DPoseDetection.mp4')
+  }}
+  sectionC={{
+    label: "Triangulation",
+    text: "Combining the observations of the same keypoint, from multiple calibrated camera views, it is estimated the 3D position in the world reference frame. By using a Weighted Direct Linear Transform solved through SVD, the system gives greater importance to more reliable detections and limits the influence of uncertain keypoints. This process turns multi‑view 2D information into a coherent 3D skeleton suitable for motion analysis, inverse kinematics and ergonomic evaluation.",
+
+    sideVideoWide: withBase('/videos/projects/Triangulation.mp4')
+  }}
+  sectionD={{
+    label: "Application Cases",
+    text: "The developed markerless acquisition system can be adapted to different real‑world scenarios, where 3D human pose reconstruction becomes the basis for motion analysis, ergonomic assessment and human‑machine interaction. Each case highlights a specific use of the same acquisition and reconstruction pipeline, from body tracking to quantitative evaluation.",
+
+    sideVideoWide: withBase('/videos/projects/skeleton_animation.mp4'),
+    sideVideo: withBase('/videos/projects/skeleton_animation.mp4'),
+    sideImage: withBase('/images/projects/cases/balance_board.png'),
+    sideImage2: withBase('/images/projects/cases/human_centric_skeleton.png'),
+    sideImage3: withBase('/images/projects/cases/ahbi.png')
+  }}
+  description={"This project brings real‑time 3D human pose estimation into a more accessible and flexible dimension by combining synchronized multi‑camera acquisition, AI‑based 2D pose detection, robust 3D reconstruction, and inverse kinematic filtering in a single markerless system. Traditional motion capture technologies often require wearable markers, dedicated suits, expensive hardware, or highly controlled laboratory environments. These requirements can limit their use in real‑world applications, especially when the goal is to observe natural movement without interfering with the subject. The developed system is designed to reduce these barriers, allowing human motion to be captured without physical sensors on the body and with a setup that can be adapted to different environments, tasks, and application needs."}
+  funding={""}
+  prevActivity={{ label: "DriveSim", href: withBase('/activities/drivesim/') }}
+  nextActivity={{ label: "Human‑Centric Skeleton Simulator", href: withBase('/activities/human-centric-skeleton-simulator/') }}
+/>
+
+<style is:global>
+  .bg-media img, .bg-media video { opacity: 0.6 !important; }
+  .bg-overlay { background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.6)) !important; }
+  /* Black background for all non‑hero sections */
+  .section.content-section { background-color: #000; color: #fff; }
+  /* Keep hero section default */
+  .section.hero-section { background-color: initial; color: inherit; }
+</style>

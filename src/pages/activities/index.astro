@@ -15,7 +15,8 @@ const getActivityHref = (activityId: string) => {
   if (slug === 'human-centric-skeleton-simulator') return withBase('/activities/human-centric-skeleton-simulator/');
   if (slug === 'ahbi') return withBase('/activities/ahbi/');
   if (slug === 'drivesim') return withBase('/activities/drivesim/');
-  return null;
+  if (slug === '3d-human-poses-estimation') return withBase('/activities/3d-human-poses-estimation/');
+return null;
 };
 
 const activities = (await getCollection('activities')).sort((a, b) => {
