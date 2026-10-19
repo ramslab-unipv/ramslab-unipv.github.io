@@ -87,12 +87,19 @@ By linking vision-based measurement with trajectory optimization, we eliminate t
   }
   .section .bg-media {
     background-color: #000;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
   }
   /* Shrink Picture 4 in Block 5 */
   .section:nth-of-type(6) .tech-image-container {
     max-width: 60%;
     margin: 0 auto;
+  }
+  @media (max-width: 768px) {
+    .section:nth-of-type(6) .tech-image-container {
+      max-width: 92%;
+    }
   }
 </style>

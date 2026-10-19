@@ -86,4 +86,13 @@ const project = {
   .section:nth-of-type(4) .tech-video {
     transform: scale(1.15); /* Zoom leggero per tagliare completamente il nero */
   }
+
+  @media (max-width: 768px) {
+    .section:nth-of-type(3) .tech-image-container {
+      max-width: 100% !important;
+    }
+    .section:nth-of-type(4) .side-wide-video {
+      max-width: 100% !important;
+    }
+  }
 </style>

@@ -124,7 +124,29 @@ const { project, relatedPeople, relatedPublications } = Astro.props;
       padding: 4rem 0;
     }
     @media (max-width: 768px) {
-      .module-split { grid-template-columns: 1fr; }
+      section {
+        min-height: auto;
+        padding: 3.5rem 0;
+      }
+      .hero {
+        min-height: calc(100svh - 60px);
+        padding: 2.5rem 0;
+      }
+      .hero-title {
+        font-size: clamp(2.1rem, 8vw, 3.5rem);
+      }
+      .vision-text {
+        font-size: clamp(1.35rem, 5vw, 2rem);
+        padding: 0 1rem;
+      }
+      .module-split {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 0;
+      }
+      .recap {
+        padding: 4rem 0;
+      }
     }
     .module-text h2 {
       font-size: 1.8rem;

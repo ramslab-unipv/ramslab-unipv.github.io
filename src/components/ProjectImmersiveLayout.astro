@@ -468,7 +468,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
     z-index: 0;
   }
 
-  .bg-media img { width: 100%; height: 100%; object-fit: contain; object-position: top; opacity: 0.4; }
+  .bg-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0.5; }
 
   .bg-overlay {
     position: absolute;
@@ -545,8 +545,9 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
 
   .tree-3d-container {
     position: relative;
-    width: 860px;
-    height: 1050px;
+    width: 100%;
+    max-width: 600px;
+    height: 520px;
     margin: 0 auto;
     z-index: 1;
     cursor: grab;
@@ -556,8 +557,33 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
   .shear-3d-container {
     position: relative;
     width: 100%;
-    height: 600px;
+    max-width: 600px;
+    height: 520px;
+    margin: 0 auto;
     z-index: 1;
+    cursor: grab;
+  }
+
+  .tech-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .tech-image {
+    width: 100%;
+    height: auto;
+    max-height: 520px;
+    object-fit: contain;
+    display: block;
+    border-radius: 12px;
   }
 
   .tech-video { width: 100%; height: 100%; object-fit: cover; }
@@ -586,39 +612,174 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
   }
 
   @media (max-width: 768px) {
-    .section { height: auto; min-height: 100vh; padding: 4rem 0; }
-    .hero-section { padding: 0; }
-    .title-main { font-size: clamp(2rem, 10vw, 4rem); word-wrap: break-word; }
-    .content-grid { grid-template-columns: 1fr; gap: 3rem; padding: 0 1.5rem; }
-    .alternate .content-grid { grid-template-columns: 1fr; }
-    .text-block { width: 100%; text-align: center; }
-    .text-block-right { justify-self: center; }
-    .text-block p { font-size: 1.125rem; }
-    .side-sync-video { width: 240px !important; }
-    .tree-3d-container { width: 100%; height: 450px; }
+    .section {
+      height: auto;
+      min-height: auto;
+      padding: 4rem 0;
+    }
+    .hero-section {
+      min-height: calc(100svh - 60px);
+      padding: 2.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .content {
+      padding: 1.5rem 1.25rem;
+    }
+    .title-main {
+      font-size: clamp(2.25rem, 9.5vw, 4.25rem);
+      line-height: 1.05;
+      word-break: break-word;
+    }
+    .title-main.title-long {
+      font-size: clamp(1.85rem, 7.5vw, 3rem);
+      line-height: 1.1;
+    }
+    .subtitle {
+      font-size: clamp(0.875rem, 3.8vw, 1.05rem);
+      letter-spacing: 0.08em;
+      line-height: 1.5;
+      margin: 1rem auto 0;
+      padding: 0 0.5rem;
+    }
+    .content-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;
+      padding: 0 1.25rem;
+      align-items: center;
+      width: 100%;
+    }
+    .alternate .content-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;
+      padding: 0 1.25rem;
+      align-items: center;
+      width: 100%;
+    }
+    .text-block {
+      order: 1;
+      width: 100%;
+      max-width: 580px;
+      text-align: center;
+    }
+    .text-block-right {
+      justify-self: center;
+      text-align: center;
+    }
+    .section-label {
+      font-size: 0.8125rem;
+      letter-spacing: 0.16em;
+      margin-bottom: 0.75rem;
+    }
+    .text-block p {
+      font-size: 1.125rem;
+      line-height: 1.5;
+    }
+    .visual-block {
+      order: 2;
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .tech-image-container {
+      max-width: min(500px, 100%);
+    }
+    .side-sync-video {
+      aspect-ratio: 9 / 16 !important;
+      width: min(260px, 75vw) !important;
+      max-width: 280px;
+      height: auto !important;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .side-wide-video {
+      width: 100% !important;
+      max-width: min(520px, 100%) !important;
+      aspect-ratio: 16 / 9;
+      height: auto !important;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .tree-3d-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 380px !important;
+      touch-action: pan-y;
+    }
+    .shear-3d-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 340px !important;
+      touch-action: pan-y;
+    }
     
-    .recap-section { padding: 60px 1rem; }
-    .info-box { padding: 30px 20px; }
-    .info-grid { grid-template-columns: 1fr; gap: 40px; }
-    .info-description { font-size: 1.25rem; }
-    .info-footer { flex-direction: row; justify-content: space-between; align-items: center; }
-    .nav-text { display: none; }
-    .footer-nav-link { font-size: 1.5rem; }
+    .recap-section {
+      padding: 50px 0 70px;
+    }
+    .info-box {
+      padding: 28px 18px;
+      border-radius: 6px;
+    }
+    .info-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .info-label {
+      font-size: 0.72rem;
+      margin-bottom: 16px;
+    }
+    .info-description {
+      font-size: 1.15rem;
+      line-height: 1.5;
+    }
+    .info-group {
+      margin-bottom: 32px;
+    }
+    .info-footer {
+      margin-top: 36px;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .nav-text {
+      display: inline;
+    }
+    .footer-nav-link {
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
   }
 </style>
 
 <script>
   // 1. REVEAL LOGIC
   function initReveal() {
+    const reveals = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
+          revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // Fallback ensures content is never stuck invisible
+    setTimeout(() => {
+      reveals.forEach(el => el.classList.add('active'));
+    }, 2000);
   }
 
   // 2. THREE.JS LOGIC
@@ -649,29 +810,33 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         private init() {
           this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
           this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+          this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+          this.renderer.toneMappingExposure = 1.1;
           this.container.appendChild(this.renderer.domElement);
 
-          this.camera.position.set(0, 0, 5);
+          this.camera.position.set(0, 0.3, 5);
           this.scene.add(this.modelGroup);
 
           const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
           this.scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
           this.scene.add(ambientLight);
 
-          const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+          const dirLight = new THREE.DirectionalLight(0xffffff, 1.4);
           dirLight.position.set(5, 10, 7.5);
           this.scene.add(dirLight);
 
-          const dirLightBack = new THREE.DirectionalLight(0xffffff, 0.5);
+          const dirLightBack = new THREE.DirectionalLight(0xffffff, 0.6);
           dirLightBack.position.set(-5, -5, -5);
           this.scene.add(dirLightBack);
 
           this.controls.enableDamping = true;
           this.controls.dampingFactor = 0.05;
+          this.controls.enableZoom = false;
           this.controls.autoRotate = true;
           this.controls.autoRotateSpeed = 1.2;
+          this.renderer.domElement.style.touchAction = 'pan-y';
 
           this.setupEventListeners();
           this.animate();
@@ -684,6 +849,9 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
             (gltf) => {
               const model = gltf.scene;
 
+              // Ensure all objects (car, cones, trajectory curve) are fully visible
+              model.traverse((c) => { c.visible = true; });
+
               const box = new THREE.Box3().setFromObject(model);
               const center = box.getCenter(new THREE.Vector3());
               const size = box.getSize(new THREE.Vector3());
@@ -692,10 +860,20 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               model.position.sub(center);
 
               const maxDim = Math.max(size.x, size.y, size.z);
-              const scaleFactor = 3.5 / (maxDim || 1);
+              const isFiatScene = this.modelPath.includes('fiat') || this.modelPath.includes('DriveSim_fiat');
+
+              // Scale comfortably so all elements (car, cones, track) fit within canvas without any clipping
+              const customScale = parseFloat(this.container.getAttribute('data-scale') || '');
+              const targetSize = !isNaN(customScale) ? customScale : (isFiatScene ? 2.5 : 2.4);
+              const scaleFactor = targetSize / (maxDim || 1);
               this.modelGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-              this.camera.position.set(0, size.y * scaleFactor * 0.2, 5);
+              // Position camera with perspective that captures car and all cones cleanly
+              if (isFiatScene) {
+                this.camera.position.set(0, 1.35, 4.3);
+              } else {
+                this.camera.position.set(0, 0.35, 5.0);
+              }
               this.controls.target.set(0, 0, 0);
               this.controls.update();
             },
@@ -768,12 +946,16 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           this.scene.add(this.modelGroup);
           this.modelGroup.add(this.pointsGroup, this.wireframeGroup, this.finalGroup);
 
+          this.camera.aspect = (this.container.clientWidth || 1) / (this.container.clientHeight || 1);
+          this.camera.updateProjectionMatrix();
           this.controls.enableDamping = true;
           this.controls.dampingFactor = 0.05;
           this.controls.enablePan = false;
+          this.controls.enableZoom = false;
           this.controls.minPolarAngle = Math.PI / 2.2;
           this.controls.maxPolarAngle = Math.PI / 1.8;
           this.controls.enabled = false;
+          this.renderer.domElement.style.touchAction = 'pan-y';
 
           const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
           this.scene.add(ambientLight);
@@ -872,6 +1054,13 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
             });
           }, { threshold: 0.1 });
           obs.observe(this.container);
+
+          window.addEventListener('resize', () => {
+            if (!this.container) return;
+            this.camera.aspect = (this.container.clientWidth || 1) / (this.container.clientHeight || 1);
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+          });
         }
 
         private animate() {
@@ -898,7 +1087,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
         private controls: InstanceType<typeof OrbitControls>;
 
         constructor(private container: HTMLElement, private modelPath: string) {
-          this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+          this.camera = new THREE.PerspectiveCamera(45, (container.clientWidth || 1) / (container.clientHeight || 1), 0.1, 100);
           this.controls = new OrbitControls(this.camera, this.renderer.domElement);
           this.init();
         }
@@ -923,8 +1112,10 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
 
           this.controls.enableDamping = true;
           this.controls.dampingFactor = 0.05;
+          this.controls.enableZoom = false;
           this.controls.autoRotate = true;
           this.controls.autoRotateSpeed = 1.0;
+          this.renderer.domElement.style.touchAction = 'pan-y';
 
           this.setupEventListeners();
           this.animate();

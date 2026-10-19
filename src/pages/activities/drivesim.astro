@@ -45,20 +45,49 @@ const project = {
   description={project.description}
   publications={project.publications}
   funding={project.funding}
-  prevActivity={{ label: "Human-Centric Skeleton Simulator", href: withBase('/activities/human-centric-skeleton-simulator/') }}
+  prevActivity={{ label: "Balance Platform Simulator", href: withBase('/activities/balance-platform-simulator/') }}
   nextActivity={{ label: "AHBI", href: withBase('/activities/ahbi/') }}
 />
 
 <style is:global>
   /* Aumenta la visibilità dello sfondo */
-  .bg-media img, .bg-media video {
-    opacity: 0.6 !important;
+  .bg-media img {
+    opacity: 0.85 !important;
+  }
+  .bg-media video {
+    opacity: 0.65 !important;
   }
   .bg-overlay {
-    background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.6)) !important;
+    background: radial-gradient(circle at center, rgba(0,0,0,0.15), rgba(0,0,0,0.45)) !important;
   }
   /* Taglia il bordo nero in alto del video Hero */
   .hero-section .hero-bg-video {
     transform: translate(-50%, -50%) scale(1.15) !important;
+  }
+  /* Immagini di sfondo nei blocchi 2 e 3: riempiono tutto lo spazio senza bande nere */
+  .section .bg-media img {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transform: none !important;
+    max-width: none !important;
+  }
+  /* Dimensioni e centratura dei modelli 3D */
+  #primary-canvas-container,
+  #secondary-canvas-container {
+    width: 100% !important;
+    max-width: 600px !important;
+    height: 520px !important;
+    margin: 0 auto !important;
+  }
+  @media (max-width: 768px) {
+    #primary-canvas-container,
+    #secondary-canvas-container {
+      max-width: 100% !important;
+      height: 360px !important;
+    }
   }
 </style>

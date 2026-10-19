@@ -88,6 +88,8 @@ html {
   font-size: 1rem; /* 16px */
   scroll-behavior: smooth;
   overscroll-behavior-y: none;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 body {
@@ -100,6 +102,8 @@ body {
   line-height: 1.45;
   text-rendering: optimizeLegibility;
   overscroll-behavior-y: none;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 main {
@@ -878,20 +882,30 @@ ol {
     position: relative;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
-    padding-top: 24px;
-    padding-bottom: 16px;
+    gap: 12px;
+    padding-top: 14px;
+    padding-bottom: 12px;
   }
 
   .site-brand {
     width: auto;
-    max-width: calc(100% - 90px); /* Evita collisioni col logo UNIPV a destra su schermi piccolissimi */
+    max-width: calc(100% - 130px); /* Evita collisioni col logo UNIPV a destra su schermi piccolissimi */
+  }
+
+  .site-brand img {
+    height: 24px;
+    width: auto;
   }
 
   .site-indicator {
     position: absolute;
-    top: 24px;
+    top: 14px;
     right: 0;
+    width: auto;
+  }
+
+  .site-indicator img {
+    height: 24px;
     width: auto;
   }
 
