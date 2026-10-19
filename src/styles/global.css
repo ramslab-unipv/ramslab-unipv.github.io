@@ -1358,3 +1358,18 @@ body.project-page-layout .site-header {
 body.project-page-layout .site-footer {
   background: #000000;
 }
+
+/* ─── Video Mobile Autoplay & Controls Suppression ─── */
+video {
+  pointer-events: none;
+}
+
+video::-webkit-media-controls-start-playback-button,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

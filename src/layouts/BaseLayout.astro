@@ -23,5 +23,70 @@ const { title = site.siteTitle, description = site.siteDescription } = Astro.pro
   <body>
     <a href="#main-content" class="skip-link">Skip to content</a>
     <slot />
+    <script>
+      function initMobileVideoAutoplay() {
+        const videos = document.querySelectorAll<HTMLVideoElement>('video');
+
+        videos.forEach((video) => {
+          // Guarantee muted properties and inline attributes required by mobile browsers (iOS WebKit / Chrome)
+          video.muted = true;
+          video.defaultMuted = true;
+          video.playsInline = true;
+          video.setAttribute('playsinline', '');
+          video.setAttribute('webkit-playsinline', 'true');
+          video.setAttribute('preload', 'auto');
+
+          // Attempt initial play
+          const promise = video.play();
+          if (promise !== undefined) {
+            promise.catch(() => {
+              // Browser policy prevented autoplay; will resume on interaction
+            });
+          }
+        });
+
+        // IntersectionObserver to start playback when scrolled into view
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                const v = entry.target as HTMLVideoElement;
+                if (entry.isIntersecting) {
+                  v.muted = true;
+                  v.defaultMuted = true;
+                  v.play().catch(() => {});
+                }
+              });
+            },
+            { threshold: 0.05 }
+          );
+          videos.forEach((v) => observer.observe(v));
+        }
+
+        // On first interaction (touch/scroll), unlock any pending autoplay
+        const unlock = () => {
+          videos.forEach((v) => {
+            v.muted = true;
+            v.defaultMuted = true;
+            v.play().catch(() => {});
+          });
+          window.removeEventListener('touchstart', unlock);
+          window.removeEventListener('touchend', unlock);
+          window.removeEventListener('pointerdown', unlock);
+          window.removeEventListener('scroll', unlock);
+        };
+
+        window.addEventListener('touchstart', unlock, { passive: true, once: true });
+        window.addEventListener('touchend', unlock, { passive: true, once: true });
+        window.addEventListener('pointerdown', unlock, { passive: true, once: true });
+        window.addEventListener('scroll', unlock, { passive: true, once: true });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileVideoAutoplay);
+      } else {
+        initMobileVideoAutoplay();
+      }
+    </script>
   </body>
 </html>

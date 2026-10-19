@@ -159,7 +159,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           {heroVideo ? (
             <video
               src={heroVideo}
-              autoplay loop muted playsinline
+              autoplay loop muted playsinline webkit-playsinline="true" preload="auto"
               class="hero-bg-video"
             ></video>
           ) : (
@@ -179,7 +179,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
           {sectionA.bgVideo ? (
             <video
               src={sectionA.bgVideo}
-              autoplay loop muted playsinline
+              autoplay loop muted playsinline webkit-playsinline="true" preload="auto"
               class="hero-bg-video"
             ></video>
           ) : sectionA.bgImage ? (
@@ -197,7 +197,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               <div class="tech-video-container side-wide-video">
                 <video
                   src={sectionA.sideVideoWide}
-                  autoplay loop muted playsinline
+                  autoplay loop muted playsinline webkit-playsinline="true" preload="auto"
                   class="tech-video"
                 ></video>
               </div>
@@ -205,7 +205,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               <div class="tech-video-container side-sync-video">
                 <video
                   src={sectionA.sideVideo}
-                  autoplay loop muted playsinline
+                  autoplay loop muted playsinline webkit-playsinline="true" preload="auto"
                   class="tech-video"
                 ></video>
               </div>
@@ -220,12 +220,11 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
       </section>
 
       <!-- SECTION 3: IMAGE BG + 3D MODEL (tipo "Digital Twin") -->
-      <!-- SECTION 3: IMAGE BG + 3D MODEL (tipo "Digital Twin") -->
       {sectionB && (
       <section class="section content-section nature-bg">
         <div class="bg-media">
           {sectionB.bgVideo ? (
-            <video src={sectionB.bgVideo} autoplay loop muted playsinline class="hero-bg-video"></video>
+            <video src={sectionB.bgVideo} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="hero-bg-video"></video>
           ) : sectionB.bgImage ? (
             <img src={sectionB.bgImage} alt="" class="parallax-bg" />
           ) : null}
@@ -241,11 +240,11 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               <div id="primary-canvas-container" class="tree-3d-container" data-model={sectionB.model3d}></div>
             ) : sectionB.sideVideoWide ? (
               <div class="tech-video-container side-wide-video">
-                <video src={sectionB.sideVideoWide} autoplay loop muted playsinline class="tech-video"></video>
+                <video src={sectionB.sideVideoWide} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="tech-video"></video>
               </div>
             ) : sectionB.sideVideo ? (
               <div class="tech-video-container side-sync-video">
-                <video src={sectionB.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
+                <video src={sectionB.sideVideo} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="tech-video"></video>
               </div>
             ) : sectionB.sideImage ? (
               <div class="tech-image-container">
@@ -263,7 +262,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
       <section class="section content-section alternate">
         <div class="bg-media">
           {sectionC.bgVideo ? (
-            <video src={sectionC.bgVideo} autoplay loop muted playsinline class="hero-bg-video"></video>
+            <video src={sectionC.bgVideo} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="hero-bg-video"></video>
           ) : sectionC.bgImage ? (
             <img src={sectionC.bgImage} alt="" class="parallax-bg" />
           ) : null}
@@ -275,11 +274,11 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               <div id="secondary-canvas-container" class="shear-3d-container" data-model={sectionC.model3d}></div>
             ) : sectionC.sideVideoWide ? (
               <div class="tech-video-container side-wide-video">
-                <video src={sectionC.sideVideoWide} autoplay loop muted playsinline class="tech-video"></video>
+                <video src={sectionC.sideVideoWide} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="tech-video"></video>
               </div>
             ) : sectionC.sideVideo ? (
               <div class="tech-video-container side-sync-video">
-                <video src={sectionC.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
+                <video src={sectionC.sideVideo} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="tech-video"></video>
               </div>
             ) : sectionC.sideImage ? (
               <div class="tech-image-container">
@@ -301,7 +300,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
       <section class="section content-section">
         <div class="bg-media">
           {sectionD.bgVideo ? (
-            <video src={sectionD.bgVideo} autoplay loop muted playsinline class="hero-bg-video"></video>
+            <video src={sectionD.bgVideo} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="hero-bg-video"></video>
           ) : sectionD.bgImage ? (
             <img src={sectionD.bgImage} alt="" class="parallax-bg" />
           ) : null}
@@ -317,11 +316,11 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               <div class="tree-3d-container" data-model={sectionD.model3d}></div>
             ) : sectionD.sideVideoWide ? (
               <div class="tech-video-container side-wide-video">
-                <video src={sectionD.sideVideoWide} autoplay loop muted playsinline class="tech-video"></video>
+                <video src={sectionD.sideVideoWide} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="tech-video"></video>
               </div>
             ) : sectionD.sideVideo ? (
               <div class="tech-video-container side-sync-video">
-                <video src={sectionD.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
+                <video src={sectionD.sideVideo} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="tech-video"></video>
               </div>
             ) : sectionD.sideImage ? (
               <div class="tech-image-container">
@@ -339,7 +338,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
       <section class="section content-section alternate">
         <div class="bg-media">
           {sectionE.bgVideo ? (
-            <video src={sectionE.bgVideo} autoplay loop muted playsinline class="hero-bg-video"></video>
+            <video src={sectionE.bgVideo} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="hero-bg-video"></video>
           ) : sectionE.bgImage ? (
             <img src={sectionE.bgImage} alt="" class="parallax-bg" />
           ) : null}
@@ -351,7 +350,7 @@ const accentColorLight = lightAccents[accentColor.toLowerCase()] || `${accentCol
               <div class="shear-3d-container" data-model={sectionE.model3d}></div>
             ) : sectionE.sideVideo ? (
               <div class="tech-video-container side-wide-video">
-                <video src={sectionE.sideVideo} autoplay loop muted playsinline class="tech-video"></video>
+                <video src={sectionE.sideVideo} autoplay loop muted playsinline webkit-playsinline="true" preload="auto" class="tech-video"></video>
               </div>
             ) : sectionE.sideImage ? (
               <div class="tech-image-container">
