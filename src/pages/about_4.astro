@@ -24,8 +24,6 @@ import { withBase } from '../lib/assets';
 import { entrySlug } from '../lib/entries';
 import site from '../content/settings/site.json';
 /* Google Material Symbols (outlined), downloaded from fonts.gstatic.com */
-import icHandshake from '../assets/icons/handshake.svg?raw';
-import icPerson from '../assets/icons/accessibility_new.svg?raw';
 import icMemory from '../assets/icons/memory.svg?raw';
 import icRobot from '../assets/icons/precision_manufacturing.svg?raw';
 import icHmd from '../assets/icons/head_mounted_device.svg?raw';
@@ -103,6 +101,14 @@ const facilities = [
     items: ['3D prototyping', 'CO2 Laser cutting', 'Optical table for precision measurement setup'] },
 ];
 
+/* What we do: text only, from Contents.docx */
+const whatWeDo = [
+  { title: 'Human centric robotics', href: '#hcr', loop: 'what-hcr',
+    text: 'Robotics as a system to enhance human capabilities, designed to combine quality, flexibility, and worker safety within production processes that cannot be fully standardized.' },
+  { title: 'Human in the loop', href: '#hitl', loop: 'what-hitl',
+    text: "Integrates operators into the production system's observation and decision-making cycle, converting human behavior into actionable data to evaluate functionality, efficiency, and safety." },
+];
+
 const longTerm = 'Instead of programming robot motions, the operator will simply specify the product to manufacture, while the system determines how to accomplish the task.';
 ---
 
@@ -139,29 +145,35 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
       </div>
     </section>
 
-    <!-- ═══ 2 · WHAT WE DO · two line drawings draw themselves, one after the other ═══ -->
-    <section class="a4-act a4-what" data-a4 data-sc-act="pin" data-sc-span="3.6" aria-labelledby="a4-what-t">
+    <!-- ═══ 2 · WHAT WE DO · split screen: looping animation left, title + definition right; the two slides travel sideways ═══ -->
+    <section class="a4-act a4-what" data-a4 data-sc-act="pin" data-sc-span="4.4" aria-labelledby="a4-what-t">
       <div data-sc-stage class="a4-st a4-what-st">
-        <div class="a4-what-head">
-          <h2 id="a4-what-t" class="chapter-label text-heading-2 a4-label">What we do</h2>
-        </div>
-        <div class="a4-what-grid">
-          <article class="a4-what-col a4-what-col--1">
-            <figure class="a4-draw" aria-hidden="true"><span class="a4-draw-ico" set:html={icHandshake} /></figure>
-            <div class="a4-what-text" data-at="0.24">
-              <h3>Human centric robotics</h3>
-              <p>Robotics as a system to enhance human capabilities, designed to combine quality, flexibility, and worker safety within production processes that cannot be fully standardized.</p>
-              <a href="#hcr" class="text-heading-2 a4-more">The vision <span aria-hidden="true">➞</span></a>
-            </div>
-          </article>
-          <article class="a4-what-col a4-what-col--2">
-            <figure class="a4-draw" aria-hidden="true"><span class="a4-draw-ico" set:html={icPerson} /><span class="a4-loop"></span></figure>
-            <div class="a4-what-text" data-at="0.66">
-              <h3>Human in the loop</h3>
-              <p>Integrates operators into the production system's observation and decision-making cycle, converting human behavior into actionable data to evaluate functionality, efficiency, and safety.</p>
-              <a href="#hitl" class="text-heading-2 a4-more">The vision <span aria-hidden="true">➞</span></a>
-            </div>
-          </article>
+        <h2 id="a4-what-t" class="chapter-label text-heading-2 a4-label a4-what-k">What we do</h2>
+        <div class="a4-track">
+          {whatWeDo.map((w, k) => {
+            const words = w.title.split(' ');
+            const n = w.title.replace(/ /g, '').length;
+            let ci = 0;
+            const textWords = w.text.split(' ');
+            return (
+              <article class={`a4-wp a4-wp--${k}`}>
+                <div class="a4-wp-media">
+                  <video class="a4-wp-video" src={v4(`${w.loop}.mp4`)} poster={v4(`${w.loop}-poster.jpg`)} autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+                </div>
+                <div class="a4-wp-copy">
+                  <h3 class="a4-wp-title" aria-label={w.title}>
+                    {words.map((word) => (
+                      <span class="a4-wp-word" aria-hidden="true">
+                        {word.split('').map((ch) => <span class="a4-ch" style={`--i:${(ci++ / n).toFixed(3)}`}>{ch}</span>)}
+                      </span>
+                    ))}
+                  </h3>
+                  <p class="a4-wp-text">{textWords.map((t, j) => <span class="a4-tw" style={`--j:${(j / textWords.length).toFixed(3)}`}>{t} </span>)}</p>
+                  <a href={w.href} class="text-heading-2 a4-more">The vision <span aria-hidden="true">➞</span></a>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -379,36 +391,40 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
       transform-origin: 15% 27%;
       transform: scale(calc(1 + var(--zoom) * var(--zoom) * var(--zoom) * 90));
     }
-    .a4-mark-body { fill: var(--a4-red); fill-opacity: var(--fill); stroke: var(--a4-red); stroke-opacity: min(1, var(--draw) * 30); stroke-width: 0.35; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw)); }
-    .a4-mark-head { fill: var(--a4-red); transform-box: fill-box; transform-origin: center; transform: translateY(calc((1 - var(--fill)) * -14px)) scale(var(--fill)); }
+    .a4-mark-body { fill: #111; fill-opacity: var(--fill); stroke: #111; stroke-opacity: min(1, var(--draw) * 30); stroke-width: 0.35; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw)); }
+    .a4-mark-head { fill: #111; transform-box: fill-box; transform-origin: center; transform: translateY(calc((1 - var(--fill)) * -14px)) scale(var(--fill)); }
 
     /* ═══ 2 · WHAT WE DO ═══ */
     .a4-what-st {
-      display: flex; flex-direction: column; justify-content: center; gap: 3vh; padding: calc(var(--a4-top) + 2vh) var(--pad) 2vh;
-      --d1: clamp(0, (var(--p) - 0.02) / 0.22, 1);
-      --mv: clamp(0, (var(--p) - 0.34) / 0.1, 1);
-      --d2: clamp(0, (var(--p) - 0.42) / 0.22, 1);
+      --sl: clamp(0, (var(--p) - 0.44) / 0.14, 1);
+      --slide: calc(var(--sl) * var(--sl) * (3 - 2 * var(--sl)));
     }
-    .a4-what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 6rem); align-items: start; }
-    .a4-what-col--1 { transform: translateX(calc((1 - var(--mv)) * 50% + (1 - var(--mv)) * clamp(1rem, 2.5vw, 3rem))); }
-    .a4-draw { position: relative; margin: 0 0 18px; height: min(42vh, 26rem); display: flex; justify-content: center; }
-    .a4-draw-ico { position: relative; z-index: 1; height: 100%; aspect-ratio: 1; display: block; }
-    .a4-draw-ico svg { width: 100%; height: 100%; display: block; }
-    .a4-what-col--1 .a4-draw-ico { color: #111; clip-path: inset(0 calc((1 - var(--d1)) * 100%) 0 0); transform: rotate(calc((1 - var(--d1)) * -8deg)); }
-    .a4-what-col--2 .a4-draw-ico { color: var(--a4-red); clip-path: inset(0 calc((1 - var(--d2)) * 100%) 0 0); transform: rotate(calc((1 - var(--d2)) * 8deg)); }
-    .a4-draw-ico svg path { fill: currentColor; }
-    /* the loop around the person: a dashed ring that turns with the scroll */
-    .a4-loop { position: absolute; z-index: 0; top: 50%; left: 50%; height: 108%; aspect-ratio: 1; border-radius: 50%;
-      border: 2px dashed var(--a4-red); opacity: calc(var(--d2) * 0.55);
-      transform: translate(-50%, -50%) rotate(calc(var(--p) * 300deg)) scale(calc(0.7 + var(--d2) * 0.3)); }
-    .a4-draw::after { content: ""; position: absolute; z-index: 2; top: 4%; bottom: 4%; width: 2px; background: var(--a4-red); box-shadow: 0 0 12px rgb(178 40 75 / 0.5); pointer-events: none; }
-    .a4-what-col--1 .a4-draw::after { left: calc(50% - min(21vh, 13rem) + var(--d1) * min(42vh, 26rem)); opacity: calc(var(--d1) * (1 - var(--d1)) * 4); }
-    .a4-what-col--2 .a4-draw::after { left: calc(50% - min(21vh, 13rem) + var(--d2) * min(42vh, 26rem)); opacity: calc(var(--d2) * (1 - var(--d2)) * 4); }
-    .a4-what-text { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--sc-ease-out), transform 600ms var(--sc-ease-out); border-top: 1px solid var(--line); padding-top: 14px; }
-    .a4-what-text.on { opacity: 1; transform: none; }
-    .a4-what-text h3 { margin: 0 0 10px; font-weight: 700; font-size: clamp(1.5rem, 2.4vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.05; }
-    .a4-what-col--2 h3 { color: var(--a4-red); }
-    .a4-what-text p { margin: 0 0 14px; color: var(--text-soft); max-width: 46ch; line-height: 1.5; }
+    .a4-what-k { position: absolute; z-index: 3; top: calc(var(--a4-top) + 2.5vh); left: var(--pad); }
+    .a4-track { position: absolute; inset: 0; display: flex; width: 200%; transform: translateX(calc(var(--slide) * -50%)); will-change: transform; }
+    .a4-wp { flex: 0 0 50%; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center;
+      gap: clamp(2rem, 5vw, 6rem); padding: calc(var(--a4-top) + 7vh) var(--pad) 5vh; }
+    /* each slide's own progress: the second starts while it slides in */
+    .a4-wp--0 { --a: clamp(0, var(--p) / 0.42, 1); }
+    .a4-wp--1 { --a: clamp(0, (var(--p) - 0.5) / 0.42, 1); }
+
+    /* left: the looping animation, both at the same height, opened left to right */
+    .a4-wp-media { display: flex; justify-content: center; align-items: center; height: 100%; }
+    .a4-wp-video { height: min(62vh, 38rem); width: auto; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.05) contrast(1.12);
+      --d: clamp(0, var(--a) / 0.3, 1);
+      clip-path: inset(0 calc((1 - var(--d)) * 100%) 0 0);
+      transform: scale(calc(0.94 + var(--d) * 0.06)); }
+
+    .a4-wp--0 .a4-wp-video { height: min(50vh, 30rem); }   /* the bench scene reads larger than the treadmill: a little smaller */
+    /* right: title letter by letter, then the definition word by word */
+    .a4-wp-copy { position: relative; z-index: 1; }
+    .a4-wp-title { margin: 0 0 3.5vh; font-weight: 900; text-transform: uppercase; font-size: clamp(2.6rem, 5.6vw, 6.4rem); line-height: 0.86; letter-spacing: -0.045em; color: #111; }
+    .a4-wp-word { display: inline-block; overflow: hidden; padding: 0.04em 0.12em 0.06em 0; margin-right: 0.1em; vertical-align: top; }
+    .a4-ch { display: inline-block;
+      --c: clamp(0, (var(--a) - var(--i) * 0.24) / 0.14, 1);
+      transform: translateY(calc((1 - var(--c)) * 110%)) rotate(calc((1 - var(--c)) * 16deg)); transform-origin: 0 100%; }
+    .a4-wp-text { margin: 0 0 22px; max-width: 34ch; font-weight: 700; font-size: clamp(1.15rem, 1.7vw, 1.75rem); line-height: 1.24; letter-spacing: -0.02em; color: #111; }
+    .a4-tw { opacity: calc(0.12 + 0.88 * clamp(0, (var(--a) - 0.36 - var(--j) * 0.44) / 0.05, 1)); }
+    .a4-wp .a4-more { opacity: clamp(0, (var(--a) - 0.82) / 0.06, 1); }
     .a4-more { display: inline-flex; gap: 8px; color: var(--text); }
     .a4-more:hover { color: var(--a4-red); }
 
@@ -475,7 +491,10 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
     /* ── reduced motion ── */
     @media (prefers-reduced-motion: reduce) {
       .a4-mark { transform: none; opacity: 1; }
-      .a4-what-col--1 { transform: none; }
+      .a4-ch { transform: none; }
+      .a4-tw { opacity: 1; }
+      .a4-track { transform: none; flex-direction: column; width: 100%; position: relative; }
+      .a4-wp-video { clip-path: none; }
     }
 
     /* ── narrow screens: the scenes stack so the whole clip stays visible ── */
@@ -501,12 +520,11 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
       .a4-motto { text-align: left; padding-bottom: 0; }
       .a4-hero-grid { grid-template-columns: 1fr; justify-items: center; row-gap: 3vh; text-align: center; font-size: 8.4vw; }
       .a4-hero-l, .a4-hero-r { text-align: center; }
-      .a4-what-grid { grid-template-columns: 1fr; gap: 2vh; }
-      .a4-what-col--1 { transform: none; }
-      .a4-draw { height: 22vh; margin-bottom: 8px; }
-      .a4-what-text p { font-size: 0.9rem; margin-bottom: 6px; }
-      .a4-what-text h3 { font-size: 1.3rem; margin-bottom: 6px; }
-      .a4-what-text .a4-more { display: none; }
+      .a4-wp { grid-template-columns: 1fr; grid-template-rows: auto auto; align-content: center; gap: 3vh; padding-top: calc(var(--a4-top) + 6vh); }
+      .a4-wp-video { height: 32vh; }
+      .a4-wp--0 .a4-wp-video { height: 26vh; }
+      .a4-wp-title { font-size: 12vw; margin-bottom: 2vh; }
+      .a4-wp-text { font-size: 1.05rem; }
         .a4-lab { padding: 56px var(--pad) 64px; }
     }
     @media (max-width: 520px) {
