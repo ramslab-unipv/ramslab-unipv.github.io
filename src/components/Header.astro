@@ -4,6 +4,7 @@ import { withBase } from '../lib/assets';
 
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const links = [
+  { href: '/about/', label: 'About' },
   { href: '/activities/', label: 'Activities' },
   { href: '/people/', label: 'People' },
   { href: '/publications/', label: 'Publications' },

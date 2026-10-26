@@ -1,0 +1,516 @@
+---
+/*
+  About 4: the RAMSLAB story as defined in Contents.docx (Hero, What we do,
+  Human centric robotics, Human in the loop, Lab facilities, Long-term vision),
+  built on the scroll-craft engine (public/scrollcraft/, copied verbatim,
+  never edited). All white, in the site's own style: the page header and the
+  activity cards are the same as /activities/.
+
+  HCR VIDEO SLOT: the Human centric robotics scene mirrors the Human in the
+  loop scene and keeps an empty media slot (.a4-media--placeholder). When the
+  clip is ready, encode it like hitl.mp4 (public/videos/about_4/) and replace
+  the placeholder with a <video data-scrub data-src=... data-src-mobile=...>
+  like the one in the HITL scene; the page script scrubs any [data-scrub]
+  video inside a scene from that scene's own progress.
+
+  Scrubbed clips carry data-scrub so BaseLayout's autoplay skips them.
+*/
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import RelatedRail from '../components/RelatedRail.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../lib/assets';
+import { entrySlug } from '../lib/entries';
+import site from '../content/settings/site.json';
+/* Google Material Symbols (outlined), downloaded from fonts.gstatic.com */
+import icHandshake from '../assets/icons/handshake.svg?raw';
+import icPerson from '../assets/icons/accessibility_new.svg?raw';
+import icMemory from '../assets/icons/memory.svg?raw';
+import icRobot from '../assets/icons/precision_manufacturing.svg?raw';
+import icHmd from '../assets/icons/head_mounted_device.svg?raw';
+import icCube from '../assets/icons/deployed_code.svg?raw';
+
+const v4 = (name: string) => withBase(`/videos/about_4/${name}`);
+
+/* ── Activity cards: same data and routing as /activities/ ── */
+const routes: Record<string, string> = {
+  'demetra-nodes': '/activities/demetra/',
+  'dynamica': '/activities/dynamica/',
+  'air-flow-dynamic': '/activities/air-flow-dynamic/',
+  'robotic-liquid-handling': '/activities/robotic-liquid-handling/',
+  'human-centric-skeleton-simulator': '/activities/human-centric-skeleton-simulator/',
+  'ahbi': '/activities/ahbi/',
+  'drivesim': '/activities/drivesim/',
+  'balance-platform-simulator': '/activities/balance-platform-simulator/',
+  '3d-human-poses-estimation': '/activities/3d-human-poses-estimation/',
+};
+const all = await getCollection('activities');
+const pick = (slugs: string[]) =>
+  slugs
+    .map((s) => all.find((a) => entrySlug(a.id) === s))
+    .filter(Boolean)
+    .map((a) => {
+      const slug = entrySlug(a!.id);
+      return {
+        href: routes[slug] ? withBase(routes[slug]) : null,
+        title: a!.data.title,
+        /* same data as the homepage card: real cover, fit, year · status; ProjectCard adds the base path */
+        cover: a!.data.cover,
+        fit: a!.data.coverFit as 'cover' | 'contain' | undefined,
+        meta: [a!.data.year?.toString(), a!.data.status?.replace(/ongoing/i, 'ONGOING')].filter(Boolean).join(' · '),
+      };
+    });
+const hcrActivities = pick(['air-flow-dynamic', 'robotic-liquid-handling', 'dynamica', 'carbon-fiber', 'fiber-placement']);
+const hitlActivities = pick(['human-centric-skeleton-simulator', '3d-human-poses-estimation', 'drivesim', 'balance-platform-simulator', 'demetra-nodes', 'ahbi']);
+
+/* ── Scenes: pillars share one timing scheme, all finished by 0.8 ── */
+const hcrPillars = [
+  ['Ultimate Human Tool', 'The robot as the ultimate extension of human capability', 'Tool'],
+  ['Democratizing Robotics', 'Making robotic technology accessible to all', 'Access'],
+  ['Unlocking Creativity', 'Enabling creative thinking within production processes', 'Create'],
+  ['Reduce Repetitive Tasks', 'Freeing workers from monotonous, repetitive work', 'Free'],
+  ['No Code Approach', 'Intuitive interfaces requiring no programming knowledge', 'No code'],
+  ['Agentic Framework', 'Human/machine interface driven by agentic systems', 'Agents'],
+  ['Physical AI', 'Intelligent systems embedded in the physical world', 'Physical'],
+];
+const hitlPillars = [
+  ['Zero-Risk Validation', 'Safety and Comfort validation in a controlled, consequence-free environment.'],
+  ['Mapping Human Behaviour', 'Capturing and modelling real human motion and decision patterns.'],
+  ['Testing of Devices', 'Rigorous evaluation of devices within a fully controlled environment.'],
+  ['Cognitive Load Assessment', 'Measuring mental effort to ensure intuitive and ergonomic human-robot interaction.'],
+];
+/* pillar i of n is on screen from at(i) to at(i+1); the first is there on arrival */
+const at = (i: number, n: number) => (i === 0 ? -1 : (i / n) * 0.8).toFixed(3);
+
+/* The HITL clip shows five simulators in sequence; times are clip seconds. */
+const devices = [
+  { word: 'Pruning', from: 0 },
+  { word: 'Cycling', from: 2.3 },
+  { word: 'Skeleton', from: 5.1 },
+  { word: 'Driving', from: 7.4 },
+  { word: 'Balance', from: 9.7 },
+];
+
+const facilities = [
+  { title: 'Computing Infrastructure', icon: icMemory,
+    items: ['Workstations and computing servers', 'NAS systems for data storage and processing', 'GPU clusters: 8× NVIDIA RTX 3090, 6× NVIDIA RTX 4080, 3× NVIDIA RTX 4090', 'Edge computing: NVIDIA Jetson Orin & Nano, Raspberry Pi 5'] },
+  { title: 'Robotic Systems', icon: icRobot,
+    items: ['Mitsubishi RV-5-AS-D', 'Mitsubishi RV-8CRL-D-S15', 'Mitsubishi RV-2FRB-D-S25', 'Omron TM12', 'Omron TM5', 'Dobot CR10AS', 'Kawasaki MC004N'] },
+  { title: 'Simulation & Testing Equipment', icon: icHmd,
+    items: ['Hexapod motion platform with 8m curved immersive display', '6-DoF force platform', 'Real-time optical and markerless motion capture system', 'Driving simulator', 'Balance board', 'Pharmaceutical isolator', 'Infinadeck omnidirectional treadmill'] },
+  { title: 'Manufacturing & Prototyping', icon: icCube,
+    items: ['3D prototyping', 'CO2 Laser cutting', 'Optical table for precision measurement setup'] },
+];
+
+const longTerm = 'Instead of programming robot motions, the operator will simply specify the product to manufacture, while the system determines how to accomplish the task.';
+---
+
+<BaseLayout title={`About — ${site.siteTitle}`} description="Welcome to RAMSLAB, where human intuition meets robotic innovation: human-centric robotics and human-in-the-loop simulation at the University of Pavia.">
+  <link rel="stylesheet" href={withBase('/scrollcraft/scrollcraft.css')} />
+  <div class="a4">
+  <Header />
+  <span data-sc-progress></span>
+
+  <main id="main-content" class="projects-page-main a4-main">
+
+    <!-- ─── Page header, as on every other page ─── -->
+    <section class="projects-header-section">
+      <div class="projects-header-container">
+        <div class="projects-header-content a4-pagehead">
+          <h1 class="projects-title-big">About RAMSLAB</h1>
+          <p class="text-link-header a4-motto">{site.siteMotto}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 1 · HERO · the RAMSLAB mark is a person: it draws itself, then we step into its head ═══ -->
+    <section class="a4-act a4-hero" data-a4 data-sc-act="pin" data-sc-span="2.5" aria-labelledby="a4-hero-t">
+      <div data-sc-stage class="a4-st a4-hero-st">
+        <p class="text-heading-2 a4-hero-k">Welcome to RAMSLAB</p>
+        <h2 id="a4-hero-t" class="a4-hero-grid">
+          <span class="a4-hero-l">Where human intuition</span>
+          <svg class="a4-mark" viewBox="-1 -1 32 32" aria-hidden="true">
+            <path class="a4-mark-body" pathLength="1" d="M29.6472 29.6504C29.6472 29.6504 29.5272 23.2262 29.5233 21.7608C29.5188 21.7608 29.5143 21.7608 29.5091 21.7608C24.8497 22.0872 14.7858 19.4446 14.7858 14.9613C14.7858 7.58898 29.5227 7.57479 29.5227 7.57479L29.5085 0.0954281C29.5085 0.0954281 23.9938 0.0257687 22.1575 0.0954281C10.2612 0.548214 10.5566 11.0139 11.2248 14.5433C11.6131 16.5963 12.6083 19.1976 14.3027 21.6608L7.41999 21.6989C2.57415 21.8247 -0.393476 26.199 0.0406056 29.8252L7.36388 29.7678C7.36388 29.7678 7.60704 22.6586 14.7845 22.3316C17.7393 26.2725 22.5574 29.6859 29.6465 29.6504H29.6472Z" />
+            <circle class="a4-mark-head" cx="3.735" cy="7.575" r="3.693" />
+          </svg>
+          <span class="a4-hero-r">meets <em>robotic innovation.</em></span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- ═══ 2 · WHAT WE DO · two line drawings draw themselves, one after the other ═══ -->
+    <section class="a4-act a4-what" data-a4 data-sc-act="pin" data-sc-span="3.6" aria-labelledby="a4-what-t">
+      <div data-sc-stage class="a4-st a4-what-st">
+        <div class="a4-what-head">
+          <h2 id="a4-what-t" class="chapter-label text-heading-2 a4-label">What we do</h2>
+        </div>
+        <div class="a4-what-grid">
+          <article class="a4-what-col a4-what-col--1">
+            <figure class="a4-draw" aria-hidden="true"><span class="a4-draw-ico" set:html={icHandshake} /></figure>
+            <div class="a4-what-text" data-at="0.24">
+              <h3>Human centric robotics</h3>
+              <p>Robotics as a system to enhance human capabilities, designed to combine quality, flexibility, and worker safety within production processes that cannot be fully standardized.</p>
+              <a href="#hcr" class="text-heading-2 a4-more">The vision <span aria-hidden="true">➞</span></a>
+            </div>
+          </article>
+          <article class="a4-what-col a4-what-col--2">
+            <figure class="a4-draw" aria-hidden="true"><span class="a4-draw-ico" set:html={icPerson} /><span class="a4-loop"></span></figure>
+            <div class="a4-what-text" data-at="0.66">
+              <h3>Human in the loop</h3>
+              <p>Integrates operators into the production system's observation and decision-making cycle, converting human behavior into actionable data to evaluate functionality, efficiency, and safety.</p>
+              <a href="#hitl" class="text-heading-2 a4-more">The vision <span aria-hidden="true">➞</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 3 · HUMAN CENTRIC ROBOTICS · scene, video slot reserved ═══ -->
+    <section id="hcr" class="a4-act a4-scene a4-hcr" data-a4 data-a4-scene data-sc-act="pin" data-sc-span="6" aria-labelledby="a4-hcr-t">
+      <div data-sc-stage class="a4-st">
+        <div class="a4-words" aria-hidden="true">
+          {hcrPillars.map(([, , w], i) => <span class="a4-word" data-at={at(i, hcrPillars.length)} data-until={i < hcrPillars.length - 1 ? at(i + 1, hcrPillars.length) : undefined}>{w}</span>)}
+        </div>
+        <div class="a4-media">
+          <!-- HCR VIDEO SLOT: replace with <video data-scrub data-src=... data-src-mobile=... muted playsinline> (see top of file) -->
+          <div class="a4-media--placeholder"><span>Human centric robotics · video in arrivo</span></div>
+        </div>
+        <div class="a4-scene-head">
+          <div class="chapter-label text-heading-2 a4-label">Human centric robotics</div>
+          <p id="a4-hcr-t" class="a4-scene-vision">Human-centered robotics marks the transition from automation as a substitute to automation as a <em>partner</em>, placing the operator back at the very center of the industrial landscape.</p>
+        </div>
+        <div class="a4-pillars" aria-label="Pillars of the vision">
+          <div class="text-heading-2 a4-pillars-k">Pillars of the vision</div>
+          <div class="a4-pillars-stack">
+            {hcrPillars.map(([t, d], i) => (
+              <div class="a4-pillar" data-at={at(i, hcrPillars.length)} data-until={i < hcrPillars.length - 1 ? at(i + 1, hcrPillars.length) : undefined}>
+                <h3>{t}</h3>
+                <p>{d}</p>
+              </div>
+            ))}
+          </div>
+          <ol class="a4-ticks" aria-hidden="true">{hcrPillars.map((_, i) => <li data-at={at(i, hcrPillars.length)}></li>)}</ol>
+        </div>
+      </div>
+    </section>
+
+    <RelatedRail id="a4-hcr-rel" items={hcrActivities} />
+
+    <!-- ═══ 4 · HUMAN IN THE LOOP · the peak: every simulator rises over its own word ═══ -->
+    <section id="hitl" class="a4-act a4-scene a4-hitl" data-a4 data-a4-scene data-sc-act="pin" data-sc-span="6.4" aria-labelledby="a4-hitl-t">
+      <div data-sc-stage class="a4-st">
+        <div class="a4-words" aria-hidden="true">
+          {devices.map((d, i) => <span class="a4-word" data-device={i}>{d.word}</span>)}
+        </div>
+        <div class="a4-media">
+          <video data-scrub data-from="0.3" data-to="11.5" data-src={v4('hitl.mp4')} data-src-mobile={v4('hitl-m.mp4')} poster={v4('hitl-poster.jpg')} muted playsinline preload="none" aria-label="Animation: the lab's human-in-the-loop simulators assemble one after another: hazelnut pruning, cycling, skeleton, driving and balance platforms."></video>
+        </div>
+        <div class="a4-scene-head">
+          <div class="chapter-label text-heading-2 a4-label">Human in the loop</div>
+          <p id="a4-hitl-t" class="a4-scene-vision">Human-in-the-Loop (HITL) simulation is a «sandbox» where human intuition meets predictive technology, renders human-centric robotics safe, scalable, and flawless by design. <em>One architecture, several devices</em> for any activity where human performance is monitored, studied, trained and enhanced.</p>
+        </div>
+        <div class="a4-pillars" aria-label="Pillars of the vision">
+          <div class="text-heading-2 a4-pillars-k">Pillars of the vision</div>
+          <div class="a4-pillars-stack">
+            {hitlPillars.map(([t, d], i) => (
+              <div class="a4-pillar" data-at={at(i, hitlPillars.length)} data-until={i < hitlPillars.length - 1 ? at(i + 1, hitlPillars.length) : undefined}>
+                <h3>{t}</h3>
+                <p>{d}</p>
+              </div>
+            ))}
+          </div>
+          <ol class="a4-ticks" aria-hidden="true">{hitlPillars.map((_, i) => <li data-at={at(i, hitlPillars.length)}></li>)}</ol>
+        </div>
+      </div>
+    </section>
+
+    <RelatedRail id="a4-hitl-rel" items={hitlActivities} />
+
+    <!-- ═══ 5 · LAB FACILITIES · four cards, icons that draw, real counts ═══ -->
+    <section class="a4-lab" aria-labelledby="a4-lab-t">
+      <div class="a4-rel-head">
+        <h2 id="a4-lab-t" class="chapter-label text-heading-2 a4-label">Lab facilities &amp; infrastructure</h2>
+        <p class="text-body a4-lab-intro">Our state-of-the-art lab facilities are equipped to support cutting-edge research and development in robotics and automation.</p>
+      </div>
+      <div class="a4-fac-grid" data-sc-in data-sc-stagger="110">
+        {facilities.map((f) => (
+          <article class="a4-fac">
+            <span class="a4-ico" aria-hidden="true" set:html={f.icon} />
+            <h3 class="a4-fac-title">{f.title}</h3>
+            <ul class="a4-fac-list">{f.items.map((it) => <li class="text-list-meta">{it}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ═══ 6 · LONG-TERM VISION · the lab itself behind the last sentence ═══ -->
+    <section class="a4-act a4-close" data-a4 data-sc-act="pin" data-sc-span="2.2" aria-labelledby="a4-close-t">
+      <div data-sc-stage class="a4-st a4-close-st">
+        <div class="a4-close-photo"><img src={withBase('/images/about/lab-hall.jpg')} alt="The RAMSLAB hall: a hexapod motion platform in front of a curved immersive screen, with industrial machines in the background." /></div>
+        <div class="a4-close-in">
+          <div class="text-heading-2 a4-close-k" id="a4-close-t">Long-term vision</div>
+          <p class="a4-close-text">{longTerm.split(' ').map((w, i) => <span class="a4-q" data-q={i}>{w} </span>)}</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  </div>
+
+  <script is:inline src={withBase('/scrollcraft/scrollcraft.js')}></script>
+  <script is:inline define:vars={{ devices }}>
+    ScrollCraft.mount(document.body);
+
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var mobile = window.matchMedia('(max-width: 767px)').matches;
+      var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+      var pOf = function (el) { return reduce ? 1 : parseFloat(el.style.getPropertyValue('--sc-p')) || 0; };
+      var acts = [].slice.call(document.querySelectorAll('[data-a4]'));
+
+      // Scrubbed clips inside a scene: the clip (optionally trimmed with
+      // data-from / data-to, in seconds) plays across the scene's whole
+      // progress and reaches its last kept frame as the scene starts to leave.
+      var clips = [].slice.call(document.querySelectorAll('[data-a4-scene] video[data-scrub]')).map(function (v) {
+        var c = { v: v, act: v.closest('[data-a4-scene]'), loaded: false, seeking: false };
+        v.muted = true;
+        v.addEventListener('seeked', function () { c.seeking = false; });
+        v.addEventListener('loadeddata', function () { v.play().then(function () { v.pause(); }).catch(function () {}); }, { once: true });
+        return c;
+      });
+      function scrub(c) {
+        if (!c.loaded && c.act.getBoundingClientRect().top < innerHeight * 2.5) {
+          c.loaded = true;
+          var src = (mobile && c.v.dataset.srcMobile) || c.v.dataset.src;
+          fetch(src).then(function (r) { return r.blob(); })
+            .then(function (b) { c.v.src = URL.createObjectURL(b); })
+            .catch(function () { c.v.src = src; });
+        }
+        if (!c.v.duration || c.seeking || c.v.seeking) return;
+        var from = parseFloat(c.v.dataset.from) || 0;
+        var to = Math.min(parseFloat(c.v.dataset.to) || c.v.duration, c.v.duration - 0.05);
+        var target = from + clamp(pOf(c.act) / 0.97) * (to - from);
+        var delta = target - c.v.currentTime;
+        if (Math.abs(delta) > 0.015) { c.seeking = true; c.v.currentTime += reduce ? delta : delta * 0.2; }
+      }
+
+      var hitl = document.querySelector('.a4-hitl');
+      var hv = hitl.querySelector('video');
+      var words = [].slice.call(hitl.querySelectorAll('[data-device]'));
+
+      var close = document.querySelector('.a4-close');
+      var qWords = [].slice.call(close.querySelectorAll('[data-q]'));
+
+      function frame() {
+        acts.forEach(function (act) {
+          var p = pOf(act);
+          act.querySelectorAll('[data-at]').forEach(function (el) {
+            var a = parseFloat(el.dataset.at);
+            var until = el.dataset.until ? parseFloat(el.dataset.until) : 9;
+            el.classList.toggle('on', reduce ? !el.dataset.until : p >= a && p < until);
+          });
+        });
+
+        clips.forEach(scrub);
+
+        // the giant word behind the HITL clip follows the clip's own clock
+        var t = hv.currentTime || 0, cur = 0;
+        devices.forEach(function (d, i) { if (t >= d.from) cur = i; });
+        words.forEach(function (w, i) { w.classList.toggle('on', i === cur); w.classList.toggle('done', i < cur); });
+
+        var cp = pOf(close);
+        qWords.forEach(function (w, i) { w.classList.toggle('lit', reduce || cp >= 0.04 + (i / qWords.length) * 0.5); });
+
+        if (!reduce) requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+  </script>
+
+  <style is:global>
+    .a4, body:has(.a4) {
+      --sc-canvas: #ffffff;
+      --sc-surface: #f2f2f2;
+      --sc-ink: #111111;
+      --sc-ink-soft: #5f5f5f;
+      --sc-accent: #b2284b;
+      --sc-accent-ink: #ffffff;
+      --sc-font-display: "Roboto", sans-serif;
+      --sc-font-text: "Roboto", sans-serif;
+      --sc-font-mono: "Roboto", sans-serif;
+      --a4-red: #b2284b;
+      --a4-tint: #f5e4e9;
+      --a4-top: 72px;
+    }
+    body:has(.a4) { background: #fff; color: var(--text); font-size: 1rem; line-height: 1.45; letter-spacing: normal; }
+    html:has(.a4) { background: #fff; scroll-behavior: auto; }
+    .a4 main.a4-main { min-height: 0; overflow-x: visible; padding-bottom: 0; max-width: none; }
+    .a4 [data-sc-progress] { background: var(--a4-red); }
+    .a4-act { position: relative; background: #fff; }
+    .a4-st { --p: var(--sc-p, 0); background: #fff; overflow: hidden; }
+    .a4 em { font-style: normal; color: var(--a4-red); }
+
+    /* the site's editorial type */
+    .a4 .chapter-label { display: flex; gap: 12px; margin-bottom: 20px; color: var(--muted); }
+    .a4-label { color: var(--a4-red) !important; }
+    .a4-h2 { font-weight: 700; font-size: clamp(1.9rem, 3.6vw, 3.25rem); line-height: 1.08; letter-spacing: -0.0265em; margin: 0; max-width: 22ch; }
+    .a4-pagehead { align-items: flex-end; gap: 32px; }
+    .a4-motto { color: var(--muted); max-width: 34ch; text-align: right; padding-bottom: 14px; }
+
+    /* ═══ 1 · HERO ═══ */
+    .a4-hero-st {
+      display: grid; align-content: center; justify-items: center; padding: var(--a4-top) var(--pad) 0;
+      --draw: clamp(0, (var(--p) - 0.015) / 0.24, 1);
+      --fill: clamp(0, (var(--p) - 0.2) / 0.08, 1);
+      --say: clamp(0, (var(--p) - 0.24) / 0.14, 1);
+      --zoom: clamp(0, (var(--p) - 0.58) / 0.36, 1);
+    }
+    .a4-hero-k { color: var(--muted); margin: 0 0 3vh; opacity: calc(1 - var(--zoom) * 3); }
+    .a4-hero-grid {
+      margin: 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: clamp(1.5rem, 3vw, 3.5rem); width: 100%;
+      font-weight: 700; font-size: clamp(1.9rem, 4vw, 4.2rem); line-height: 1.04; letter-spacing: -0.0265em;
+    }
+    .a4-hero-l, .a4-hero-r { opacity: calc(var(--say) * (1 - var(--zoom) * 3)); }
+    .a4-hero-l { text-align: right; transform: translateX(calc((1 - var(--say)) * -8vw)); }
+    .a4-hero-r { text-align: left; transform: translateX(calc((1 - var(--say)) * 8vw)); }
+    .a4-mark {
+      width: clamp(10rem, 34vh, 22rem); height: auto; overflow: visible;
+      transform-origin: 15% 27%;
+      transform: scale(calc(1 + var(--zoom) * var(--zoom) * var(--zoom) * 90));
+    }
+    .a4-mark-body { fill: var(--a4-red); fill-opacity: var(--fill); stroke: var(--a4-red); stroke-opacity: min(1, var(--draw) * 30); stroke-width: 0.35; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw)); }
+    .a4-mark-head { fill: var(--a4-red); transform-box: fill-box; transform-origin: center; transform: translateY(calc((1 - var(--fill)) * -14px)) scale(var(--fill)); }
+
+    /* ═══ 2 · WHAT WE DO ═══ */
+    .a4-what-st {
+      display: flex; flex-direction: column; justify-content: center; gap: 3vh; padding: calc(var(--a4-top) + 2vh) var(--pad) 2vh;
+      --d1: clamp(0, (var(--p) - 0.02) / 0.22, 1);
+      --mv: clamp(0, (var(--p) - 0.34) / 0.1, 1);
+      --d2: clamp(0, (var(--p) - 0.42) / 0.22, 1);
+    }
+    .a4-what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 6rem); align-items: start; }
+    .a4-what-col--1 { transform: translateX(calc((1 - var(--mv)) * 50% + (1 - var(--mv)) * clamp(1rem, 2.5vw, 3rem))); }
+    .a4-draw { position: relative; margin: 0 0 18px; height: min(42vh, 26rem); display: flex; justify-content: center; }
+    .a4-draw-ico { position: relative; z-index: 1; height: 100%; aspect-ratio: 1; display: block; }
+    .a4-draw-ico svg { width: 100%; height: 100%; display: block; }
+    .a4-what-col--1 .a4-draw-ico { color: #111; clip-path: inset(0 calc((1 - var(--d1)) * 100%) 0 0); transform: rotate(calc((1 - var(--d1)) * -8deg)); }
+    .a4-what-col--2 .a4-draw-ico { color: var(--a4-red); clip-path: inset(0 calc((1 - var(--d2)) * 100%) 0 0); transform: rotate(calc((1 - var(--d2)) * 8deg)); }
+    .a4-draw-ico svg path { fill: currentColor; }
+    /* the loop around the person: a dashed ring that turns with the scroll */
+    .a4-loop { position: absolute; z-index: 0; top: 50%; left: 50%; height: 108%; aspect-ratio: 1; border-radius: 50%;
+      border: 2px dashed var(--a4-red); opacity: calc(var(--d2) * 0.55);
+      transform: translate(-50%, -50%) rotate(calc(var(--p) * 300deg)) scale(calc(0.7 + var(--d2) * 0.3)); }
+    .a4-draw::after { content: ""; position: absolute; z-index: 2; top: 4%; bottom: 4%; width: 2px; background: var(--a4-red); box-shadow: 0 0 12px rgb(178 40 75 / 0.5); pointer-events: none; }
+    .a4-what-col--1 .a4-draw::after { left: calc(50% - min(21vh, 13rem) + var(--d1) * min(42vh, 26rem)); opacity: calc(var(--d1) * (1 - var(--d1)) * 4); }
+    .a4-what-col--2 .a4-draw::after { left: calc(50% - min(21vh, 13rem) + var(--d2) * min(42vh, 26rem)); opacity: calc(var(--d2) * (1 - var(--d2)) * 4); }
+    .a4-what-text { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--sc-ease-out), transform 600ms var(--sc-ease-out); border-top: 1px solid var(--line); padding-top: 14px; }
+    .a4-what-text.on { opacity: 1; transform: none; }
+    .a4-what-text h3 { margin: 0 0 10px; font-weight: 700; font-size: clamp(1.5rem, 2.4vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.05; }
+    .a4-what-col--2 h3 { color: var(--a4-red); }
+    .a4-what-text p { margin: 0 0 14px; color: var(--text-soft); max-width: 46ch; line-height: 1.5; }
+    .a4-more { display: inline-flex; gap: 8px; color: var(--text); }
+    .a4-more:hover { color: var(--a4-red); }
+
+    /* ═══ 3 + 4 · SCENES (HCR and HITL share one structure) ═══ */
+    .a4-words { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; overflow: hidden; pointer-events: none; padding-left: 22%; transform: rotate(-5deg) scale(1.08); }
+    .a4-word {
+      grid-area: 1 / 1; font-weight: 900; text-transform: uppercase; font-size: 18vw; line-height: 0.8; letter-spacing: -0.05em; white-space: nowrap;
+      color: var(--a4-tint); padding-top: 4vh;
+      opacity: 0; transform: translateY(16%) scale(0.96); transition: opacity 500ms, transform 700ms var(--sc-ease-out);
+    }
+    .a4-word.on { opacity: 1; transform: translateX(calc((0.5 - var(--p)) * 6vw)); }
+    .a4-word.done { transform: translateY(-16%) scale(0.96); }
+    .a4-media { position: absolute; z-index: 2; left: 24%; right: 0; top: var(--a4-top); bottom: 0; mix-blend-mode: multiply; overflow: hidden; }
+    .a4-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: transparent; transform: scale(1.32); transform-origin: 50% 54%; }
+    .a4-media--placeholder { position: absolute; inset: 5% 4%; display: grid; place-items: center; border: 2px dashed #d6d6d6; border-radius: 12px; }
+    .a4-media--placeholder span { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #9a9a9a; }
+
+    .a4-scene-head { position: absolute; z-index: 4; left: var(--pad); top: calc(var(--a4-top) + 3vh); width: min(30rem, 30vw); }
+    /* both scenes: the red label, then the vision sentence from Contents.docx, same style */
+    .a4-scene-vision { font-weight: 700; font-size: clamp(1.1rem, 1.35vw, 1.4rem); line-height: 1.25; letter-spacing: -0.015em; margin: 0; }
+
+    /* the pillars: one at a time, big, in their own panel */
+    .a4-pillars { position: absolute; z-index: 5; left: var(--pad); bottom: 4vh; width: min(36rem, 38vw); background: #111; color: #fff; padding: 26px 28px 22px; box-shadow: 18px 18px 0 var(--a4-red); transform: rotate(-1.2deg); }
+    .a4-pillars-k { color: var(--a4-red-hi, #e0386a) !important; margin-bottom: 12px; }
+    .a4-pillars-stack { display: grid; min-height: 12.5rem; overflow: hidden; }
+    .a4-pillar { grid-area: 1 / 1; opacity: 0; transform: translateX(-30px) skewX(-6deg); transition: opacity 450ms var(--sc-ease-out), transform 550ms var(--sc-ease-out); }
+    .a4-pillar.on { opacity: 1; transform: none; }
+    .a4-pillar h3 { margin: 0 0 12px; font-weight: 900; text-transform: uppercase; font-size: clamp(1.9rem, 3vw, 3.2rem); line-height: 0.95; letter-spacing: -0.03em; }
+    .a4-pillar p { margin: 0; font-size: 1.1rem; line-height: 1.45; color: rgb(255 255 255 / 0.82); max-width: 32ch; }
+    .a4-ticks { list-style: none; display: flex; gap: 6px; margin: 16px 0 0; padding: 0; }
+    .a4-ticks li { flex: 1; height: 3px; background: rgb(255 255 255 / 0.2); transition: background 300ms; }
+    .a4-ticks li.on { background: #e0386a; }
+
+    .a4-lab { padding: 80px var(--pad) 96px; border-top: 1px solid var(--line); position: relative; z-index: 6; background: #fff; }
+    .a4-rel-head { margin-bottom: 40px; }
+
+    /* ═══ 5 · LAB ═══ */
+    .a4-lab-intro { color: var(--text-soft); max-width: 52ch; margin: 16px 0 0; }
+    .a4-fac-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .a4-fac { border-top: 2px solid var(--text); padding-top: 22px; display: flex; flex-direction: column; }
+    .a4-ico { display: grid; place-items: center; width: 84px; height: 84px; margin-bottom: 18px; border-radius: 50%; background: var(--a4-tint); color: var(--a4-red); }
+    .a4-ico svg { width: 54px; height: 54px; display: block; }
+    .a4-ico svg path { fill: currentColor; }
+    @media (prefers-reduced-motion: no-preference) {
+      .a4-fac:not(.sc-in) .a4-ico { transform: scale(0.4) rotate(-40deg); opacity: 0; }
+      .a4-fac.sc-in .a4-ico { transition: transform 900ms cubic-bezier(0.34, 1.56, 0.64, 1) 150ms, opacity 400ms 150ms; }
+      .a4-fac:hover .a4-ico { transform: scale(1.08) rotate(-6deg); transition: transform 300ms var(--sc-ease-out); }
+    }
+    .a4-fac-title { margin: 0 0 14px; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.01em; line-height: 1.2; }
+    .a4-fac-list { list-style: none; margin: 0; padding: 0; }
+    .a4-fac-list li { padding: 8px 0; border-top: 1px solid var(--line-soft); color: var(--text-soft); }
+
+    /* ═══ 6 · CLOSE · the lab behind the sentence ═══ */
+    .a4-close-st { display: grid; align-content: end; background: #111; color: #fff; }
+    .a4-close-photo { position: absolute; inset: 0; z-index: 0; }
+    .a4-close-photo img { width: 100%; height: 100%; object-fit: cover; transform: scale(calc(1.18 - var(--p) * 0.14)); }
+    .a4-close-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(0 0 0 / 0.82) 0%, rgb(0 0 0 / 0.55) 45%, rgb(0 0 0 / 0.25) 100%); }
+    .a4-close-in { position: relative; z-index: 1; padding: 0 var(--pad) 10vh; }
+    .a4-close-k { color: rgb(255 255 255 / 0.75); margin-bottom: 20px; }
+    .a4-close-text { margin: 0; font-weight: 700; font-size: clamp(2.2rem, 4.8vw, 4.6rem); line-height: 1.04; letter-spacing: -0.0265em; max-width: 22ch; }
+    .a4-q { color: rgb(255 255 255 / 0.28); transition: color 260ms; }
+    .a4-q.lit { color: #fff; }
+
+    /* ── reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .a4-mark { transform: none; opacity: 1; }
+      .a4-what-col--1 { transform: none; }
+    }
+
+    /* ── narrow screens: the scenes stack so the whole clip stays visible ── */
+    @media (max-width: 1100px), (max-aspect-ratio: 5/4) {
+      .a4-scene .a4-st { display: flex; flex-direction: column; padding: calc(var(--a4-top) + 1rem) var(--pad) 1.25rem; gap: 14px; }
+      .a4-scene-head, .a4-pillars { position: relative; left: auto; right: auto; top: auto; bottom: auto; width: auto; }
+      .a4-scene-vision { font-size: 0.95rem; line-height: 1.3; }
+      .a4-media { position: relative; left: auto; right: auto; top: auto; bottom: auto; flex: 1 1 auto; min-height: 0; }
+      .a4-words { padding-left: 0; }
+      .a4-word { font-size: 24vw; }
+      .a4-pillars-stack { min-height: 8.5rem; }
+      .a4-pillars { transform: none; box-shadow: 8px 8px 0 var(--a4-red); padding: 18px 20px 16px; }
+      .a4-words { transform: none; }
+      .a4-pillar h3 { font-size: clamp(1.4rem, 4.6vw, 2.1rem); margin-bottom: 8px; }
+      .a4-pillar p { font-size: 0.95rem; }
+        .a4-fac-grid { grid-template-columns: 1fr 1fr; gap: 40px 16px; }
+    }
+
+    /* ── phones ── */
+    @media (max-width: 860px) {
+      .a4, body:has(.a4) { --a4-top: 64px; }
+      .a4-pagehead { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .a4-motto { text-align: left; padding-bottom: 0; }
+      .a4-hero-grid { grid-template-columns: 1fr; justify-items: center; row-gap: 3vh; text-align: center; font-size: 8.4vw; }
+      .a4-hero-l, .a4-hero-r { text-align: center; }
+      .a4-what-grid { grid-template-columns: 1fr; gap: 2vh; }
+      .a4-what-col--1 { transform: none; }
+      .a4-draw { height: 22vh; margin-bottom: 8px; }
+      .a4-what-text p { font-size: 0.9rem; margin-bottom: 6px; }
+      .a4-what-text h3 { font-size: 1.3rem; margin-bottom: 6px; }
+      .a4-what-text .a4-more { display: none; }
+        .a4-lab { padding: 56px var(--pad) 64px; }
+    }
+    @media (max-width: 520px) {
+      .a4-fac-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</BaseLayout>

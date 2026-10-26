@@ -1,0 +1,39 @@
+---
+/*
+  RelatedRail: the homepage's "Activities" section (.home-projects,
+  .section-heading, .media-strip, ProjectCard), reused as is, with the
+  project tiles slightly larger.
+*/
+import ProjectCard from './ProjectCard.astro';
+
+interface Item {
+  href: string | null;
+  title: string;
+  cover: string;
+  fit?: 'cover' | 'contain';
+  meta?: string;
+}
+interface Props {
+  id: string;
+  items: Item[];
+}
+const { id, items } = Astro.props;
+---
+
+<section class="home-projects rr" aria-labelledby={`${id}-t`}>
+  <div class="section-heading">
+    <h2 id={`${id}-t`} class="text-heading-2">You can see this vision in action in</h2>
+  </div>
+  <div class="media-strip rr-strip">
+    {items.map((a) => (
+      <ProjectCard href={a.href ?? undefined} title={a.title} meta={a.meta} src={a.cover} fit={a.fit} />
+    ))}
+  </div>
+</section>
+
+<style>
+  .rr { position: relative; z-index: 6; background: #fff; }
+  /* homepage tiles are 148 × 109; these are about 30% larger, same proportion */
+  .rr-strip :global(.media-tile) { width: 192px; }
+  .rr-strip :global(.media-thumb) { height: 141px; }
+</style>
