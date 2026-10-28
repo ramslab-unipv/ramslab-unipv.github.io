@@ -1,37 +1,15 @@
 ---
-/*
-  About 4: the RAMSLAB story as defined in Contents.docx (Hero, What we do,
-  Human centric robotics, Human in the loop, Lab facilities, Long-term vision),
-  built on the scroll-craft engine (public/scrollcraft/, copied verbatim,
-  never edited). All white, in the site's own style: the page header and the
-  activity cards are the same as /activities/.
-
-  HCR VIDEO SLOT: the Human centric robotics scene mirrors the Human in the
-  loop scene and keeps an empty media slot (.a4-media--placeholder). When the
-  clip is ready, encode it like hitl.mp4 (public/videos/about_4/) and replace
-  the placeholder with a <video data-scrub data-src=... data-src-mobile=...>
-  like the one in the HITL scene; the page script scrubs any [data-scrub]
-  video inside a scene from that scene's own progress.
-
-  Scrubbed clips carry data-scrub so BaseLayout's autoplay skips them.
-*/
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import RelatedRail from '../components/RelatedRail.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../lib/assets';
 import { entrySlug } from '../lib/entries';
 import site from '../content/settings/site.json';
-/* Google Material Symbols (outlined), downloaded from fonts.gstatic.com */
-import icMemory from '../assets/icons/memory.svg?raw';
-import icRobot from '../assets/icons/precision_manufacturing.svg?raw';
-import icHmd from '../assets/icons/head_mounted_device.svg?raw';
-import icCube from '../assets/icons/deployed_code.svg?raw';
 
-const v4 = (name: string) => withBase(`/videos/about_4/${name}`);
+const img = (name: string) => withBase(`/images/about/${name}`);
 
-/* ── Activity cards: same data and routing as /activities/ ── */
+/* ── Activities with a dedicated page (same routing as /activities/) ── */
 const routes: Record<string, string> = {
   'demetra-nodes': '/activities/demetra/',
   'dynamica': '/activities/dynamica/',
@@ -48,487 +26,692 @@ const pick = (slugs: string[]) =>
   slugs
     .map((s) => all.find((a) => entrySlug(a.id) === s))
     .filter(Boolean)
-    .map((a) => {
-      const slug = entrySlug(a!.id);
-      return {
-        href: routes[slug] ? withBase(routes[slug]) : null,
-        title: a!.data.title,
-        /* same data as the homepage card: real cover, fit, year · status; ProjectCard adds the base path */
-        cover: a!.data.cover,
-        fit: a!.data.coverFit as 'cover' | 'contain' | undefined,
-        meta: [a!.data.year?.toString(), a!.data.status?.replace(/ongoing/i, 'ONGOING')].filter(Boolean).join(' · '),
-      };
-    });
-const hcrActivities = pick(['air-flow-dynamic', 'robotic-liquid-handling', 'dynamica', 'carbon-fiber', 'fiber-placement']);
-const hitlActivities = pick(['human-centric-skeleton-simulator', '3d-human-poses-estimation', 'drivesim', 'balance-platform-simulator', 'demetra-nodes', 'ahbi']);
+    .map((a) => ({
+      href: routes[entrySlug(a!.id)] ? withBase(routes[entrySlug(a!.id)]) : null,
+      title: a!.data.title,
+      excerpt: a!.data.excerpt,
+      cover: a!.data.cover,
+      fit: a!.data.coverFit === 'contain' ? 'fit-contain' : 'fit-cover',
+      meta: [a!.data.year ? String(a!.data.year) : null, a!.data.status?.replace(/ongoing/i, 'ONGOING')].filter(Boolean),
+    }));
 
-/* ── Scenes: pillars share one timing scheme, all finished by 0.8 ── */
-const hcrPillars = [
-  ['Ultimate Human Tool', 'The robot as the ultimate extension of human capability', 'Tool'],
-  ['Democratizing Robotics', 'Making robotic technology accessible to all', 'Access'],
-  ['Unlocking Creativity', 'Enabling creative thinking within production processes', 'Create'],
-  ['Reduce Repetitive Tasks', 'Freeing workers from monotonous, repetitive work', 'Free'],
-  ['No Code Approach', 'Intuitive interfaces requiring no programming knowledge', 'No code'],
-  ['Agentic Framework', 'Human/machine interface driven by agentic systems', 'Agents'],
-  ['Physical AI', 'Intelligent systems embedded in the physical world', 'Physical'],
-];
-const hitlPillars = [
-  ['Zero-Risk Validation', 'Safety and Comfort validation in a controlled, consequence-free environment.'],
-  ['Mapping Human Behaviour', 'Capturing and modelling real human motion and decision patterns.'],
-  ['Testing of Devices', 'Rigorous evaluation of devices within a fully controlled environment.'],
-  ['Cognitive Load Assessment', 'Measuring mental effort to ensure intuitive and ergonomic human-robot interaction.'],
-];
-/* pillar i of n is on screen from at(i) to at(i+1); the first is there on arrival */
-const at = (i: number, n: number) => (i === 0 ? -1 : (i / n) * 0.8).toFixed(3);
+const hitlActivities = pick(['drivesim', 'balance-platform-simulator', 'human-centric-skeleton-simulator', '3d-human-poses-estimation', 'ahbi', 'demetra-nodes']);
+const agentActivities = pick(['dynamica', 'robotic-liquid-handling']);
+const industryActivities = pick(['air-flow-dynamic']);
 
-/* The HITL clip shows five simulators in sequence; times are clip seconds. */
-const devices = [
-  { word: 'Pruning', from: 0 },
-  { word: 'Cycling', from: 2.3 },
-  { word: 'Skeleton', from: 5.1 },
-  { word: 'Driving', from: 7.4 },
-  { word: 'Balance', from: 9.7 },
+/* ── Story chapters (used by the sticky index) ── */
+const chapters = [
+  { id: 'prologue', label: 'Who we are' },
+  { id: 'vision', label: 'The vision' },
+  { id: 'principles', label: 'Seven principles' },
+  { id: 'loop', label: 'Humans in the loop' },
+  { id: 'automotive', label: 'A lesson from cars' },
+  { id: 'agents', label: 'From intent to action' },
+  { id: 'industry', label: 'Into industry' },
+  { id: 'lab', label: 'The lab' },
+  { id: 'epilogue', label: 'What comes next' },
 ];
+const num = (i: number) => String(i).padStart(2, '0');
+
+const manifesto =
+  'Human-centred robotics marks the transition from automation as a substitute to automation as a partner, placing the operator back at the very centre of the industrial landscape.';
+
+const principles = [
+  ['Ultimate Human Tool', 'The robot as the ultimate extension of human capability.'],
+  ['Democratizing Robotics', 'Making robotic technology accessible to everyone, not only to specialists.'],
+  ['Unlocking Creativity', 'Giving room to creative thinking inside production processes.'],
+  ['Reduce Repetitive Tasks', 'Freeing workers from monotonous, repetitive work.'],
+  ['No-Code Approach', 'Intuitive interfaces that require no programming knowledge.'],
+  ['Agentic Framework', 'Human–machine interaction driven by intelligent agentic systems.'],
+  ['Physical AI', 'Intelligent systems embodied in, and acting on, the physical world.'],
+];
+
+const hitl = [
+  ['Zero-risk validation', 'Safety and comfort are validated in a controlled, consequence-free environment.'],
+  ['Mapping human behaviour', 'Real human motion and decision patterns are captured and modelled.'],
+  ['Testing of devices', 'Devices are rigorously evaluated within a fully controlled environment.'],
+  ['Cognitive load assessment', 'Mental effort is measured to keep human–robot interaction intuitive and ergonomic.'],
+];
+
+const automotive = [
+  ['Driving simulators as enablers', 'Simulators provided the environment to develop and validate increasingly intelligent vehicle technologies.'],
+  ['From simulation to autonomy', 'This is how modern driver-assistance and autonomous driving systems became possible.'],
+  ['The same principle for robotics', 'A manufacturing simulator becomes the environment where intelligent robotic systems are developed, trained and validated.'],
+  ["Shifting the operator's role", 'Increasing intelligence progressively moves the operator from controlling the system to defining the objective.'],
+];
+
+const projects = [
+  ['Pharmaceutical Production Plant', 'Pharma'],
+  ['Humanoid Robots for Livestock Management', 'Agriculture'],
+  ['Agricultural Systems Safety — RoboVeg', 'Agriculture'],
+  ['Laser Finishing for Luxury Composite Components', 'Composites'],
+  ['Robotic Composite Manufacturing', 'Composites'],
+];
+
+const stats = [
+  [17, '', 'NVIDIA RTX GPUs for training, simulation and vision'],
+  [7, '', 'industrial and collaborative robots'],
+  [8, ' m', 'curved immersive display on a hexapod motion platform'],
+  [6, '-DoF', 'force platform for human-in-the-loop experiments'],
+] as const;
 
 const facilities = [
-  { title: 'Computing Infrastructure', icon: icMemory,
-    items: ['Workstations and computing servers', 'NAS systems for data storage and processing', 'GPU clusters: 8× NVIDIA RTX 3090, 6× NVIDIA RTX 4080, 3× NVIDIA RTX 4090', 'Edge computing: NVIDIA Jetson Orin & Nano, Raspberry Pi 5'] },
-  { title: 'Robotic Systems', icon: icRobot,
-    items: ['Mitsubishi RV-5-AS-D', 'Mitsubishi RV-8CRL-D-S15', 'Mitsubishi RV-2FRB-D-S25', 'Omron TM12', 'Omron TM5', 'Dobot CR10AS', 'Kawasaki MC004N'] },
-  { title: 'Simulation & Testing Equipment', icon: icHmd,
-    items: ['Hexapod motion platform with 8m curved immersive display', '6-DoF force platform', 'Real-time optical and markerless motion capture system', 'Driving simulator', 'Balance board', 'Pharmaceutical isolator', 'Infinadeck omnidirectional treadmill'] },
-  { title: 'Manufacturing & Prototyping', icon: icCube,
-    items: ['3D prototyping', 'CO2 Laser cutting', 'Optical table for precision measurement setup'] },
-];
-
-/* What we do: text only, from Contents.docx */
-const whatWeDo = [
-  { title: 'Human centric robotics', href: '#hcr', loop: 'what-hcr',
-    text: 'Robotics as a system to enhance human capabilities, designed to combine quality, flexibility, and worker safety within production processes that cannot be fully standardized.' },
-  { title: 'Human in the loop', href: '#hitl', loop: 'what-hitl',
-    text: "Integrates operators into the production system's observation and decision-making cycle, converting human behavior into actionable data to evaluate functionality, efficiency, and safety." },
-];
-
-const longTerm = 'Instead of programming robot motions, the operator will simply specify the product to manufacture, while the system determines how to accomplish the task.';
+  ['Robotic systems', ['Mitsubishi RV-5-AS-D', 'Mitsubishi RV-8CRL-D-S15', 'Mitsubishi RV-2FRB-D-S25', 'Omron TM12, Omron TM5', 'Dobot CR10AS', 'Kawasaki MC004N']],
+  ['Simulation & testing', ['Hexapod motion platform with 8 m curved immersive display', '6-DoF force platform', 'Real-time optical and markerless motion capture', 'Driving simulator, balance board', 'Pharmaceutical isolator', 'Infinadeck omnidirectional treadmill']],
+  ['Computing', ['Workstations and computing servers', 'NAS for data storage and processing', 'GPU clusters: 8× RTX 3090, 6× RTX 4080, 3× RTX 4090', 'Edge: NVIDIA Jetson Orin & Nano, Raspberry Pi 5']],
+  ['Manufacturing & prototyping', ['3D prototyping', 'CO₂ laser cutting', 'Optical table for precision measurement']],
+] as const;
 ---
 
-<BaseLayout title={`About — ${site.siteTitle}`} description="Welcome to RAMSLAB, where human intuition meets robotic innovation: human-centric robotics and human-in-the-loop simulation at the University of Pavia.">
-  <link rel="stylesheet" href={withBase('/scrollcraft/scrollcraft.css')} />
-  <div class="a4">
+<BaseLayout title={`About — ${site.siteTitle}`} description="The RAMSLAB story: human-centric robotics and human-in-the-loop simulation at the University of Pavia.">
+  <script is:inline>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('about-anim');
+  </script>
   <Header />
-  <span data-sc-progress></span>
+  <div class="about-progress" aria-hidden="true"><span></span></div>
 
-  <main id="main-content" class="projects-page-main a4-main">
+  <main id="main-content" class="projects-page-main about">
 
-    <!-- ─── Page header, as on every other page ─── -->
+    <!-- ─── Page header (same as /activities/) ─── -->
     <section class="projects-header-section">
       <div class="projects-header-container">
-        <div class="projects-header-content a4-pagehead">
-          <h1 class="projects-title-big">About RAMSLAB</h1>
-          <p class="text-link-header a4-motto">{site.siteMotto}</p>
+        <div class="projects-header-content about-header">
+          <h1 class="projects-title-big about-title"><span>About</span></h1>
+          <p class="text-link-header about-header-motto" style="color: var(--muted);">{site.siteMotto}</p>
         </div>
       </div>
     </section>
 
-    <!-- ═══ 1 · HERO · the RAMSLAB mark is a person: it draws itself, then we step into its head ═══ -->
-    <section class="a4-act a4-hero" data-a4 data-sc-act="pin" data-sc-span="2.5" aria-labelledby="a4-hero-t">
-      <div data-sc-stage class="a4-st a4-hero-st">
-        <p class="text-heading-2 a4-hero-k">Welcome to RAMSLAB</p>
-        <h2 id="a4-hero-t" class="a4-hero-grid">
-          <span class="a4-hero-l">Where human intuition</span>
-          <svg class="a4-mark" viewBox="-1 -1 32 32" aria-hidden="true">
-            <path class="a4-mark-body" pathLength="1" d="M29.6472 29.6504C29.6472 29.6504 29.5272 23.2262 29.5233 21.7608C29.5188 21.7608 29.5143 21.7608 29.5091 21.7608C24.8497 22.0872 14.7858 19.4446 14.7858 14.9613C14.7858 7.58898 29.5227 7.57479 29.5227 7.57479L29.5085 0.0954281C29.5085 0.0954281 23.9938 0.0257687 22.1575 0.0954281C10.2612 0.548214 10.5566 11.0139 11.2248 14.5433C11.6131 16.5963 12.6083 19.1976 14.3027 21.6608L7.41999 21.6989C2.57415 21.8247 -0.393476 26.199 0.0406056 29.8252L7.36388 29.7678C7.36388 29.7678 7.60704 22.6586 14.7845 22.3316C17.7393 26.2725 22.5574 29.6859 29.6465 29.6504H29.6472Z" />
-            <circle class="a4-mark-head" cx="3.735" cy="7.575" r="3.693" />
-          </svg>
-          <span class="a4-hero-r">meets <em>robotic innovation.</em></span>
-        </h2>
-      </div>
-    </section>
+    <div class="about-story">
 
-    <!-- ═══ 2 · WHAT WE DO · split screen: looping animation left, title + definition right; the two slides travel sideways ═══ -->
-    <section class="a4-act a4-what" data-a4 data-sc-act="pin" data-sc-span="4.4" aria-labelledby="a4-what-t">
-      <div data-sc-stage class="a4-st a4-what-st">
-        <h2 id="a4-what-t" class="chapter-label text-heading-2 a4-label a4-what-k">What we do</h2>
-        <div class="a4-track">
-          {whatWeDo.map((w, k) => {
-            const words = w.title.split(' ');
-            const n = w.title.replace(/ /g, '').length;
-            let ci = 0;
-            const textWords = w.text.split(' ');
-            return (
-              <article class={`a4-wp a4-wp--${k}`}>
-                <div class="a4-wp-media">
-                  <video class="a4-wp-video" src={v4(`${w.loop}.mp4`)} poster={v4(`${w.loop}-poster.jpg`)} autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
-                </div>
-                <div class="a4-wp-copy">
-                  <h3 class="a4-wp-title" aria-label={w.title}>
-                    {words.map((word) => (
-                      <span class="a4-wp-word" aria-hidden="true">
-                        {word.split('').map((ch) => <span class="a4-ch" style={`--i:${(ci++ / n).toFixed(3)}`}>{ch}</span>)}
-                      </span>
-                    ))}
-                  </h3>
-                  <p class="a4-wp-text">{textWords.map((t, j) => <span class="a4-tw" style={`--j:${(j / textWords.length).toFixed(3)}`}>{t} </span>)}</p>
-                  <a href={w.href} class="text-heading-2 a4-more">The vision <span aria-hidden="true">➞</span></a>
+      <!-- ─── Sticky chapter index ─── -->
+      <aside class="about-index" aria-label="Chapters">
+        <nav>
+          <div class="text-heading-2 about-index-title">The story</div>
+          <ol>
+            {chapters.map((c, i) => (
+              <li><a href={`#${c.id}`} data-chapter-link={c.id}><span class="about-index-num">{num(i)}</span>{c.label}</a></li>
+            ))}
+          </ol>
+          <div class="about-index-track"><span></span></div>
+        </nav>
+      </aside>
+
+      <div class="about-chapters">
+
+        <!-- 00 ─ PROLOGUE -->
+        <section class="chapter" id="prologue" aria-labelledby="t-prologue">
+          <div class="chapter-label text-heading-2" data-reveal><span>00</span>Who we are</div>
+          <h2 class="chapter-title" id="t-prologue" data-reveal>A robotics lab that starts from people.</h2>
+          <div class="chapter-cols">
+            <p class="text-body" data-reveal>RAMSLAB — Research on Advanced Mechanical Systems — is a laboratory of the University of Pavia founded and led by Prof. Hermes Giberti. We bring innovation and creativity to industrial and research applications through robotics and dynamic simulators.</p>
+            <p class="text-body" data-reveal>Our work moves between two worlds: industrial robots and cobots that take on real production tasks, and immersive simulators — for driving, sport, rehabilitation and agriculture — where people can be studied, trained and protected. What connects them is a single idea about the role of the human.</p>
+          </div>
+          <figure class="about-figure about-figure--wide" data-wipe>
+            <img src={img('lab-hall.jpg')} alt="The RAMSLAB hall: a hexapod motion platform in front of a curved immersive screen, with industrial machines in the background." loading="lazy" />
+          </figure>
+        </section>
+
+        <!-- 01 ─ VISION -->
+        <section class="chapter" id="vision" aria-labelledby="t-vision">
+          <div class="chapter-label text-heading-2" data-reveal><span>01</span>The vision</div>
+          <h2 class="sr-only" id="t-vision">The vision</h2>
+          <p class="about-manifesto">
+            {manifesto.split(' ').map((w) => <span class="w">{w} </span>)}
+          </p>
+          <div class="chapter-cols about-ideas">
+            <div class="about-idea" data-reveal>
+              <div class="text-heading-2">Human Centric Robotics</div>
+              <p class="text-body">Robotics as a system that enhances human capabilities — designed to combine quality, flexibility and worker safety in production processes that cannot be fully standardised.</p>
+            </div>
+            <div class="about-idea" data-reveal>
+              <div class="text-heading-2">Human in the Loop</div>
+              <p class="text-body">Operators become part of the production system's observation and decision-making cycle, turning human behaviour into actionable data to evaluate functionality, efficiency and safety.</p>
+            </div>
+          </div>
+          <figure class="about-figure about-figure--plain" data-wipe>
+            <img src={img('hcr-hitl.jpg')} alt="Illustration: an operator working next to a robot in a monitored production cell, and a person in VR on an omnidirectional treadmill tracked by cameras." loading="lazy" />
+          </figure>
+        </section>
+
+        <!-- 02 ─ PRINCIPLES -->
+        <section class="chapter" id="principles" aria-labelledby="t-principles">
+          <div class="chapter-label text-heading-2" data-reveal><span>02</span>Seven principles</div>
+          <h2 class="chapter-title" id="t-principles" data-reveal>From automation as a substitute to automation as a partner.</h2>
+          <ol class="about-rows">
+            {principles.map(([t, d], i) => (
+              <li class="about-row">
+                <span class="about-row-num">{num(i + 1)}</span>
+                <span class="about-row-title">{t}</span>
+                <span class="about-row-text">{d}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <!-- 03 ─ HUMANS IN THE LOOP -->
+        <section class="chapter" id="loop" aria-labelledby="t-loop">
+          <div class="chapter-label text-heading-2" data-reveal><span>03</span>Humans in the loop</div>
+          <h2 class="chapter-title" id="t-loop" data-reveal>A sandbox where human intuition meets predictive technology.</h2>
+          <div class="about-loop">
+            <div>
+              <p class="text-body about-lead" data-reveal>Human-in-the-loop simulation makes human-centric robotics safe, scalable and flawless by design. For us it is not just a testing methodology: it is the catalyst for the next industrial revolution.</p>
+              <dl class="about-grid4">
+                {hitl.map(([t, d], i) => (
+                  <div data-reveal>
+                    <dt class="text-list-title"><span class="about-row-num">{num(i + 1)}</span>{t}</dt>
+                    <dd class="text-list-meta">{d}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <figure class="about-figure about-figure--plain about-loop-figure" data-wipe>
+              <img src={img('hitl-treadmill.jpg')} alt="Illustration of a person in a VR headset walking on an omnidirectional treadmill surrounded by motion-capture cameras." loading="lazy" />
+            </figure>
+          </div>
+          <div class="about-sub text-heading-2" data-reveal>Where it happens</div>
+          <div class="activities-grid-container about-cards">
+            {hitlActivities.map((a) => (
+              <article class={`activity-card ${a.href ? 'activity-card-clickable' : 'activity-card-disabled'}`}>
+                <a href={a.href ?? undefined} class="activity-card-image-link"><img src={withBase(a.cover)} alt="" class={a.fit} loading="lazy" /></a>
+                <div class="activity-card-info">
+                  <div class="activity-card-meta">{a.meta.map((m, i) => <>{i > 0 && <span>·</span>}<span>{m}</span></>)}</div>
+                  <h3 class="activity-card-title">{a.href ? <a href={a.href}>{a.title}</a> : a.title}</h3>
+                  {a.excerpt && <p class="activity-card-excerpt">{a.excerpt}</p>}
                 </div>
               </article>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+            ))}
+          </div>
+        </section>
 
-    <!-- ═══ 3 · HUMAN CENTRIC ROBOTICS · scene, video slot reserved ═══ -->
-    <section id="hcr" class="a4-act a4-scene a4-hcr" data-a4 data-a4-scene data-sc-act="pin" data-sc-span="6" aria-labelledby="a4-hcr-t">
-      <div data-sc-stage class="a4-st">
-        <div class="a4-words" aria-hidden="true">
-          {hcrPillars.map(([, , w], i) => <span class="a4-word" data-at={at(i, hcrPillars.length)} data-until={i < hcrPillars.length - 1 ? at(i + 1, hcrPillars.length) : undefined}>{w}</span>)}
-        </div>
-        <div class="a4-media">
-          <!-- HCR VIDEO SLOT: replace with <video data-scrub data-src=... data-src-mobile=... muted playsinline> (see top of file) -->
-          <div class="a4-media--placeholder"><span>Human centric robotics · video in arrivo</span></div>
-        </div>
-        <div class="a4-scene-head">
-          <div class="chapter-label text-heading-2 a4-label">Human centric robotics</div>
-          <p id="a4-hcr-t" class="a4-scene-vision">Human-centered robotics marks the transition from automation as a substitute to automation as a <em>partner</em>, placing the operator back at the very center of the industrial landscape.</p>
-        </div>
-        <div class="a4-pillars" aria-label="Pillars of the vision">
-          <div class="text-heading-2 a4-pillars-k">Pillars of the vision</div>
-          <div class="a4-pillars-stack">
-            {hcrPillars.map(([t, d], i) => (
-              <div class="a4-pillar" data-at={at(i, hcrPillars.length)} data-until={i < hcrPillars.length - 1 ? at(i + 1, hcrPillars.length) : undefined}>
-                <h3>{t}</h3>
-                <p>{d}</p>
+        <!-- 04 ─ AUTOMOTIVE -->
+        <section class="chapter" id="automotive" aria-labelledby="t-auto">
+          <div class="chapter-label text-heading-2" data-reveal><span>04</span>A lesson from cars</div>
+          <h2 class="chapter-title" id="t-auto" data-reveal>Simulators made cars intelligent. They will do the same for robots.</h2>
+          <div class="about-auto">
+            <div class="about-timeline">
+              <span class="about-timeline-line" aria-hidden="true"><span></span></span>
+              <ol class="about-timeline-list">
+                {automotive.map(([t, d], i) => (
+                  <li class="about-step">
+                    <span class="about-step-dot" aria-hidden="true"></span>
+                    <div class="text-list-title"><span class="about-row-num">{num(i + 1)}</span>{t}</div>
+                    <p class="text-body">{d}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <figure class="about-figure about-figure--plain" data-wipe>
+              <img src={img('automotive.jpg')} alt="Illustration: a driver relying on assistance systems, next to a driving simulator with immersive screens used to develop those systems." loading="lazy" />
+            </figure>
+          </div>
+        </section>
+
+        <!-- 05 ─ AGENTS -->
+        <section class="chapter" id="agents" aria-labelledby="t-agents">
+          <div class="chapter-label text-heading-2" data-reveal><span>05</span>From intent to action</div>
+          <h2 class="chapter-title" id="t-agents" data-reveal>People define <em>what</em>. Intelligent agents work out <em>how</em>.</h2>
+
+          <div class="about-flow" aria-label="Human intent, then intelligent agents, then robot execution">
+            <div class="about-flow-node"><div class="text-heading-2">Human intent</div><p class="text-list-meta">Define what</p></div>
+            <svg class="about-flow-link" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0 5H98M93 1l5 4-5 4" /></svg>
+            <div class="about-flow-node"><div class="text-heading-2">Intelligent agents</div><p class="text-list-meta">Determine how</p></div>
+            <svg class="about-flow-link" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0 5H98M93 1l5 4-5 4" /></svg>
+            <div class="about-flow-node"><div class="text-heading-2">Robot execution</div><p class="text-list-meta">Achieve the task</p></div>
+          </div>
+
+          <div class="about-kitting">
+            <figure class="about-figure" data-wipe>
+              <img src={img('kitting-xr.jpg')} alt="Mixed-reality view of a collaborative robot for kitting. The user says 'Spawn robot' and the assistant replies with instructions." loading="lazy" />
+              <figcaption class="text-emphasis">Robotic kitting: the first validation of the approach, with voice commands, mixed reality and a local multi-agent system.</figcaption>
+            </figure>
+            <ol class="about-kitting-steps">
+              <li data-reveal><div class="text-list-title">Natural language interface</div><p class="text-body">The operator describes the kitting task in plain language — no programming required.</p></li>
+              <li data-reveal><div class="text-list-title">The agent translates commands</div><p class="text-body">An AI agent interprets the objective and breaks it down into executable robotic sub-tasks.</p></li>
+              <li data-reveal><div class="text-list-title">The robot executes</div><p class="text-body">The robot carries out the sequence autonomously, adapting to real-world conditions.</p></li>
+            </ol>
+          </div>
+
+          <div class="about-sub text-heading-2" data-reveal>Where it happens</div>
+          <div class="activities-grid-container about-cards">
+            {agentActivities.map((a) => (
+              <article class={`activity-card ${a.href ? 'activity-card-clickable' : 'activity-card-disabled'}`}>
+                <a href={a.href ?? undefined} class="activity-card-image-link"><img src={withBase(a.cover)} alt="" class={a.fit} loading="lazy" /></a>
+                <div class="activity-card-info">
+                  <div class="activity-card-meta">{a.meta.map((m, i) => <>{i > 0 && <span>·</span>}<span>{m}</span></>)}</div>
+                  <h3 class="activity-card-title">{a.href ? <a href={a.href}>{a.title}</a> : a.title}</h3>
+                  {a.excerpt && <p class="activity-card-excerpt">{a.excerpt}</p>}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- 06 ─ INDUSTRY -->
+        <section class="chapter" id="industry" aria-labelledby="t-industry">
+          <div class="chapter-label text-heading-2" data-reveal><span>06</span>Into industry</div>
+          <h2 class="chapter-title" id="t-industry" data-reveal>Validated in the lab, scaled to high-value production.</h2>
+          <div class="chapter-cols">
+            <p class="text-body" data-reveal>Once a task can be described by its goal, every step of a manufacturing process becomes an independent task. An intelligent planner orchestrates those tasks into a complete, optimised workflow.</p>
+            <p class="text-body" data-reveal>We apply this to the robotic production of composite materials — filament winding and automated fibre placement, followed by mechanical and laser finishing guided by vision-based inspection — and to sterile pharmaceutical processes.</p>
+          </div>
+          <div class="about-pair">
+            <figure class="about-figure" data-wipe>
+              <img src={img('composite-cell.jpg')} alt="Mitsubishi industrial robot working on a carbon-fibre part." loading="lazy" />
+              <figcaption class="text-emphasis">Robotic composite manufacturing</figcaption>
+            </figure>
+            <figure class="about-figure" data-wipe>
+              <img src={img('dual-robot-finishing.jpg')} alt="Two collaborative robots finishing a composite helmet shell." loading="lazy" />
+              <figcaption class="text-emphasis">Dual-robot finishing</figcaption>
+            </figure>
+          </div>
+
+          <div class="about-sub text-heading-2" data-reveal>Current projects &amp; applications</div>
+          <ul class="about-rows about-rows--projects">
+            {projects.map(([t, tag]) => (
+              <li class="about-row">
+                <span class="about-row-title">{t}</span>
+                <span class="about-row-text">{tag}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="activities-grid-container about-cards">
+            {industryActivities.map((a) => (
+              <article class={`activity-card ${a.href ? 'activity-card-clickable' : 'activity-card-disabled'}`}>
+                <a href={a.href ?? undefined} class="activity-card-image-link"><img src={withBase(a.cover)} alt="" class={a.fit} loading="lazy" /></a>
+                <div class="activity-card-info">
+                  <div class="activity-card-meta">{a.meta.map((m, i) => <>{i > 0 && <span>·</span>}<span>{m}</span></>)}</div>
+                  <h3 class="activity-card-title">{a.href ? <a href={a.href}>{a.title}</a> : a.title}</h3>
+                  {a.excerpt && <p class="activity-card-excerpt">{a.excerpt}</p>}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- 07 ─ LAB -->
+        <section class="chapter" id="lab" aria-labelledby="t-lab">
+          <div class="chapter-label text-heading-2" data-reveal><span>07</span>The lab</div>
+          <h2 class="chapter-title" id="t-lab" data-reveal>A space built to put humans in the loop.</h2>
+          <ul class="about-stats">
+            {stats.map(([v, suf, label]) => (
+              <li>
+                <span class="about-stat-value"><span class="about-count" data-to={v}>{v}</span>{suf}</span>
+                <span class="text-list-meta">{label}</span>
+              </li>
+            ))}
+          </ul>
+          <div class="about-photos">
+            <figure class="about-figure" data-wipe><img src={img('lab-robots.jpg')} alt="Researcher at a workstation next to two industrial robot arms." loading="lazy" /></figure>
+            <figure class="about-figure" data-wipe><img src={img('vr-treadmill.jpg')} alt="Person in VR on the Infinadeck omnidirectional treadmill." loading="lazy" /></figure>
+            <figure class="about-figure" data-wipe><img src={img('balance-board.jpg')} alt="Person standing on the active balance board in front of a screen." loading="lazy" /></figure>
+            <figure class="about-figure" data-wipe><img src={img('robot-dark.jpg')} alt="Robot arm lit in a dark test environment." loading="lazy" /></figure>
+          </div>
+          <div class="about-facilities">
+            {facilities.map(([t, items]) => (
+              <div data-reveal>
+                <div class="text-heading-2">{t}</div>
+                <ul>{items.map((it) => <li class="text-list-meta">{it}</li>)}</ul>
               </div>
             ))}
           </div>
-          <ol class="a4-ticks" aria-hidden="true">{hcrPillars.map((_, i) => <li data-at={at(i, hcrPillars.length)}></li>)}</ol>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <RelatedRail id="a4-hcr-rel" items={hcrActivities} />
-
-    <!-- ═══ 4 · HUMAN IN THE LOOP · the peak: every simulator rises over its own word ═══ -->
-    <section id="hitl" class="a4-act a4-scene a4-hitl" data-a4 data-a4-scene data-sc-act="pin" data-sc-span="6.4" aria-labelledby="a4-hitl-t">
-      <div data-sc-stage class="a4-st">
-        <div class="a4-words" aria-hidden="true">
-          {devices.map((d, i) => <span class="a4-word" data-device={i}>{d.word}</span>)}
-        </div>
-        <div class="a4-media">
-          <video data-scrub data-from="0.3" data-to="11.5" data-src={v4('hitl.mp4')} data-src-mobile={v4('hitl-m.mp4')} poster={v4('hitl-poster.jpg')} muted playsinline preload="none" aria-label="Animation: the lab's human-in-the-loop simulators assemble one after another: hazelnut pruning, cycling, skeleton, driving and balance platforms."></video>
-        </div>
-        <div class="a4-scene-head">
-          <div class="chapter-label text-heading-2 a4-label">Human in the loop</div>
-          <p id="a4-hitl-t" class="a4-scene-vision">Human-in-the-Loop (HITL) simulation is a «sandbox» where human intuition meets predictive technology, renders human-centric robotics safe, scalable, and flawless by design. <em>One architecture, several devices</em> for any activity where human performance is monitored, studied, trained and enhanced.</p>
-        </div>
-        <div class="a4-pillars" aria-label="Pillars of the vision">
-          <div class="text-heading-2 a4-pillars-k">Pillars of the vision</div>
-          <div class="a4-pillars-stack">
-            {hitlPillars.map(([t, d], i) => (
-              <div class="a4-pillar" data-at={at(i, hitlPillars.length)} data-until={i < hitlPillars.length - 1 ? at(i + 1, hitlPillars.length) : undefined}>
-                <h3>{t}</h3>
-                <p>{d}</p>
-              </div>
-            ))}
+        <!-- 08 ─ EPILOGUE -->
+        <section class="chapter chapter--last" id="epilogue" aria-labelledby="t-epilogue">
+          <div class="chapter-label text-heading-2" data-reveal><span>08</span>What comes next</div>
+          <h2 class="sr-only" id="t-epilogue">What comes next</h2>
+          <blockquote class="about-quote">
+            <p>Instead of programming robot motions, the operator will simply specify the product to manufacture — while the system determines how to accomplish the task.</p>
+            <footer class="text-heading-2" data-reveal>RAMSLAB long-term vision</footer>
+          </blockquote>
+          <div class="about-links" data-reveal>
+            <a href={withBase('/activities/')} class="text-heading-2">Explore the activities <span aria-hidden="true">➞</span></a>
+            <a href={withBase('/people/')} class="text-heading-2">Meet the people <span aria-hidden="true">➞</span></a>
+            <a href={withBase('/publications/')} class="text-heading-2">Read the publications <span aria-hidden="true">➞</span></a>
+            <a href={`mailto:${site.contactEmail}`} class="text-heading-2">{site.contactEmail}</a>
           </div>
-          <ol class="a4-ticks" aria-hidden="true">{hitlPillars.map((_, i) => <li data-at={at(i, hitlPillars.length)}></li>)}</ol>
-        </div>
+        </section>
       </div>
-    </section>
-
-    <RelatedRail id="a4-hitl-rel" items={hitlActivities} />
-
-    <!-- ═══ 5 · LAB FACILITIES · four cards, icons that draw, real counts ═══ -->
-    <section class="a4-lab" aria-labelledby="a4-lab-t">
-      <div class="a4-rel-head">
-        <h2 id="a4-lab-t" class="chapter-label text-heading-2 a4-label">Lab facilities &amp; infrastructure</h2>
-        <p class="text-body a4-lab-intro">Our state-of-the-art lab facilities are equipped to support cutting-edge research and development in robotics and automation.</p>
-      </div>
-      <div class="a4-fac-grid" data-sc-in data-sc-stagger="110">
-        {facilities.map((f) => (
-          <article class="a4-fac">
-            <span class="a4-ico" aria-hidden="true" set:html={f.icon} />
-            <h3 class="a4-fac-title">{f.title}</h3>
-            <ul class="a4-fac-list">{f.items.map((it) => <li class="text-list-meta">{it}</li>)}</ul>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <!-- ═══ 6 · LONG-TERM VISION · the lab itself behind the last sentence ═══ -->
-    <section class="a4-act a4-close" data-a4 data-sc-act="pin" data-sc-span="2.2" aria-labelledby="a4-close-t">
-      <div data-sc-stage class="a4-st a4-close-st">
-        <div class="a4-close-photo"><img src={withBase('/images/about/lab-hall.jpg')} alt="The RAMSLAB hall: a hexapod motion platform in front of a curved immersive screen, with industrial machines in the background." /></div>
-        <div class="a4-close-in">
-          <div class="text-heading-2 a4-close-k" id="a4-close-t">Long-term vision</div>
-          <p class="a4-close-text">{longTerm.split(' ').map((w, i) => <span class="a4-q" data-q={i}>{w} </span>)}</p>
-        </div>
-      </div>
-    </section>
+    </div>
   </main>
   <Footer />
-  </div>
-
-  <script is:inline src={withBase('/scrollcraft/scrollcraft.js')}></script>
-  <script is:inline define:vars={{ devices }}>
-    ScrollCraft.mount(document.body);
-
-    (function () {
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var mobile = window.matchMedia('(max-width: 767px)').matches;
-      var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-      var pOf = function (el) { return reduce ? 1 : parseFloat(el.style.getPropertyValue('--sc-p')) || 0; };
-      var acts = [].slice.call(document.querySelectorAll('[data-a4]'));
-
-      // Scrubbed clips inside a scene: the clip (optionally trimmed with
-      // data-from / data-to, in seconds) plays across the scene's whole
-      // progress and reaches its last kept frame as the scene starts to leave.
-      var clips = [].slice.call(document.querySelectorAll('[data-a4-scene] video[data-scrub]')).map(function (v) {
-        var c = { v: v, act: v.closest('[data-a4-scene]'), loaded: false, seeking: false };
-        v.muted = true;
-        v.addEventListener('seeked', function () { c.seeking = false; });
-        v.addEventListener('loadeddata', function () { v.play().then(function () { v.pause(); }).catch(function () {}); }, { once: true });
-        return c;
-      });
-      function scrub(c) {
-        if (!c.loaded && c.act.getBoundingClientRect().top < innerHeight * 2.5) {
-          c.loaded = true;
-          var src = (mobile && c.v.dataset.srcMobile) || c.v.dataset.src;
-          fetch(src).then(function (r) { return r.blob(); })
-            .then(function (b) { c.v.src = URL.createObjectURL(b); })
-            .catch(function () { c.v.src = src; });
-        }
-        if (!c.v.duration || c.seeking || c.v.seeking) return;
-        var from = parseFloat(c.v.dataset.from) || 0;
-        var to = Math.min(parseFloat(c.v.dataset.to) || c.v.duration, c.v.duration - 0.05);
-        var target = from + clamp(pOf(c.act) / 0.97) * (to - from);
-        var delta = target - c.v.currentTime;
-        if (Math.abs(delta) > 0.015) { c.seeking = true; c.v.currentTime += reduce ? delta : delta * 0.2; }
-      }
-
-      var hitl = document.querySelector('.a4-hitl');
-      var hv = hitl.querySelector('video');
-      var words = [].slice.call(hitl.querySelectorAll('[data-device]'));
-
-      var close = document.querySelector('.a4-close');
-      var qWords = [].slice.call(close.querySelectorAll('[data-q]'));
-
-      function frame() {
-        acts.forEach(function (act) {
-          var p = pOf(act);
-          act.querySelectorAll('[data-at]').forEach(function (el) {
-            var a = parseFloat(el.dataset.at);
-            var until = el.dataset.until ? parseFloat(el.dataset.until) : 9;
-            el.classList.toggle('on', reduce ? !el.dataset.until : p >= a && p < until);
-          });
-        });
-
-        clips.forEach(scrub);
-
-        // the giant word behind the HITL clip follows the clip's own clock
-        var t = hv.currentTime || 0, cur = 0;
-        devices.forEach(function (d, i) { if (t >= d.from) cur = i; });
-        words.forEach(function (w, i) { w.classList.toggle('on', i === cur); w.classList.toggle('done', i < cur); });
-
-        var cp = pOf(close);
-        qWords.forEach(function (w, i) { w.classList.toggle('lit', reduce || cp >= 0.04 + (i / qWords.length) * 0.5); });
-
-        if (!reduce) requestAnimationFrame(frame);
-      }
-      frame();
-    })();
-  </script>
-
-  <style is:global>
-    .a4, body:has(.a4) {
-      --sc-canvas: #ffffff;
-      --sc-surface: #f2f2f2;
-      --sc-ink: #111111;
-      --sc-ink-soft: #5f5f5f;
-      --sc-accent: #b2284b;
-      --sc-accent-ink: #ffffff;
-      --sc-font-display: "Roboto", sans-serif;
-      --sc-font-text: "Roboto", sans-serif;
-      --sc-font-mono: "Roboto", sans-serif;
-      --a4-red: #b2284b;
-      --a4-tint: #f5e4e9;
-      --a4-top: 72px;
-    }
-    body:has(.a4) { background: #fff; color: var(--text); font-size: 1rem; line-height: 1.45; letter-spacing: normal; }
-    html:has(.a4) { background: #fff; scroll-behavior: auto; }
-    .a4 main.a4-main { min-height: 0; overflow-x: visible; padding-bottom: 0; max-width: none; }
-    .a4 [data-sc-progress] { background: var(--a4-red); }
-    .a4-act { position: relative; background: #fff; }
-    .a4-st { --p: var(--sc-p, 0); background: #fff; overflow: hidden; }
-    .a4 em { font-style: normal; color: var(--a4-red); }
-
-    /* the site's editorial type */
-    .a4 .chapter-label { display: flex; gap: 12px; margin-bottom: 20px; color: var(--muted); }
-    .a4-label { color: var(--a4-red) !important; }
-    .a4-h2 { font-weight: 700; font-size: clamp(1.9rem, 3.6vw, 3.25rem); line-height: 1.08; letter-spacing: -0.0265em; margin: 0; max-width: 22ch; }
-    .a4-pagehead { align-items: flex-end; gap: 32px; }
-    .a4-motto { color: var(--muted); max-width: 34ch; text-align: right; padding-bottom: 14px; }
-
-    /* ═══ 1 · HERO ═══ */
-    .a4-hero-st {
-      display: grid; align-content: center; justify-items: center; padding: var(--a4-top) var(--pad) 0;
-      --draw: clamp(0, (var(--p) - 0.015) / 0.24, 1);
-      --fill: clamp(0, (var(--p) - 0.2) / 0.08, 1);
-      --say: clamp(0, (var(--p) - 0.24) / 0.14, 1);
-      --zoom: clamp(0, (var(--p) - 0.58) / 0.36, 1);
-    }
-    .a4-hero-k { color: var(--muted); margin: 0 0 3vh; opacity: calc(1 - var(--zoom) * 3); }
-    .a4-hero-grid {
-      margin: 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: clamp(1.5rem, 3vw, 3.5rem); width: 100%;
-      font-weight: 700; font-size: clamp(1.9rem, 4vw, 4.2rem); line-height: 1.04; letter-spacing: -0.0265em;
-    }
-    .a4-hero-l, .a4-hero-r { opacity: calc(var(--say) * (1 - var(--zoom) * 3)); }
-    .a4-hero-l { text-align: right; transform: translateX(calc((1 - var(--say)) * -8vw)); }
-    .a4-hero-r { text-align: left; transform: translateX(calc((1 - var(--say)) * 8vw)); }
-    .a4-mark {
-      width: clamp(10rem, 34vh, 22rem); height: auto; overflow: visible;
-      transform-origin: 15% 27%;
-      transform: scale(calc(1 + var(--zoom) * var(--zoom) * var(--zoom) * 90));
-    }
-    .a4-mark-body { fill: #111; fill-opacity: var(--fill); stroke: #111; stroke-opacity: min(1, var(--draw) * 30); stroke-width: 0.35; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw)); }
-    .a4-mark-head { fill: #111; transform-box: fill-box; transform-origin: center; transform: translateY(calc((1 - var(--fill)) * -14px)) scale(var(--fill)); }
-
-    /* ═══ 2 · WHAT WE DO ═══ */
-    .a4-what-st {
-      --sl: clamp(0, (var(--p) - 0.44) / 0.14, 1);
-      --slide: calc(var(--sl) * var(--sl) * (3 - 2 * var(--sl)));
-    }
-    .a4-what-k { position: absolute; z-index: 3; top: calc(var(--a4-top) + 2.5vh); left: var(--pad); }
-    .a4-track { position: absolute; inset: 0; display: flex; width: 200%; transform: translateX(calc(var(--slide) * -50%)); will-change: transform; }
-    .a4-wp { flex: 0 0 50%; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center;
-      gap: clamp(2rem, 5vw, 6rem); padding: calc(var(--a4-top) + 7vh) var(--pad) 5vh; }
-    /* each slide's own progress: the second starts while it slides in */
-    .a4-wp--0 { --a: clamp(0, var(--p) / 0.42, 1); }
-    .a4-wp--1 { --a: clamp(0, (var(--p) - 0.5) / 0.42, 1); }
-
-    /* left: the looping animation, both at the same height, opened left to right */
-    .a4-wp-media { display: flex; justify-content: center; align-items: center; height: 100%; }
-    .a4-wp-video { height: min(62vh, 38rem); width: auto; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; filter: brightness(1.05) contrast(1.12);
-      --d: clamp(0, var(--a) / 0.3, 1);
-      clip-path: inset(0 calc((1 - var(--d)) * 100%) 0 0);
-      transform: scale(calc(0.94 + var(--d) * 0.06)); }
-
-    .a4-wp--0 .a4-wp-video { height: min(50vh, 30rem); }   /* the bench scene reads larger than the treadmill: a little smaller */
-    /* right: title letter by letter, then the definition word by word */
-    .a4-wp-copy { position: relative; z-index: 1; }
-    .a4-wp-title { margin: 0 0 3.5vh; font-weight: 900; text-transform: uppercase; font-size: clamp(2.6rem, 5.6vw, 6.4rem); line-height: 0.86; letter-spacing: -0.045em; color: #111; }
-    .a4-wp-word { display: inline-block; overflow: hidden; padding: 0.04em 0.12em 0.06em 0; margin-right: 0.1em; vertical-align: top; }
-    .a4-ch { display: inline-block;
-      --c: clamp(0, (var(--a) - var(--i) * 0.24) / 0.14, 1);
-      transform: translateY(calc((1 - var(--c)) * 110%)) rotate(calc((1 - var(--c)) * 16deg)); transform-origin: 0 100%; }
-    .a4-wp-text { margin: 0 0 22px; max-width: 34ch; font-weight: 700; font-size: clamp(1.15rem, 1.7vw, 1.75rem); line-height: 1.24; letter-spacing: -0.02em; color: #111; }
-    .a4-tw { opacity: calc(0.12 + 0.88 * clamp(0, (var(--a) - 0.36 - var(--j) * 0.44) / 0.05, 1)); }
-    .a4-wp .a4-more { opacity: clamp(0, (var(--a) - 0.82) / 0.06, 1); }
-    .a4-more { display: inline-flex; gap: 8px; color: var(--text); }
-    .a4-more:hover { color: var(--a4-red); }
-
-    /* ═══ 3 + 4 · SCENES (HCR and HITL share one structure) ═══ */
-    .a4-words { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; overflow: hidden; pointer-events: none; padding-left: 22%; transform: rotate(-5deg) scale(1.08); }
-    .a4-word {
-      grid-area: 1 / 1; font-weight: 900; text-transform: uppercase; font-size: 18vw; line-height: 0.8; letter-spacing: -0.05em; white-space: nowrap;
-      color: var(--a4-tint); padding-top: 4vh;
-      opacity: 0; transform: translateY(16%) scale(0.96); transition: opacity 500ms, transform 700ms var(--sc-ease-out);
-    }
-    .a4-word.on { opacity: 1; transform: translateX(calc((0.5 - var(--p)) * 6vw)); }
-    .a4-word.done { transform: translateY(-16%) scale(0.96); }
-    .a4-media { position: absolute; z-index: 2; left: 24%; right: 0; top: var(--a4-top); bottom: 0; mix-blend-mode: multiply; overflow: hidden; }
-    .a4-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: transparent; transform: scale(1.32); transform-origin: 50% 54%; }
-    .a4-media--placeholder { position: absolute; inset: 5% 4%; display: grid; place-items: center; border: 2px dashed #d6d6d6; border-radius: 12px; }
-    .a4-media--placeholder span { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #9a9a9a; }
-
-    .a4-scene-head { position: absolute; z-index: 4; left: var(--pad); top: calc(var(--a4-top) + 3vh); width: min(30rem, 30vw); }
-    /* both scenes: the red label, then the vision sentence from Contents.docx, same style */
-    .a4-scene-vision { font-weight: 700; font-size: clamp(1.1rem, 1.35vw, 1.4rem); line-height: 1.25; letter-spacing: -0.015em; margin: 0; }
-
-    /* the pillars: one at a time, big, in their own panel */
-    .a4-pillars { position: absolute; z-index: 5; left: var(--pad); bottom: 4vh; width: min(36rem, 38vw); background: #111; color: #fff; padding: 26px 28px 22px; box-shadow: 18px 18px 0 var(--a4-red); transform: rotate(-1.2deg); }
-    .a4-pillars-k { color: var(--a4-red-hi, #e0386a) !important; margin-bottom: 12px; }
-    .a4-pillars-stack { display: grid; min-height: 12.5rem; overflow: hidden; }
-    .a4-pillar { grid-area: 1 / 1; opacity: 0; transform: translateX(-30px) skewX(-6deg); transition: opacity 450ms var(--sc-ease-out), transform 550ms var(--sc-ease-out); }
-    .a4-pillar.on { opacity: 1; transform: none; }
-    .a4-pillar h3 { margin: 0 0 12px; font-weight: 900; text-transform: uppercase; font-size: clamp(1.9rem, 3vw, 3.2rem); line-height: 0.95; letter-spacing: -0.03em; }
-    .a4-pillar p { margin: 0; font-size: 1.1rem; line-height: 1.45; color: rgb(255 255 255 / 0.82); max-width: 32ch; }
-    .a4-ticks { list-style: none; display: flex; gap: 6px; margin: 16px 0 0; padding: 0; }
-    .a4-ticks li { flex: 1; height: 3px; background: rgb(255 255 255 / 0.2); transition: background 300ms; }
-    .a4-ticks li.on { background: #e0386a; }
-
-    .a4-lab { padding: 80px var(--pad) 96px; border-top: 1px solid var(--line); position: relative; z-index: 6; background: #fff; }
-    .a4-rel-head { margin-bottom: 40px; }
-
-    /* ═══ 5 · LAB ═══ */
-    .a4-lab-intro { color: var(--text-soft); max-width: 52ch; margin: 16px 0 0; }
-    .a4-fac-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-    .a4-fac { border-top: 2px solid var(--text); padding-top: 22px; display: flex; flex-direction: column; }
-    .a4-ico { display: grid; place-items: center; width: 84px; height: 84px; margin-bottom: 18px; border-radius: 50%; background: var(--a4-tint); color: var(--a4-red); }
-    .a4-ico svg { width: 54px; height: 54px; display: block; }
-    .a4-ico svg path { fill: currentColor; }
-    @media (prefers-reduced-motion: no-preference) {
-      .a4-fac:not(.sc-in) .a4-ico { transform: scale(0.4) rotate(-40deg); opacity: 0; }
-      .a4-fac.sc-in .a4-ico { transition: transform 900ms cubic-bezier(0.34, 1.56, 0.64, 1) 150ms, opacity 400ms 150ms; }
-      .a4-fac:hover .a4-ico { transform: scale(1.08) rotate(-6deg); transition: transform 300ms var(--sc-ease-out); }
-    }
-    .a4-fac-title { margin: 0 0 14px; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.01em; line-height: 1.2; }
-    .a4-fac-list { list-style: none; margin: 0; padding: 0; }
-    .a4-fac-list li { padding: 8px 0; border-top: 1px solid var(--line-soft); color: var(--text-soft); }
-
-    /* ═══ 6 · CLOSE · the lab behind the sentence ═══ */
-    .a4-close-st { display: grid; align-content: end; background: #111; color: #fff; }
-    .a4-close-photo { position: absolute; inset: 0; z-index: 0; }
-    .a4-close-photo img { width: 100%; height: 100%; object-fit: cover; transform: scale(calc(1.18 - var(--p) * 0.14)); }
-    .a4-close-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgb(0 0 0 / 0.82) 0%, rgb(0 0 0 / 0.55) 45%, rgb(0 0 0 / 0.25) 100%); }
-    .a4-close-in { position: relative; z-index: 1; padding: 0 var(--pad) 10vh; }
-    .a4-close-k { color: rgb(255 255 255 / 0.75); margin-bottom: 20px; }
-    .a4-close-text { margin: 0; font-weight: 700; font-size: clamp(2.2rem, 4.8vw, 4.6rem); line-height: 1.04; letter-spacing: -0.0265em; max-width: 22ch; }
-    .a4-q { color: rgb(255 255 255 / 0.28); transition: color 260ms; }
-    .a4-q.lit { color: #fff; }
-
-    /* ── reduced motion ── */
-    @media (prefers-reduced-motion: reduce) {
-      .a4-mark { transform: none; opacity: 1; }
-      .a4-ch { transform: none; }
-      .a4-tw { opacity: 1; }
-      .a4-track { transform: none; flex-direction: column; width: 100%; position: relative; }
-      .a4-wp-video { clip-path: none; }
-    }
-
-    /* ── narrow screens: the scenes stack so the whole clip stays visible ── */
-    @media (max-width: 1100px), (max-aspect-ratio: 5/4) {
-      .a4-scene .a4-st { display: flex; flex-direction: column; padding: calc(var(--a4-top) + 1rem) var(--pad) 1.25rem; gap: 14px; }
-      .a4-scene-head, .a4-pillars { position: relative; left: auto; right: auto; top: auto; bottom: auto; width: auto; }
-      .a4-scene-vision { font-size: 0.95rem; line-height: 1.3; }
-      .a4-media { position: relative; left: auto; right: auto; top: auto; bottom: auto; flex: 1 1 auto; min-height: 0; }
-      .a4-words { padding-left: 0; }
-      .a4-word { font-size: 24vw; }
-      .a4-pillars-stack { min-height: 8.5rem; }
-      .a4-pillars { transform: none; box-shadow: 8px 8px 0 var(--a4-red); padding: 18px 20px 16px; }
-      .a4-words { transform: none; }
-      .a4-pillar h3 { font-size: clamp(1.4rem, 4.6vw, 2.1rem); margin-bottom: 8px; }
-      .a4-pillar p { font-size: 0.95rem; }
-        .a4-fac-grid { grid-template-columns: 1fr 1fr; gap: 40px 16px; }
-    }
-
-    /* ── phones ── */
-    @media (max-width: 860px) {
-      .a4, body:has(.a4) { --a4-top: 64px; }
-      .a4-pagehead { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .a4-motto { text-align: left; padding-bottom: 0; }
-      .a4-hero-grid { grid-template-columns: 1fr; justify-items: center; row-gap: 3vh; text-align: center; font-size: 8.4vw; }
-      .a4-hero-l, .a4-hero-r { text-align: center; }
-      .a4-wp { grid-template-columns: 1fr; grid-template-rows: auto auto; align-content: center; gap: 3vh; padding-top: calc(var(--a4-top) + 6vh); }
-      .a4-wp-video { height: 32vh; }
-      .a4-wp--0 .a4-wp-video { height: 26vh; }
-      .a4-wp-title { font-size: 12vw; margin-bottom: 2vh; }
-      .a4-wp-text { font-size: 1.05rem; }
-        .a4-lab { padding: 56px var(--pad) 64px; }
-    }
-    @media (max-width: 520px) {
-      .a4-fac-grid { grid-template-columns: 1fr; }
-    }
-  </style>
 </BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ── Chapter index + reading progress (works with or without motion) ── */
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-chapter-link]'));
+  const setActive = (id: string) => links.forEach((l) => l.classList.toggle('is-active', l.dataset.chapterLink === id));
+  document.querySelectorAll<HTMLElement>('.chapter').forEach((ch) => {
+    ScrollTrigger.create({
+      trigger: ch, start: 'top 45%', end: 'bottom 45%',
+      onToggle: (self) => { if (self.isActive) setActive(ch.id); },
+    });
+  });
+  ScrollTrigger.create({
+    trigger: '.about-chapters', start: 'top 45%', end: 'bottom bottom',
+    onUpdate: (self) => {
+      document.querySelector<HTMLElement>('.about-index-track span')?.style.setProperty('transform', `scaleY(${self.progress})`);
+      document.querySelector<HTMLElement>('.about-progress span')?.style.setProperty('transform', `scaleX(${self.progress})`);
+    },
+  });
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduce) {
+    /* Title */
+    gsap.from('.about-title span', { yPercent: 100, duration: 1, ease: 'power4.out' });
+    gsap.from('.about-header-motto', { opacity: 0, y: 12, duration: 0.8, delay: 0.3, ease: 'power3.out' });
+
+    /* Generic reveal */
+    gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+      gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+    });
+
+    /* Images are uncovered from the bottom */
+    gsap.utils.toArray<HTMLElement>('[data-wipe]').forEach((el) => {
+      const im = el.querySelector('img');
+      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 85%' } });
+      tl.fromTo(el, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.1, ease: 'power3.inOut' });
+      if (im && !el.classList.contains('about-figure--wide')) tl.fromTo(im, { scale: 1.12 }, { scale: 1, duration: 1.5, ease: 'power3.out' }, 0);
+    });
+
+    /* Wide prologue image: slow parallax */
+    gsap.fromTo('.about-figure--wide img', { yPercent: -5 }, {
+      yPercent: 5, ease: 'none',
+      scrollTrigger: { trigger: '.about-figure--wide', start: 'top bottom', end: 'bottom top', scrub: true },
+    });
+
+    /* Manifesto: words go from grey to black as you read */
+    gsap.to('.about-manifesto .w', {
+      color: '#111111', stagger: 0.08, ease: 'none',
+      scrollTrigger: { trigger: '.about-manifesto', start: 'top 75%', end: 'bottom 40%', scrub: 0.5 },
+    });
+
+    /* Numbered rows */
+    gsap.utils.toArray<HTMLElement>('.about-rows').forEach((list) => {
+      gsap.from(list.querySelectorAll('.about-row'), {
+        opacity: 0, y: 24, duration: 0.6, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: list, start: 'top 80%' },
+      });
+    });
+
+    /* Timeline */
+    gsap.fromTo('.about-timeline-line span', { scaleY: 0 }, {
+      scaleY: 1, ease: 'none',
+      scrollTrigger: { trigger: '.about-timeline', start: 'top 70%', end: 'bottom 55%', scrub: true },
+    });
+    gsap.utils.toArray<HTMLElement>('.about-step').forEach((step) => {
+      gsap.from(step, { opacity: 0, x: 24, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: step, start: 'top 80%' } });
+      ScrollTrigger.create({
+        trigger: step, start: 'top 62%',
+        onEnter: () => step.classList.add('is-active'),
+        onLeaveBack: () => step.classList.remove('is-active'),
+      });
+    });
+
+    /* Flow: nodes and arrows appear in sequence */
+    const flow = gsap.timeline({ scrollTrigger: { trigger: '.about-flow', start: 'top 80%' } });
+    const nodes = gsap.utils.toArray<HTMLElement>('.about-flow-node');
+    const arrows = gsap.utils.toArray<SVGPathElement>('.about-flow-link path');
+    arrows.forEach((p) => { const l = p.getTotalLength(); gsap.set(p, { strokeDasharray: l, strokeDashoffset: l }); });
+    nodes.forEach((n, i) => {
+      flow.from(n, { opacity: 0, y: 16, duration: 0.5, ease: 'power3.out' });
+      if (arrows[i]) flow.to(arrows[i], { strokeDashoffset: 0, duration: 0.5, ease: 'power2.inOut' });
+    });
+
+    /* Activity cards */
+    gsap.utils.toArray<HTMLElement>('.about-cards').forEach((grid) => {
+      gsap.from(grid.querySelectorAll('.activity-card'), {
+        opacity: 0, y: 32, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: { trigger: grid, start: 'top 85%' },
+      });
+    });
+
+    /* Counters */
+    gsap.utils.toArray<HTMLElement>('.about-count').forEach((el) => {
+      const to = Number(el.dataset.to || 0);
+      const o = { v: 0 };
+      el.textContent = '0';
+      gsap.to(o, {
+        v: to, duration: 1.4, ease: 'power2.out',
+        onUpdate: () => { el.textContent = String(Math.round(o.v)); },
+        scrollTrigger: { trigger: el, start: 'top 88%' },
+      });
+    });
+
+    /* Epilogue quote: words darken as you read */
+    const q = document.querySelector('.about-quote p');
+    if (q && q.textContent) {
+      q.innerHTML = q.textContent.split(' ').map((w) => `<span class="w">${w} </span>`).join('');
+      gsap.to('.about-quote .w', {
+        color: '#111111', stagger: 0.08, ease: 'none',
+        scrollTrigger: { trigger: '.about-quote', start: 'top 80%', end: 'bottom 50%', scrub: 0.5 },
+      });
+    }
+
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+  }
+</script>
+
+<style>
+  /* Hidden start states only when motion is allowed */
+  :global(html.about-anim) .about [data-reveal] { opacity: 0; transform: translateY(24px); }
+  :global(html.about-anim) .about .about-manifesto .w { color: #c8c8c8; }
+  :global(html.about-anim) .about .about-quote p { color: #c8c8c8; }
+
+  /* Reading progress (shown when the chapter index is hidden) */
+  .about-progress {
+    position: sticky; top: 0; z-index: 99;
+    height: 2px; margin-bottom: -2px;
+    display: none;
+  }
+  .about-progress span { display: block; height: 100%; background: var(--text); transform-origin: left; transform: scaleX(0); }
+
+  .about-header { align-items: flex-end; gap: 32px; }
+  .about-title { overflow: hidden; }
+  .about-title span { display: inline-block; }
+  .about-header-motto { max-width: 34ch; text-align: right; padding-bottom: 14px; }
+
+  /* ─── Story layout: index column + chapters (same 1/4 – 3/4 split as the homepage) ─── */
+  .about-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    gap: 16px;
+    padding: 0 var(--pad);
+  }
+
+  .about-index nav {
+    position: sticky;
+    top: 110px;
+    padding: 40px 0;
+    display: grid;
+    grid-template-columns: 1px 1fr;
+    column-gap: 16px;
+  }
+  .about-index-title { grid-column: 2; grid-row: 1; margin-bottom: 16px; }
+  .about-index ol { grid-column: 2; grid-row: 2; display: grid; gap: 2px; }
+  .about-index-track { grid-column: 1; grid-row: 2; background: var(--line-soft); position: relative; }
+  .about-index-track span { position: absolute; inset: 0; background: var(--text); transform-origin: top; transform: scaleY(0); }
+  .about-index a {
+    display: flex; gap: 10px;
+    font-size: 0.8125rem; line-height: 1.5;
+    color: var(--muted);
+    padding: 3px 0;
+    transition: color .25s;
+  }
+  .about-index a:hover { color: var(--text); text-decoration: none; }
+  .about-index a.is-active { color: var(--text); font-weight: 700; }
+  .about-index-num { font-variant-numeric: tabular-nums; color: var(--muted-soft); font-weight: 400; }
+
+  /* ─── Chapters ─── */
+  .chapter {
+    padding: 40px 0 96px;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 90px;
+  }
+  .chapter:first-child { border-top: none; }
+  .chapter--last { padding-bottom: 80px; }
+
+  .chapter-label { display: flex; gap: 12px; margin-bottom: 24px; color: var(--muted); }
+  .chapter-label span { color: var(--text); }
+
+  .chapter-title {
+    font-weight: 700;
+    font-size: clamp(1.9rem, 3.6vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.0265em;
+    max-width: 20ch;
+    margin-bottom: 32px;
+  }
+  .chapter-title em { font-style: normal; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.12em; }
+
+  .chapter-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; color: var(--text-soft); }
+  .chapter-cols + * { margin-top: 40px; }
+
+  .about-lead { color: var(--text-soft); max-width: 46ch; margin-bottom: 32px; }
+
+  .about-sub { margin: 64px 0 0; padding-bottom: 12px; }
+
+  /* Figures */
+  .about-figure { overflow: hidden; border: 1px solid var(--line-soft); background: #fff; }
+  .about-figure img { width: 100%; height: auto; display: block; }
+  .about-figure figcaption { padding: 10px 12px; color: var(--muted); border-top: 1px solid var(--line-soft); }
+  .about-figure--plain { border: none; }
+  .about-figure--wide { aspect-ratio: 16 / 8; }
+  .about-figure--wide img { height: 112%; margin-top: -6%; object-fit: cover; }
+
+  /* Manifesto */
+  .about-manifesto {
+    font-weight: 700;
+    font-size: clamp(1.9rem, 3.6vw, 3.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.0265em;
+    max-width: 24ch;
+    margin-bottom: 56px;
+  }
+  .about-idea { display: grid; gap: 12px; border-top: 1px solid var(--line-soft); padding-top: 12px; color: var(--text-soft); }
+  .about-ideas + .about-figure { margin-top: 48px; }
+
+  /* Numbered rows (like the publications list) */
+  .about-rows { border-top: 1px solid var(--line); }
+  .about-row {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: 16px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .about-row-num { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.0833em; color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 12px; }
+  .about-row-title { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.01em; line-height: 1.2; }
+  .about-row-text { color: var(--muted); font-size: 0.9375rem; line-height: 1.5; }
+  .about-rows--projects .about-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .about-rows--projects .about-row-text { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .about-rows--projects + .about-cards { margin-top: 48px; }
+
+  /* Humans in the loop */
+  .about-loop { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: start; }
+  .about-loop-figure { max-width: 380px; justify-self: center; }
+  .about-grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 16px; }
+  .about-grid4 > div { border-top: 1px solid var(--line-soft); padding-top: 12px; display: grid; gap: 6px; align-content: start; }
+  .about-grid4 dd { color: var(--muted); }
+
+  .about-cards { margin-top: 0; }
+
+  /* Automotive timeline */
+  .about-auto { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: center; }
+  .about-timeline { position: relative; padding-left: 32px; }
+  .about-timeline-list { display: grid; gap: 32px; }
+  .about-timeline-line { position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
+  .about-timeline-line span { display: block; width: 100%; height: 100%; background: var(--text); transform-origin: top; }
+  :global(html.about-anim) .about-timeline-line span { transform: scaleY(0); }
+  .about-step { position: relative; display: grid; gap: 6px; color: var(--text-soft); }
+  .about-step-dot {
+    position: absolute; left: -32px; top: 3px; z-index: 1;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--text); border: 1px solid var(--text);
+    transition: background .35s, border-color .35s;
+  }
+  :global(html.about-anim) .about-step:not(.is-active) .about-step-dot { background: #fff; border-color: var(--muted-soft); }
+
+  /* Flow */
+  .about-flow {
+    display: flex; align-items: center; gap: 16px;
+    padding: 28px 0; margin-bottom: 48px;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .about-flow-node { flex: 0 0 auto; display: grid; gap: 4px; }
+  .about-flow-node p { color: var(--muted); }
+  .about-flow-link { flex: 1 1 auto; height: 10px; min-width: 32px; overflow: visible; }
+  .about-flow-link path { fill: none; stroke: var(--text); stroke-width: 1; vector-effect: non-scaling-stroke; }
+
+  .about-kitting { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: start; }
+  .about-kitting-steps { display: grid; border-top: 1px solid var(--line); }
+  .about-kitting-steps li { display: grid; gap: 6px; padding: 18px 0; border-bottom: 1px solid var(--line-soft); color: var(--text-soft); }
+
+  /* Industry */
+  .about-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .about-pair img { aspect-ratio: 16 / 10; object-fit: cover; }
+
+  /* Lab */
+  .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 48px; }
+  .about-stats li { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; align-content: start; }
+  .about-stat-value { font-weight: 700; font-size: clamp(2.4rem, 4.2vw, 4rem); letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .about-stats .text-list-meta { color: var(--muted); max-width: 24ch; }
+
+  .about-photos { display: grid; grid-template-columns: 2fr 1fr 1fr 2fr; gap: 16px; margin-bottom: 56px; }
+  .about-photos .about-figure { height: 300px; }
+  .about-photos img { height: 100%; object-fit: cover; }
+
+  .about-facilities { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .about-facilities > div { display: grid; gap: 12px; align-content: start; }
+  .about-facilities li { padding: 8px 0; border-top: 1px solid var(--line-soft); color: var(--text-soft); }
+
+  /* Epilogue */
+  .about-quote p {
+    font-weight: 700;
+    font-size: clamp(2rem, 4.4vw, 4.2rem);
+    line-height: 1.06;
+    letter-spacing: -0.0265em;
+    max-width: 22ch;
+  }
+  .about-quote footer { margin-top: 24px; color: var(--muted); }
+  .about-links { display: flex; flex-wrap: wrap; gap: 12px 40px; margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--line); }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 1180px) {
+    .about-story { grid-template-columns: 1fr; }
+    .about-index { display: none; }
+    .about-progress { display: block; }
+    .about-photos { grid-template-columns: 1fr 1fr; }
+    .about-facilities { grid-template-columns: 1fr 1fr; gap: 32px 16px; }
+  }
+  @media (max-width: 900px) {
+    .about-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .about-header-motto { text-align: left; padding-bottom: 0; }
+    .projects-title-big.about-title { font-size: 2.7rem; }
+    .chapter { padding: 32px 0 64px; }
+    .chapter-cols, .about-loop, .about-auto, .about-kitting, .about-pair, .about-grid4 { grid-template-columns: 1fr; }
+    .about-loop-figure { max-width: 260px; }
+    .about-row { grid-template-columns: 40px 1fr; }
+    .about-row .about-row-text { grid-column: 2; }
+    .about-rows--projects .about-row { grid-template-columns: 1fr; gap: 4px; }
+    .about-rows--projects .about-row-text { grid-column: 1; }
+    .about-flow { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .about-flow-link { width: 40px; flex: none; transform: rotate(90deg); margin: 8px 0 8px -6px; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .about-photos .about-figure { height: 200px; }
+  }
+  @media (max-width: 520px) {
+    .about-facilities { grid-template-columns: 1fr; }
+    .about-photos { grid-template-columns: 1fr; }
+    .about-figure--wide { aspect-ratio: 4 / 3; }
+  }
+</style>

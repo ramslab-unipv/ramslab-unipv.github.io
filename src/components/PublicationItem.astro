@@ -6,9 +6,10 @@ interface Props {
   venue?: string;
   url?: string;
   doi?: string;
+  projects?: { name: string; href: string }[];
 }
 
-const { title, authors, year, venue, url, doi } = Astro.props;
+const { title, authors, year, venue, url, doi, projects = [] } = Astro.props;
 const href = doi ? `https://doi.org/${doi}` : url;
 ---
 
@@ -22,4 +23,9 @@ const href = doi ? `https://doi.org/${doi}` : url;
   </div>
   <div class="text-list-meta" style="color: var(--muted);">{authors.join(', ')}</div>
   {venue && <div class="text-emphasis" style="color: var(--muted);">{venue}</div>}
+  {projects.length > 0 && (
+    <div class="text-list-meta" style="color: var(--muted);">
+      Project: {projects.map((p, i) => <>{i > 0 && ', '}<a href={p.href} class="hover-underline" style="color: var(--text);">{p.name}</a></>)}
+    </div>
+  )}
 </article>
