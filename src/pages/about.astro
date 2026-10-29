@@ -43,7 +43,7 @@ const routes: Record<string, string> = {
   'balance-platform-simulator': '/activities/balance-platform-simulator/',
   '3d-human-poses-estimation': '/activities/3d-human-poses-estimation/',
 };
-const all = await getCollection('activities');
+const all = await getCollection('activities', ({ data }) => !data.draft);
 const pick = (slugs: string[]) =>
   slugs
     .map((s) => all.find((a) => entrySlug(a.id) === s))

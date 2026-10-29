@@ -1,6 +1,7 @@
 ---
-title: "Fiber Placement e Filament Winding"
-excerpt: "New project in development."
+title: "Fiber Placement and Filament Winding"
+excerpt: "Activity under development."
+draft: true
 year: 2024
 status: "ongoing"
 cover: "/images/projects/white.png"

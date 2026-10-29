@@ -20,7 +20,7 @@ const getActivityHref = (activityId: string) => {
 return null;
 };
 
-const activities = (await getCollection('activities')).sort((a, b) => {
+const activities = (await getCollection('activities', ({ data }) => !data.draft)).sort((a, b) => {
   const hrefA = getActivityHref(a.id);
   const hrefB = getActivityHref(b.id);
   

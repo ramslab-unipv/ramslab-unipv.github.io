@@ -13,6 +13,7 @@ const activities = defineCollection({ type: 'content', schema: z.object({
   tags: z.array(z.string()).default([]), people: z.array(z.string()).default([]),
   publications: z.array(z.string()).default([]), consortium: z.array(z.string()).default([]),
   featured: z.boolean().default(false),
+  draft: z.boolean().default(false),
   coverFit: z.enum(['cover','contain','horizontal']).default('cover'),
   // ─── Immersive layout fields (optional) ───
   accentColor: z.string().optional(),          // e.g. "#10b981"

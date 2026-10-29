@@ -1,6 +1,7 @@
 ---
 title: "Laser"
-excerpt: "New project in development."
+excerpt: "Activity under development."
+draft: true
 year: 2024
 status: "ongoing"
 cover: "/images/projects/white.png"
