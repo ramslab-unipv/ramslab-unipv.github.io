@@ -9,7 +9,7 @@
  * be turned by dragging.
  *
  * The page:
- *   opening   the site's page header (title, subtitle), then the cover video
+ *   opening   the site's page header (title), then the cover video
  *             edge to edge, cropped to fill exactly the rest of the first screen
  *   intro     the vision, large, and the project in two columns
  *   chapters  each one of these kinds, in the order given:
@@ -47,7 +47,6 @@ interface Publication { title: string; url?: string; authors?: string; venue?: s
 interface TeamMember { name: string; role: string; }
 interface Props {
   title: string;
-  subtitle?: string;
   accentColor: string;
   activity?: string;
   cover: { video?: string; poster?: string; image?: string; alt: string };
@@ -63,7 +62,7 @@ interface Props {
 }
 
 const {
-  title, subtitle, accentColor, activity, cover, vision, intro = [], chapters, description,
+  title, accentColor, activity, cover, vision, intro = [], chapters, description,
   publications = [], funding, team = [], prevActivity, nextActivity,
 } = Astro.props;
 
@@ -103,7 +102,6 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
         <section class="projects-header-section pd-head" aria-labelledby="pd-title">
           <div class="projects-header-content">
             <h1 id="pd-title" class="projects-title-big pd-title">{title}</h1>
-            {subtitle && <p class="pd-head-sub">{subtitle}</p>}
           </div>
         </section>
         <figure class="pd-cover">
@@ -316,16 +314,14 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
     .pd-first { display: flex; flex-direction: column; height: calc(100svh - var(--pd-top)); min-height: 30rem; }
     .pd-head { flex: none; }
     .pd-head .projects-title-big { margin: 0; }
-    .pd-head .projects-title-big { max-width: 62%; }
+    .pd-head .projects-title-big { max-width: 100%; }
     .pd-head .pd-title { font-size: clamp(2rem, 3.1vw, 3.1rem); line-height: 1.1; letter-spacing: -0.02em; }
-    .pd-head-sub { margin: 0; max-width: 24rem; text-align: right; font-size: 1.05rem; line-height: 1.4; color: var(--muted); }
     .pd-cover { flex: 1 1 auto; min-height: 0; margin: 0; position: relative; overflow: hidden; }
     .pd-cover video, .pd-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; max-width: none; }
 
     /* titles: always upper case; the header and cover arrive on load */
     @media (prefers-reduced-motion: no-preference) {
-      .pd-head .pd-title, .pd-head-sub { animation: pd-up 900ms var(--sc-ease-out, ease-out) both; }
-      .pd-head-sub { animation-delay: 150ms; }
+      .pd-head .pd-title { animation: pd-up 900ms var(--sc-ease-out, ease-out) both; }
       .pd-cover { animation: pd-fade 1200ms var(--sc-ease-out, ease-out) 250ms both; }
     }
     @keyframes pd-up { from { opacity: 0; transform: translateY(18px); } }
@@ -451,7 +447,6 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
     @media (max-width: 768px) {
       .pd, body:has(.pd) { --pd-top: 64px; }
       .pd-head .projects-header-content { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-      .pd-head-sub { text-align: left; }
       .pd-head .projects-title-big { max-width: none; }
       .pd-head .pd-title { font-size: 1.6rem !important; }
       .pd-intro-cols { grid-template-columns: 1fr; gap: 1.25rem; }
