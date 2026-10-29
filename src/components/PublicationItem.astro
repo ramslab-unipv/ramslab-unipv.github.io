@@ -1,31 +1,21 @@
 ---
+import { formatPublicationDetails } from '../lib/publications';
+
 interface Props {
   title: string;
   authors: string[];
   year: number;
   venue?: string;
-  url?: string;
-  doi?: string;
-  projects?: { name: string; href: string }[];
+  url: string;
 }
 
-const { title, authors, year, venue, url, doi, projects = [] } = Astro.props;
-const href = doi ? `https://doi.org/${doi}` : url;
+const { title, authors, year, venue, url } = Astro.props;
 ---
 
 <article class="dense-item">
   <div class="text-list-title" style="color: var(--text);">
-    {href ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;" class="hover-underline">{title}</a>
-    ) : (
-      title
-    )}
+    <a href={url} target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;" class="hover-underline">{title}</a>
   </div>
   <div class="text-list-meta" style="color: var(--muted);">{authors.join(', ')}</div>
-  {venue && <div class="text-emphasis" style="color: var(--muted);">{venue}</div>}
-  {projects.length > 0 && (
-    <div class="text-list-meta" style="color: var(--muted);">
-      Project: {projects.map((p, i) => <>{i > 0 && ', '}<a href={p.href} class="hover-underline" style="color: var(--text);">{p.name}</a></>)}
-    </div>
-  )}
+  <div class="text-emphasis" style="color: var(--muted);">{formatPublicationDetails({ venue, year })}</div>
 </article>

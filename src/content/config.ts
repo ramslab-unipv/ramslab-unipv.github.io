@@ -35,7 +35,8 @@ const activities = defineCollection({ type: 'content', schema: z.object({
 
 const publications = defineCollection({ type: 'content', schema: z.object({
   title: z.string(), authors: z.array(z.string()), year: z.number(),
-  venue: z.string().optional(), doi: z.string().optional(), url: z.string().optional(),
+  publicationDate: z.string().regex(/^\d{4}(?:-\d{2}(?:-\d{2})?)?$/),
+  venue: z.string(), doi: z.string().optional(), url: z.string().url(),
   relatedProjects: z.array(z.string()).default([]), featured: z.boolean().default(false)
 }) });
 

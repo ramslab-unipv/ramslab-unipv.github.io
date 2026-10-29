@@ -6,6 +6,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../lib/assets';
 import { entrySlug } from '../lib/entries';
+import { comparePublications, formatPublicationDetails } from '../lib/publications';
 import site from '../content/settings/site.json';
 
 const clickableSlugs = ['robotic-liquid-handling', 'air-flow-dynamic', 'demetra-nodes', 'human-centric-skeleton-simulator', 'dynamica', 'ahbi', 'drivesim', '3d-human-poses-estimation', 'balance-platform-simulator'];
@@ -32,7 +33,7 @@ const otherPeople = allPeople.slice(5).sort((a, b) => {
   const surnameB = b.data.name.split(' ').pop() || '';
   return surnameA.localeCompare(surnameB);
 });
-const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year).slice(0, 4);
+const publications = (await getCollection('publications')).sort((a, b) => comparePublications(a.data, b.data)).slice(0, 4);
 ---
 
 <BaseLayout title={site.siteTitle}>
@@ -110,10 +111,10 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
           {publications.map((publication, index) => (
             <article class="dense-item" style={`--row: ${index + 2}`}>
               <div class="text-list-title" style="color: var(--text);">
-                <a href={(publication.data.doi ? `https://doi.org/${publication.data.doi}` : publication.data.url) || '#'} target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;" class="hover-underline">{publication.data.title}</a>
+                <a href={publication.data.url} target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;" class="hover-underline">{publication.data.title}</a>
               </div>
               <div class="text-list-meta" style="color: var(--muted);">{publication.data.authors.join(', ')}</div>
-              {publication.data.venue && <div class="text-emphasis" style="color: var(--muted);">{publication.data.venue}</div>}
+              <div class="text-emphasis" style="color: var(--muted);">{formatPublicationDetails(publication.data)}</div>
             </article>
           ))}
           <div class="home-column-footer" style="--row: 6">

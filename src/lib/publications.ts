@@ -1,17 +1,43 @@
 import { getCollection } from 'astro:content';
 
+interface PublicationMetadata {
+  title: string;
+  year: number;
+  publicationDate: string;
+  venue?: string;
+  doi?: string;
+}
+
+/** Sort the cited editions newest first, retaining the precision supplied by the source. */
+export function comparePublications(a: PublicationMetadata, b: PublicationMetadata) {
+  const dateKey = (date: string) => {
+    const [year, month = '00', day = '00'] = date.split('-');
+    return `${year}${month}${day}`;
+  };
+  return b.year - a.year
+    || dateKey(b.publicationDate).localeCompare(dateKey(a.publicationDate))
+    || a.title.localeCompare(b.title, 'en')
+    || (a.doi ?? '').localeCompare(b.doi ?? '');
+}
+
+/** Shared bibliographic details for the archive, homepage and activity recaps. */
+export function formatPublicationDetails(publication: Pick<PublicationMetadata, 'venue' | 'year'>) {
+  const venue = publication.venue?.trim().replace(/\.$/, '');
+  return `${venue ? `${venue}, ` : ''}${publication.year}.`;
+}
+
 /** Publications linked to a project page (via `relatedProjects` in each publication),
  *  newest first, shaped for the project recap. */
 export async function getProjectPublications(project: string) {
   const all = await getCollection('publications');
   return all
     .filter((p) => p.data.relatedProjects.includes(project))
-    .sort((a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title))
+    .sort((a, b) => comparePublications(a.data, b.data))
     .map((p) => ({
       title: p.data.title,
-      url: p.data.doi ? `https://doi.org/${p.data.doi}` : p.data.url,
+      url: p.data.url,
       authors: p.data.authors.join(', '),
-      venue: p.data.venue,
+      venue: formatPublicationDetails(p.data),
     }));
 }
 
