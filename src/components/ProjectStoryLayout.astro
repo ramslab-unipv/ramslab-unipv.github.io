@@ -1,0 +1,482 @@
+---
+/**
+ * ProjectStoryLayout.astro
+ *
+ * The standard for a RAMSLAB project page, told as a story. White, Roboto and thin
+ * grey rules, the language of the rest of the site; built on the scroll-craft
+ * engine (public/scrollcraft/, never edited). Every word comes from the project's
+ * own content. Videos autoplay in loop; 3D models animate on their own and can
+ * be turned by dragging.
+ *
+ * The page:
+ *   opening   the site's page header (title, subtitle), then the cover video
+ *             edge to edge, cropped to fill exactly the rest of the first screen
+ *   intro     the vision, large, and the project in two columns
+ *   chapters  each one of these kinds, in the order given:
+ *     media      label + text and the media. A single media closer to a square than to a
+ *                rectangle (ratio < 1.4) sits beside the text, sides alternating; a rectangle
+ *                sits under the text, as wide as it (two or more share the width at the same
+ *                height). A chart (chart: true) sits under the text, never cropped, sized to
+ *                be seen whole on one screen. beside: true puts any single media (chart or
+ *                not) beside the text. Without media: text only.
+ *     model      label + text beside a 3D model (side: 'left' | 'right'), optionally
+ *                followed by media as wide as the text
+ *     statement  two sentences, a rule drawing between them (or one sentence, large)
+ *   chapters with images, videos or a 3D model fill one screen; text-only ones and
+ *   statements take only the room their text needs
+ *   close     the original summary card, in the light tint of the project colour:
+ *             description beside project facts, publications, team, funding (only
+ *             what exists), previous / next activity in its footer
+ *
+ * Chapter labels are small, upper case, in the project colour. Hovering an image or a video
+ * (not the cover) shows its description (alt) in a frosted-glass bar along the bottom.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import { withBase } from '../lib/assets';
+import { getEntry } from 'astro:content';
+
+interface Media { video?: string; poster?: string; image?: string; alt: string; ratio: number; focus?: string; chart?: boolean; beside?: boolean; }
+interface ModelOptions { build?: boolean; anim?: 'shears' | 'drive'; view?: 'side' | 'top'; size?: number; sizeMobile?: number; }
+type Chapter =
+  | { kind: 'media'; label: string; text: string; media?: Media[] }
+  | { kind: 'model'; label: string; text: string; model: string; modelOptions?: ModelOptions; side?: 'left' | 'right'; media?: Media[] }
+  | { kind: 'statement'; lead: string; text?: string };
+interface Publication { title: string; url?: string; authors?: string; venue?: string; }
+interface TeamMember { name: string; role: string; }
+interface Props {
+  title: string;
+  subtitle?: string;
+  accentColor: string;
+  activity?: string;
+  cover: { video?: string; poster?: string; image?: string; alt: string };
+  vision?: string;
+  intro?: string[];
+  chapters: Chapter[];
+  description: string;
+  publications?: Publication[];
+  funding?: string;
+  team?: TeamMember[];
+  prevActivity?: { label: string; href: string };
+  nextActivity?: { label: string; href: string };
+}
+
+const {
+  title, subtitle, accentColor, activity, cover, vision, intro = [], chapters, description,
+  publications = [], funding, team = [], prevActivity, nextActivity,
+} = Astro.props;
+
+const b = (p?: string) => (p ? withBase(p) : undefined);
+// the light tints the original card used; other colours get a 7% mix of the accent
+const lightAccents: Record<string, string> = {
+  '#22c55e': '#f0fdf4', '#16a34a': '#f0fdf4', '#b2284b': '#fdf2f2', '#dc2626': '#fdf2f2',
+  '#0ea5e9': '#f0f9ff', '#38bdf8': '#f0f9ff',
+};
+const light = lightAccents[accentColor.toLowerCase()];
+let sideCount = 0;
+// closer to a square than to a 16:9 rectangle: the media sits beside the text
+const SQUARE = 1.4;
+const entry = activity ? await getEntry('activities', activity) : undefined;
+const year = entry?.data.year;
+const ended = entry?.data.status && /^\d{4}$/.test(entry.data.status) ? entry.data.status : undefined;
+const period = year ? `${year} – ${ended ?? 'Ongoing'}` : undefined;
+const areas = entry?.data.tags ?? [];
+
+const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
+  'data-model': b(src), 'data-build': o.build === false ? '0' : '1', 'data-anim': o.anim ?? '',
+  'data-view': o.view ?? 'side', 'data-size': o.size ?? 1, 'data-size-m': o.sizeMobile ?? '',
+  'data-ink': light ? 'light-page' : '',
+});
+---
+
+<BaseLayout title={`${title} — RAMSLAB`}>
+  <link rel="stylesheet" href={withBase('/scrollcraft/scrollcraft.css')} />
+  <div class="pd" style="--accent: #B2284B;">
+    <Header />
+    <span data-sc-progress></span>
+
+    <main id="main-content">
+
+      <!-- OPENING: the site's page header, then the cover edge to edge, filling the first screen -->
+      <div class="pd-first">
+        <section class="projects-header-section pd-head" aria-labelledby="pd-title">
+          <div class="projects-header-content">
+            <h1 id="pd-title" class="projects-title-big pd-title">{title}</h1>
+            {subtitle && <p class="pd-head-sub">{subtitle}</p>}
+          </div>
+        </section>
+        <figure class="pd-cover">
+          {cover.video
+            ? <video src={b(cover.video)} poster={b(cover.poster)} autoplay muted loop playsinline preload="auto" aria-label={cover.alt}></video>
+            : <img src={b(cover.image)} alt={cover.alt} />}
+        </figure>
+      </div>
+
+      <!-- INTRO -->
+      {(vision || intro.length > 0) && (
+        <section class="pd-intro pd-wrap" aria-label="The project">
+          {vision && <p class="pd-vision" data-sc-in>{vision}</p>}
+          {intro.length > 0 && (
+            <div class="pd-intro-cols">
+              {intro.map((t, i) => <p data-sc-in style={`--d:${120 + i * 120}ms`}>{t}</p>)}
+            </div>
+          )}
+        </section>
+      )}
+
+      <!-- CHAPTERS -->
+      {chapters.map((c, i) => {
+        const beside = c.kind === 'media' && c.media?.length === 1 && (c.media[0].beside || (!c.media[0].chart && c.media[0].ratio < SQUARE));
+        if (beside) sideCount += 1;
+        const id = `pd-c${i}`;
+        if (c.kind === 'media') return (
+          <section class={`pd-chapter pd-media pd-wrap ${c.media?.length ? '' : 'pd-media--text'} ${beside ? 'pd-media--beside' : ''} ${beside && sideCount % 2 === 0 ? 'pd-media--beside-flip' : ''}`} data-chart={c.media?.some((m) => m.chart) ? '' : undefined} aria-labelledby={id}>
+            <div class="pd-media-text">
+              <h2 id={id} class="pd-label" data-sc-in>{c.label}</h2>
+              <p class="pd-lede" data-sc-in style="--d:140ms">{c.text}</p>
+            </div>
+            {c.media && c.media.length > 0 && (
+            <div class="pd-media-fit">
+            <div class="pd-media-row" style={`grid-template-columns: ${c.media.map((m) => `${m.ratio}fr`).join(' ')}; --sum:${c.media.reduce((a, m) => a + m.ratio, 0)};`}>
+              {c.media.map((m, k) => (
+                <figure class={`pd-media-item ${c.media!.length > 1 ? (k === 0 ? 'pd-from-left' : 'pd-from-right') : 'pd-from-below'}`} data-sc-in style={`aspect-ratio: ${m.ratio}; --d:${260 + k * 120}ms; --r:${m.ratio}; --focus:${m.focus ?? '50% 50%'}`}>
+                  {m.video
+                    ? <video src={b(m.video)} poster={b(m.poster)} autoplay muted loop playsinline preload="auto" aria-label={m.alt}></video>
+                    : <img src={b(m.image)} alt={m.alt} loading="lazy" />}
+                  <figcaption class="pd-hover-cap" aria-hidden="true"><span>{m.alt}</span></figcaption>
+                </figure>
+              ))}
+            </div>
+            </div>
+            )}
+          </section>
+        );
+        if (c.kind === 'model') return (
+          <section class={`pd-chapter pd-model pd-wrap ${c.side === 'right' ? 'pd-model--right' : ''} ${c.media?.length ? 'pd-model--with-media' : ''}`} aria-labelledby={id}>
+            <div class="pd-model-box" data-sc-in>
+              <div class="ps-model" {...modelAttrs(c.model, c.modelOptions, !(c.modelOptions?.build === false))}></div>
+            </div>
+            <div class="pd-model-text">
+              <h2 id={id} class="pd-label" data-sc-in style="--d:150ms">{c.label}</h2>
+              <p class="pd-lede" data-sc-in style="--d:290ms">{c.text}</p>
+            </div>
+            {c.media && c.media.length > 0 && (
+              <div class="pd-model-media">
+              <div class="pd-media-fit">
+              <div class="pd-media-row" style={`grid-template-columns: ${c.media.map((m) => `${m.ratio}fr`).join(' ')}; --sum:${c.media.reduce((a, m) => a + m.ratio, 0)};`}>
+                {c.media.map((m, k) => (
+                  <figure class="pd-media-item pd-from-below" data-sc-in style={`aspect-ratio: ${m.ratio}; --d:${k * 120}ms; --r:${m.ratio}; --focus:${m.focus ?? '50% 50%'}`}>
+                    {m.video
+                      ? <video src={b(m.video)} poster={b(m.poster)} autoplay muted loop playsinline preload="auto" aria-label={m.alt}></video>
+                      : <img src={b(m.image)} alt={m.alt} loading="lazy" />}
+                    <figcaption class="pd-hover-cap" aria-hidden="true"><span>{m.alt}</span></figcaption>
+                  </figure>
+                ))}
+              </div>
+              </div>
+              </div>
+            )}
+          </section>
+        );
+        return (
+          <section class={`pd-chapter pd-dual pd-wrap ${c.text ? '' : 'pd-dual--one'}`} aria-label="Statement">
+            {!c.text && <span class="pd-dual-line" data-sc-in aria-hidden="true"></span>}
+            <p class="pd-dual-lead" data-sc-in style={c.text ? '' : '--d:200ms'}>{c.lead}</p>
+            {c.text && <span class="pd-dual-line" data-sc-in style="--d:200ms" aria-hidden="true"></span>}
+            {c.text && <p class="pd-dual-text" data-sc-in style="--d:350ms">{c.text}</p>}
+          </section>
+        );
+      })}
+
+      <!-- CLOSE: the summary card, as on the current project pages -->
+      <section class="pd-close" aria-label="Project summary">
+        <div class="container">
+          <div class="pd-card" data-sc-in>
+            <div class="pd-card-grid">
+              <div>
+                <h2 class="pd-card-label">Description</h2>
+                <p class="pd-card-desc">{description}</p>
+              </div>
+              <div>
+                {(period || areas.length > 0) && (
+                  <div class="pd-card-group">
+                    <h3 class="pd-card-label">Project</h3>
+                    {period && <p class="pd-card-row">{period}</p>}
+                    {areas.length > 0 && <p class="pd-card-row pd-cap">{areas.join(' · ')}</p>}
+                  </div>
+                )}
+                {publications.length > 0 && (
+                  <div class="pd-card-group">
+                    <h3 class="pd-card-label">Publications</h3>
+                    {publications.map((p) => (
+                      <article class="pd-card-pub">
+                        {p.url ? <a href={p.url} target="_blank" rel="noopener noreferrer" class="hover-underline">{p.title}</a> : <span>{p.title}</span>}
+                        {p.authors && <div class="pd-card-meta">{p.authors}</div>}
+                        {p.venue && <div class="pd-card-meta pd-venue">{p.venue}</div>}
+                      </article>
+                    ))}
+                  </div>
+                )}
+                {team.length > 0 && (
+                  <div class="pd-card-group">
+                    <h3 class="pd-card-label">Team</h3>
+                    <ul class="pd-card-team">{team.map((m) => <li><strong>{m.name}</strong> · {m.role}</li>)}</ul>
+                  </div>
+                )}
+                {funding && (
+                  <div class="pd-card-group">
+                    <h3 class="pd-card-label">Funding</h3>
+                    <p class="pd-card-funding">{funding}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <footer class="pd-card-footer">
+              {prevActivity ? <a href={b(prevActivity.href)} class="pd-card-nav" aria-label={`Previous activity: ${prevActivity.label}`}>← <span>Previous Activity</span></a> : <span></span>}
+              {nextActivity ? <a href={b(nextActivity.href)} class="pd-card-nav" aria-label={`Next activity: ${nextActivity.label}`}><span>Next Activity</span> →</a> : <span></span>}
+            </footer>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+
+  <script is:inline src={withBase('/scrollcraft/scrollcraft.js')}></script>
+  <script is:inline>
+    ScrollCraft.mount(document.body);
+    // Media under the text stay as wide as the text. If the chapter does not fit one screen
+    // videos are cropped top and bottom (up to 20%, keeping the focus); photos are never
+    // cropped. If still too tall the chapter grows past the screen. Charts are never cropped:
+    // they narrow, centred, until the chapter fits one screen.
+    (function () {
+      var HEADER = 72, CROP_VIDEO = 1.2;
+      function crop(el, natural, avail, lim) {
+        var h = Math.max(avail, natural / lim);
+        el.classList.add('is-crop'); el.style.setProperty('--pd-avail', Math.floor(h) + 'px');
+        if (h > avail + 1) el.classList.add('is-tall');
+      }
+      function size(el, row, avail, desk) {
+        el.classList.remove('is-crop', 'is-tall'); el.style.removeProperty('--pd-avail');
+        row.style.removeProperty('width'); row.style.removeProperty('margin');
+        if (!desk) return;
+        var sum = parseFloat(getComputedStyle(row).getPropertyValue('--sum')) || 1;
+        var natural = row.clientWidth / sum;
+        if (natural <= avail) return;
+        if (el.hasAttribute('data-chart')) { row.style.width = Math.floor(avail * sum) + 'px'; row.style.margin = '0 auto'; return; }
+        if (row.querySelector('video')) crop(el, natural, avail, CROP_VIDEO); else el.classList.add('is-tall');
+      }
+      function fit() {
+        var desk = innerWidth > 768;
+        [].slice.call(document.querySelectorAll('.pd-media.pd-chapter:not(.pd-media--beside)')).forEach(function (sec) {
+          var row = sec.querySelector('.pd-media-row');
+          if (!row) return;
+          var cs = getComputedStyle(sec), text = sec.querySelector('.pd-media-text');
+          size(sec, row, (innerHeight - HEADER) - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)
+            - text.offsetHeight - parseFloat(getComputedStyle(text).marginBottom), desk);
+        });
+        // media under a 3D model
+        [].slice.call(document.querySelectorAll('.pd-model-media')).forEach(function (box) {
+          var cs = getComputedStyle(box);
+          size(box, box.querySelector('.pd-media-row'), (innerHeight - HEADER) - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom), desk);
+        });
+      }
+      fit();
+      addEventListener('resize', fit);
+      addEventListener('load', fit);
+    })();
+  </script>
+  <script>
+    import '../scripts/projectModels';
+  </script>
+
+  <style is:global>
+    .pd, body:has(.pd) {
+      --sc-canvas: #fff; --sc-surface: #f2f2f2; --sc-ink: #111; --sc-ink-soft: #5f5f5f;
+      --sc-accent: var(--accent); --sc-accent-ink: #fff;
+      --sc-font-display: var(--font-sans); --sc-font-text: var(--font-sans); --sc-font-mono: var(--font-sans);
+      --pd-top: 72px;
+      --pd-green: var(--accent);
+      --pd-light: color-mix(in srgb, var(--accent) 7%, #fff);
+    }
+    body:has(.pd) { background: #fff; letter-spacing: normal; }
+    .pd [data-sc-progress] { background: var(--accent); }
+    .pd main { color: var(--text); font-family: var(--font-sans); }
+    .pd-st { --p: var(--sc-p, 0); background: #fff; overflow: hidden; }
+    .pd [data-sc-in] { transition-delay: var(--d, 0ms); }
+    .pd-wrap { max-width: var(--max); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); box-sizing: border-box; width: 100%; }
+    .pd video, .pd img { display: block; }
+
+    .pd-kicker { margin: 0; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.0833em; text-transform: uppercase; color: var(--text); }
+    .pd-label { margin: 0 0 1.1rem; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pd-green); }
+    .pd-lede { margin: 0; font-size: clamp(1.2rem, 1.6vw, 1.6rem); line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; color: var(--text); }
+
+    /* ═══ opening: header + cover fill exactly the first screen; the cover runs edge to edge ═══ */
+    .pd-first { display: flex; flex-direction: column; height: calc(100svh - var(--pd-top)); min-height: 30rem; }
+    .pd-head { flex: none; }
+    .pd-head .projects-title-big { margin: 0; }
+    .pd-head .projects-title-big { max-width: 62%; }
+    .pd-head .pd-title { font-size: clamp(2rem, 3.1vw, 3.1rem); line-height: 1.1; letter-spacing: -0.02em; }
+    .pd-head-sub { margin: 0; max-width: 24rem; text-align: right; font-size: 1.05rem; line-height: 1.4; color: var(--muted); }
+    .pd-cover { flex: 1 1 auto; min-height: 0; margin: 0; position: relative; overflow: hidden; }
+    .pd-cover video, .pd-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; max-width: none; }
+
+    /* titles: always upper case; the header and cover arrive on load */
+    @media (prefers-reduced-motion: no-preference) {
+      .pd-head .pd-title, .pd-head-sub { animation: pd-up 900ms var(--sc-ease-out, ease-out) both; }
+      .pd-head-sub { animation-delay: 150ms; }
+      .pd-cover { animation: pd-fade 1200ms var(--sc-ease-out, ease-out) 250ms both; }
+    }
+    @keyframes pd-up { from { opacity: 0; transform: translateY(18px); } }
+    @keyframes pd-fade { from { opacity: 0; transform: scale(1.03); } }
+
+    /* every chapter is one screen: text and media always seen whole */
+    .pd-chapter { min-height: calc(100svh - var(--pd-top)); box-sizing: border-box; }
+    .pd-media.pd-chapter { display: flex; flex-direction: column; justify-content: center; height: calc(100svh - var(--pd-top));
+      padding-top: clamp(1.5rem, 5vh, 3.5rem); padding-bottom: clamp(1.5rem, 5vh, 3.5rem); }
+    /* under the text: as wide as it; the script below crops it to fit the screen (charts narrow instead) */
+    .pd-media-fit { flex: none; }
+    .pd-media-fit .pd-media-row { width: 100%; }
+    .pd-media.is-crop .pd-media-row, .pd-model-media.is-crop .pd-media-row { height: var(--pd-avail); }
+    /* media that stays as wide as the text even after cropping: the chapter grows past one screen */
+    .pd-media.is-tall.pd-chapter, .pd-model-media.is-tall { height: auto; }
+    .pd-media.is-crop .pd-media-item, .pd-model-media.is-crop .pd-media-item { aspect-ratio: auto !important; height: 100%; }
+    .pd-media-item video, .pd-media-item img { object-position: var(--focus, 50% 50%); }
+    .pd-media--beside .pd-media-fit { flex: 1 1 auto; height: 100%; min-height: 0; container-type: size; display: flex; align-items: center; justify-content: center; }
+    .pd-media--beside .pd-media-fit .pd-media-row { width: min(100cqw, 100cqh * var(--sum)); }
+    /* without images or videos a chapter takes only the room its text needs */
+    .pd-media--text.pd-chapter, .pd-dual.pd-chapter { height: auto; min-height: 0; }
+    .pd-model.pd-chapter { height: calc(100svh - var(--pd-top)); padding-top: 4vh; padding-bottom: 4vh; }
+    .pd-model.pd-chapter .pd-model-box { height: 100%; }
+    .pd-model--with-media.pd-chapter { height: auto; }
+    .pd-model--with-media.pd-chapter .pd-model-box { height: calc(100svh - var(--pd-top) - 8vh); }
+    @media (prefers-reduced-motion: no-preference) {
+      .pd-label[data-sc-in], .pd-lede[data-sc-in] { transform: translateY(16px); transition: opacity 800ms var(--sc-ease-out), transform 1000ms var(--sc-ease-out); }
+      .pd-label.sc-in, .pd-lede.sc-in { transform: none; }
+    }
+
+    /* ═══ intro ═══ */
+    .pd-intro { padding-top: clamp(6rem, 16vh, 11rem); padding-bottom: clamp(5rem, 12vh, 8rem); }
+    .pd-vision { margin: 0 0 clamp(3rem, 8vh, 5rem); max-width: 60rem; font-size: clamp(2rem, 4vw, 4.2rem); line-height: 1.08; font-weight: 700; letter-spacing: -0.03em; }
+    .pd-vision:last-child { margin-bottom: 0; }
+    .pd-intro-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 5rem); padding-top: 2rem; border-top: 1px solid var(--line-soft); }
+    .pd-intro-cols p { margin: 0; font-size: clamp(1.02rem, 1.2vw, 1.15rem); line-height: 1.65; color: var(--text-soft); }
+
+    /* ═══ media: as wide as the text, every item the same height (columns follow the aspect ratios) ═══ */
+    .pd-media { padding-top: clamp(4rem, 10vh, 7rem); padding-bottom: clamp(5rem, 12vh, 8rem); border-top: 1px solid var(--line-soft); }
+    .pd-media .pd-lede { font-size: clamp(1.05rem, 1.3vw, 1.3rem); line-height: 1.42; }
+    .pd-media-text { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem; align-items: baseline; margin-bottom: clamp(2rem, 5vh, 3.5rem); }
+    .pd-media-text .pd-label { margin: 0; }
+    .pd-media-row { display: grid; gap: 1.25vw; }
+    .pd-media-item { margin: 0; width: 100%; overflow: hidden; position: relative; }
+
+    /* on hover, the description of what is shown appears in a frosted-glass bar along the bottom */
+    .pd-hover-cap { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; pointer-events: none; }
+    .pd-hover-cap span { display: block; padding: clamp(0.65rem, 1.4vh, 0.9rem) clamp(0.9rem, 1.6vw, 1.25rem);
+      background: rgb(255 255 255 / 0.72); -webkit-backdrop-filter: blur(16px) saturate(170%); backdrop-filter: blur(16px) saturate(170%);
+      border-top: 1px solid rgb(255 255 255 / 0.55);
+      color: #111; font-size: clamp(0.82rem, 0.9vw, 0.92rem); line-height: 1.4; font-weight: 500; letter-spacing: -0.005em;
+      opacity: 0; transform: translateY(100%); filter: blur(4px);
+      transition: opacity 280ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1), filter 380ms ease; }
+    @media (hover: hover) {
+      .pd-media-item:hover .pd-hover-cap span { opacity: 1; transform: none; filter: none; }
+    }
+    @media (hover: none) { .pd-hover-cap { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .pd-hover-cap span { transform: none; filter: none; } }
+    .pd-media-item video, .pd-media-item img { width: 100%; height: 100%; object-fit: cover; }
+    @media (prefers-reduced-motion: no-preference) {
+      .pd-media-item[data-sc-in] { transition: opacity 900ms var(--sc-ease-out), transform 1300ms var(--sc-ease-out); }
+      .pd-from-left[data-sc-in] { transform: translateX(-12vw); }
+      .pd-from-right[data-sc-in] { transform: translateX(12vw); }
+      .pd-from-below[data-sc-in] { transform: translateY(6vh); }
+      .pd-media-item.sc-in { transform: none; }
+    }
+
+    .pd-media--text .pd-media-text { margin-bottom: 0; }
+    /* a square or tall media sits beside the text (sides alternate) */
+    .pd-media--beside.pd-chapter { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+    .pd-media--beside .pd-media-fit { height: 100%; }
+    .pd-media--beside .pd-media-text { display: block; margin: 0; }
+    .pd-media--beside .pd-media-text .pd-label { margin-bottom: 1.1rem; }
+    .pd-media--beside-flip.pd-chapter { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+    .pd-media--beside-flip .pd-media-text { order: 2; }
+
+    /* ═══ model ═══ */
+    .pd-model { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(2rem, 5vw, 5rem); align-items: center;
+      padding-top: clamp(3rem, 8vh, 5rem); padding-bottom: clamp(3rem, 8vh, 5rem); border-top: 1px solid var(--line-soft); }
+    .pd-model--right { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); }
+    .pd-model--right .pd-model-box { order: 2; }
+    .pd-model-box { position: relative; height: calc(100svh - var(--pd-top) - 10vh); }
+    .pd-model-media { grid-column: 1 / -1; display: flex; flex-direction: column; justify-content: center; height: calc(100svh - var(--pd-top)); box-sizing: border-box; padding: 4vh 0; }
+    .pd-model-box .ps-model { position: absolute; inset: 0; }
+    .pd .ps-model { cursor: grab; }
+    .pd .ps-model:active { cursor: grabbing; }
+    .pd .ps-model canvas { display: block; }
+
+    /* ═══ statement ═══ */
+    .pd-dual { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start;
+      padding-top: clamp(5rem, 12vh, 8rem); padding-bottom: clamp(5rem, 12vh, 8rem); border-top: 1px solid var(--line-soft); }
+    .pd-dual-lead { margin: 0; font-size: clamp(1.5rem, 2.3vw, 2.3rem); line-height: 1.2; font-weight: 600; letter-spacing: -0.015em; }
+    .pd-dual-text { margin: 0; font-size: clamp(1.05rem, 1.25vw, 1.2rem); line-height: 1.6; color: var(--text-soft); }
+    .pd-dual-line { width: 2px; align-self: stretch; background: var(--accent); transform-origin: 50% 0; }
+    .pd-dual--one { grid-template-columns: auto minmax(0, 1fr); }
+    .pd-dual--one .pd-dual-lead { max-width: 52rem; font-size: clamp(1.8rem, 3.2vw, 3.2rem); line-height: 1.12; font-weight: 700; letter-spacing: -0.025em; }
+    @media (prefers-reduced-motion: no-preference) {
+      .pd-dual-line[data-sc-in] { opacity: 1; transform: scaleY(0); transition: transform 1400ms var(--sc-ease-out); }
+      .pd-dual-line.sc-in { transform: scaleY(1); }
+    }
+
+    /* ═══ close: the original summary card, in the light tint of the project colour ═══ */
+    .pd-close { padding: 120px 0; }
+    .pd-card { background: var(--surface, #f2f2f2); border-radius: 4px; padding: 60px; color: #111; }
+    .pd-card-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; }
+    .pd-card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; margin: 0 0 24px; color: #666; font-weight: 700; }
+    .pd-card-desc { font-size: 1.75rem; line-height: 1.3; font-weight: 400; color: #111; white-space: pre-line; margin: 0; }
+    .pd-card-group { margin-bottom: 48px; }
+    .pd-card-group:last-child { margin-bottom: 0; }
+    .pd-card-row { margin: 0; padding: 12px 0; border-top: 1px solid rgb(0 0 0 / 0.08); color: #334155; }
+    .pd-card-pub { padding: 12px 0; border-top: 1px solid rgb(0 0 0 / 0.08); }
+    .pd-card-pub a, .pd-card-pub span { color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.9375rem; line-height: 1.2; }
+    .pd-card-meta { color: var(--muted); font-size: 0.75rem; margin-top: 4px; line-height: 1.4; }
+    .pd-card-team { list-style: none; padding: 0; margin: 0; }
+    .pd-card-team li { padding: 12px 0; border-top: 1px solid rgb(0 0 0 / 0.05); font-size: 1rem; color: #334155; }
+    .pd-card-funding { font-size: 1rem; line-height: 1.5; color: #333; margin: 0; }
+    .pd-cap { text-transform: capitalize; }
+    .pd-venue { font-style: italic; }
+    .pd-card-footer { margin-top: 60px; padding-top: 32px; border-top: 1px solid rgb(0 0 0 / 0.08); display: flex; justify-content: space-between; }
+    .pd-card-nav { color: #666; text-decoration: none; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; transition: color 0.2s ease; }
+    .pd-card-nav:hover { color: #000; text-decoration: underline; text-underline-offset: 0.2em; }
+
+    @media (max-width: 768px) {
+      .pd, body:has(.pd) { --pd-top: 64px; }
+      .pd-head .projects-header-content { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .pd-head-sub { text-align: left; }
+      .pd-head .projects-title-big { max-width: none; }
+      .pd-head .pd-title { font-size: 1.6rem !important; }
+      .pd-intro-cols { grid-template-columns: 1fr; gap: 1.25rem; }
+      .pd-lede { font-size: 1.1rem; }
+      .pd-media-text { grid-template-columns: 1fr; gap: 0.75rem; }
+      .pd-media-row { grid-template-columns: 1fr !important; gap: 3vw; }
+      .pd-media--beside.pd-chapter, .pd-media--beside-flip.pd-chapter { grid-template-columns: 1fr; gap: 1.5rem; }
+      .pd-chapter, .pd-media.pd-chapter, .pd-model.pd-chapter { height: auto; min-height: 0; }
+      .pd-media-fit { container-type: normal; display: block; }
+      .pd-media-fit .pd-media-row { width: 100%; }
+      .pd-model-media { height: auto; padding: 0; }
+      .pd-media--beside .pd-media-fit { height: auto; container-type: normal; display: block; }
+      .pd-media--beside .pd-media-fit .pd-media-row { width: 100%; }
+      .pd-media--beside-flip .pd-media-text { order: 0; }
+      .pd-model, .pd-model--right { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 3rem; padding-bottom: 3rem; }
+      .pd-model-text { order: -1; }
+      .pd-model--right .pd-model-box { order: 0; }
+      .pd-model-box { height: 58vh; }
+      .pd-dual { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 3.5rem; padding-bottom: 4rem; }
+      .pd-dual-line { width: 3rem; height: 2px; transform-origin: 0 50%; }
+      .pd-close { padding: 50px 0 70px; }
+      .pd-card { padding: 28px 18px; border-radius: 6px; }
+      .pd-card-grid { grid-template-columns: 1fr; gap: 36px; }
+      .pd-card-desc { font-size: 1.2rem; line-height: 1.45; }
+      .pd-card-footer { margin-top: 36px; padding-top: 20px; gap: 16px; }
+    }
+  </style>
+</BaseLayout>

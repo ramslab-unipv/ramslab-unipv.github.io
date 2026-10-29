@@ -1,46 +1,77 @@
 ---
-import ProjectScrollLayout from '../../components/ProjectScrollLayout.astro';
+import ProjectStoryLayout from '../../components/ProjectStoryLayout.astro';
 import { getProjectPublications } from '../../lib/publications';
 
-const project = {
-  title: "Balance Platform Simulator",
-  subtitle: "A robotic 3-DOF platform for balance and proprioception rehabilitation and training.",
-};
 const publications = await getProjectPublications('balance-platform-simulator');
 ---
 
-<ProjectScrollLayout
-  title={project.title}
-  subtitle={project.subtitle}
+<ProjectStoryLayout
+  title={"Balance Platform Simulator"}
+  subtitle={"A robotic 3-DOF platform for balance and proprioception rehabilitation and training."}
   accentColor="#7dd3fc"
-  world={{ image: '/images/projects/avatar_skii.png' }}
-  sections={[
+  activity="balance-platform-simulator"
+  cover={{
+    "image": "/images/projects/avatar_skii.png",
+    "alt": "The ski exergame: the patient’s avatar descends a virtual slope between the gates."
+  }}
+  vision={"Restoring balance and confidence through a robotic platform that adapts, in real time, to every patient."}
+  chapters={[
     {
-      label: "Three Degrees of Freedom",
-      text: "A 3-degree-of-freedom motion platform (roll, pitch, heave), ideal for challenging human equilibrium and testing responses to perturbation, with exercises delivered in a controlled setting and tailored to each individual user.",
-      image: '/images/projects/cad_sistema_schermo.png'
+      "kind": "media",
+      "label": "Three Degrees of Freedom",
+      "text": "A 3-degree-of-freedom motion platform (roll, pitch, heave), ideal for challenging human equilibrium and testing responses to perturbation, with exercises delivered in a controlled setting and tailored to each individual user.",
+      "media": [
+        {
+          "image": "/images/projects/cad_sistema_schermo.png",
+          "alt": "CAD model of the 3-DOF balance platform with its frame and screen.",
+          "ratio": 1.7865
+        }
+      ]
     },
     {
-      label: "Markerless Motion Tracking",
-      text: "Four cameras, powered by AI, capture the patient's joints and reconstruct their center of mass in real time through dedicated algorithms, feeding the system's control loop.",
-      image: '/images/projects/4cameras.png'
+      "kind": "media",
+      "label": "Markerless Motion Tracking",
+      "text": "Four cameras, powered by AI, capture the patient's joints and reconstruct their center of mass in real time through dedicated algorithms, feeding the system's control loop.",
+      "media": [
+        {
+          "image": "/images/projects/4cameras.png",
+          "alt": "The four camera views used for markerless tracking of the patient on the platform.",
+          "ratio": 2.0692,
+          "chart": true
+        }
+      ]
     },
     {
-      label: "Human-Machine Interaction Model",
-      text: "A mathematical model describes the interaction between the person and the platform, allowing the machine to be controlled in a way that is coherent with the simulation being performed. The person's movement, together with the platform's current state, feeds into the model as input; the model, in turn, generates the platform's motion references as output. The platform's motion then acts back on the person—closing the loop."
+      "kind": "media",
+      "label": "Human-Machine Interaction Model",
+      "text": "A mathematical model describes the interaction between the person and the platform, allowing the machine to be controlled in a way that is coherent with the simulation being performed. The person's movement, together with the platform's current state, feeds into the model as input; the model, in turn, generates the platform's motion references as output. The platform's motion then acts back on the person—closing the loop."
     },
     {
-      label: "Virtual Environment Exergame",
-      text: "Inside the virtual environment, patients complete task-based exergames that push them just beyond their comfort zone, turning every session into a controlled challenge to their equilibrium, and every challenge into progress.",
-      image: '/images/projects/avatar_skii.png'
+      "kind": "media",
+      "label": "Virtual Environment Exergame",
+      "text": "Inside the virtual environment, patients complete task-based exergames that push them just beyond their comfort zone, turning every session into a controlled challenge to their equilibrium, and every challenge into progress.",
+      "media": [
+        {
+          "image": "/images/projects/avatar_skii.png",
+          "alt": "The ski exergame: the patient’s avatar descends a virtual slope between the gates.",
+          "ratio": 1.7855
+        }
+      ]
     },
     {
-      label: "For Sport and Rehabilitation",
-      text: "Born to train balance for sport and rehabilitation. Combined with virtual reality, the platform turns physical exercise into an exergame that trains body, proprioception, and cognition all together."
+      "kind": "media",
+      "label": "For Sport and Rehabilitation",
+      "text": "Born to train balance for sport and rehabilitation. Combined with virtual reality, the platform turns physical exercise into an exergame that trains body, proprioception, and cognition all together."
     }
   ]}
   description={"Balance and proprioception are essential for safe, independent movement, yet are often compromised by natural aging and neurological conditions such as stroke, Parkinson's disease, ALS, and mild cognitive impairment. The Balance Platform Simulator responds with a 3-degree-of-freedom robotic system, controlled in real time and driven by markerless motion tracking. Patient movement is captured without wearable sensors and fed into a mathematical model that dynamically shapes the platform's response to each patient's abilities. Integrated with virtual reality, the platform allows patients to play exergames that merge physical exercise with cognitive challenges, supporting motor recovery while stimulating brain plasticity. Born from a collaboration between clinicians and engineers, the system offers greater versatility than conventional two-DOF devices and can also be reconfigured as a driving simulator."}
   publications={publications}
-  prevActivity={{ label: "3D Human Poses Estimation", href: '/activities/3d-human-poses-estimation/' }}
-  nextActivity={{ label: "Driving Simulator", href: '/activities/drivesim/' }}
+  prevActivity={{
+    "label": "3D Human Poses Estimation",
+    "href": "/activities/3d-human-poses-estimation/"
+  }}
+  nextActivity={{
+    "label": "Driving Simulator",
+    "href": "/activities/drivesim/"
+  }}
 />

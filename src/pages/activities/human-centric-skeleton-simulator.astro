@@ -1,50 +1,66 @@
 ---
-import ProjectScrollLayout from '../../components/ProjectScrollLayout.astro';
+import ProjectStoryLayout from '../../components/ProjectStoryLayout.astro';
 import { getProjectPublications } from '../../lib/publications';
 
-const project = {
-  title: "Human in the Loop Skeleton Simulator",
-  subtitle: "Train Smarter. Slide Faster. Perform Better",
-  description: `This project brings skeleton training into a new era by combining immersive simulation, realistic sled dynamics, and advanced athlete monitoring in a single training environment.
-
-Access to high-quality skeleton training is often limited by the small number of tracks worldwide, seasonal conditions, travel costs, and the safety risks of high-speed descents. The simulator is designed to reduce these barriers, giving athletes the possibility to train more frequently, in safer, controlled, and repeatable conditions.
-
-Athletes interact with a physical sled mounted on a motion platform while sliding through virtual tracks that can replicate real-world courses or be custom-designed for specific training goals. This creates a realistic Human-in-the-Loop experience, where the athlete’s movements, posture, and steering actions directly influence the simulation.
-
-During each run, markerless cameras and load cells capture body motion, pressure inputs, and athlete–sled interaction. This data gives coaches a detailed view of the athlete’s technique, helping them analyze performance, identify recurring patterns, and detect areas for improvement.
-
-By transforming each simulated descent into a measurable training session, the system allows feedback to be supported by objective data rather than observation alone. The result is a safer, smarter, and more accessible way to improve skeleton performance.`
-};
 const publications = await getProjectPublications('human-centric-skeleton-simulator');
 ---
 
-<ProjectScrollLayout
-  title={project.title}
-  subtitle={project.subtitle}
+<ProjectStoryLayout
+  title={"Human in the Loop Skeleton Simulator"}
+  subtitle={"Train Smarter. Slide Faster. Perform Better"}
   accentColor="#0ea5e9"
-  world={{ video: '/videos/scroll/skeleton-world.mp4', poster: '/videos/scroll/skeleton-world-poster.jpg' }}
-  sections={[
+  activity="human-centric-skeleton-simulator"
+  cover={{
+    "video": "/videos/scroll/skeleton-world.mp4",
+    "poster": "/videos/scroll/skeleton-world-poster.jpg",
+    "alt": "First-person view down the virtual skeleton track."
+  }}
+  vision={"Bringing the skeleton track into the lab for safe, repeatable and measurable training."}
+  chapters={[
     {
-      label: "Train Beyond Track Limitations",
-      text: "Slide through iconic tracks around the world from a single training environment. Move freely, experience every second of sessions, and train beyond the geographical limits.",
-      image: '/images/projects/Sim_skeleton.png',
-      imageAlt: "An athlete wearing a VR headset lies on the skeleton sled mounted on the motion platform."
+      "kind": "media",
+      "label": "Train Beyond Track Limitations",
+      "text": "Slide through iconic tracks around the world from a single training environment. Move freely, experience every second of sessions, and train beyond the geographical limits.",
+      "media": [
+        {
+          "image": "/images/projects/Sim_skeleton.png",
+          "alt": "An athlete wearing a VR headset lies on the skeleton sled mounted on the motion platform.",
+          "ratio": 1.3346
+        }
+      ]
     },
     {
-      label: "Capture Human Behaviour",
-      text: "Capture the athlete’s behavior in real time. Body movements and pressure inputs are tracked through cameras and load cells, allowing coaches to understand exactly how the athlete performed during the simulation and provide sharper, data-driven feedback.",
-      video: '/videos/scroll/skeleton-capture.mp4', poster: '/videos/scroll/skeleton-capture-poster.jpg',
-      videoLabel: "Animation: the athlete's tracked body points plotted in 3D during a run.",
-      mediaSide: 'left'
+      "kind": "media",
+      "label": "Capture Human Behaviour",
+      "text": "Capture the athlete’s behavior in real time. Body movements and pressure inputs are tracked through cameras and load cells, allowing coaches to understand exactly how the athlete performed during the simulation and provide sharper, data-driven feedback.",
+      "media": [
+        {
+          "video": "/videos/scroll/skeleton-capture.mp4",
+          "poster": "/videos/scroll/skeleton-capture-poster.jpg",
+          "alt": "Animation: the athlete's tracked body points plotted in 3D during a run.",
+          "ratio": 1.0938
+        }
+      ]
     },
     {
-      label: "Build the Track",
-      text: "From satellite data to virtual tracks. Each course can be recreated from GPS and satellite data, transforming real-world geometry into an accurate digital mesh. Coaches can also design custom tracks tailored to specific training objectives, creating controlled environments built around the athlete’s needs.",
-      model: '/models/Cortina_track.glb', modelOptions: { view: 'top' }, mediaSide: 'right'
+      "kind": "model",
+      "label": "Build the Track",
+      "text": "From satellite data to virtual tracks. Each course can be recreated from GPS and satellite data, transforming real-world geometry into an accurate digital mesh. Coaches can also design custom tracks tailored to specific training objectives, creating controlled environments built around the athlete’s needs.",
+      "model": "/models/Cortina_track.glb",
+      "side": "right",
+      "modelOptions": {
+        "view": "top"
+      }
     }
   ]}
-  description={project.description}
+  description={"This project brings skeleton training into a new era by combining immersive simulation, realistic sled dynamics, and advanced athlete monitoring in a single training environment.\n\nAccess to high-quality skeleton training is often limited by the small number of tracks worldwide, seasonal conditions, travel costs, and the safety risks of high-speed descents. The simulator is designed to reduce these barriers, giving athletes the possibility to train more frequently, in safer, controlled, and repeatable conditions.\n\nAthletes interact with a physical sled mounted on a motion platform while sliding through virtual tracks that can replicate real-world courses or be custom-designed for specific training goals. This creates a realistic Human-in-the-Loop experience, where the athlete’s movements, posture, and steering actions directly influence the simulation.\n\nDuring each run, markerless cameras and load cells capture body motion, pressure inputs, and athlete–sled interaction. This data gives coaches a detailed view of the athlete’s technique, helping them analyze performance, identify recurring patterns, and detect areas for improvement.\n\nBy transforming each simulated descent into a measurable training session, the system allows feedback to be supported by objective data rather than observation alone. The result is a safer, smarter, and more accessible way to improve skeleton performance."}
   publications={publications}
-  prevActivity={{ label: "Robotic Liquid Handling", href: '/activities/robotic-liquid-handling/' }}
-  nextActivity={{ label: "3D Human Poses Estimation", href: '/activities/3d-human-poses-estimation/' }}
+  prevActivity={{
+    "label": "Robotic Liquid Handling",
+    "href": "/activities/robotic-liquid-handling/"
+  }}
+  nextActivity={{
+    "label": "3D Human Poses Estimation",
+    "href": "/activities/3d-human-poses-estimation/"
+  }}
 />

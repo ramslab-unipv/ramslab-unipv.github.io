@@ -1,44 +1,53 @@
 ---
-import ProjectScrollLayout from '../../components/ProjectScrollLayout.astro';
+import ProjectStoryLayout from '../../components/ProjectStoryLayout.astro';
 import { getProjectPublications } from '../../lib/publications';
 
-const project = {
-  title: "DEMETRA",
-  subtitle: "Pruning Virtual Training Simulator",
-  vision: "Redefining agricultural precision through immersive virtual environments and robotic simulation.",
-  description: "DEMETRA is an innovative research platform dedicated to the digitization of pruning techniques and the advancement of agricultural training. At its core, the project leverages a human-in-the-loop approach, placing the operator inside a highly immersive virtual environment. By seamlessly integrating advanced technologies, such as omnidirectional locomotion systems and authentic haptic interfaces, DEMETRA allows users to move freely and physically interact with digital plants exactly as they would in a real orchard. Beyond offering an unprecedented, safe, and optimized environment for upskilling agricultural workers, the platform serves a dual purpose. By combining high-fidelity physics simulations with precise digital twins, DEMETRA provides a robust, risk-free testing ground for validating and refining automated robotic pruning algorithms, shaping the future of smart agriculture.",
-  funding: "Produced within the NODES project, financed by the MUR on M4C2 funds - Investment 1.5 'Innovation Ecosystems', within the PNRR financed by the European Union - NextGenerationEU (Grant agreement Cod. n.ECS00000036)."
-};
 const publications = await getProjectPublications('demetra');
 ---
 
-<ProjectScrollLayout
-  title={project.title}
-  subtitle={project.subtitle}
-  vision={project.vision}
+<ProjectStoryLayout
+  title="Demetra"
+  subtitle="Pruning Virtual Training Simulator"
   accentColor="#22c55e"
-  world={{ video: '/videos/scroll/demetra-world.mp4', poster: '/videos/scroll/demetra-world-poster.jpg' }}
-  sections={[
-    {
-      label: "Unlimited Locomotion",
-      text: "Walk naturally through the virtual rows as if you were in the field. Explore the entire environment and select any tree with total freedom of movement.",
-      video: '/videos/scroll/demetra-walker.mp4', poster: '/videos/scroll/demetra-walker-poster.jpg',
-      videoLabel: "A person in a VR headset walking on the omnidirectional treadmill."
-    },
-    {
-      label: "Digital Twin",
-      text: "From high-resolution photogrammetry to high-fidelity virtual models. Real trees are reconstructed with absolute precision, allowing for realistic pruning simulations.",
-      model: '/models/tree_old.glb', mediaSide: 'right'
-    },
-    {
-      label: "Real-Tool Integration",
-      text: "Erase the boundary between simulation and practice by using real pruning tools. Experience one-to-one haptic feedback in a real-time, accelerating skill acquisition through a natural and familiar tactile experience.",
-      model: '/models/shear.glb', modelOptions: { build: false, anim: 'shears', size: 0.7 }, mediaSide: 'left'
-    }
+  activity="demetra-nodes"
+  cover={{ video: '/videos/scroll/demetra-world.mp4', poster: '/videos/scroll/demetra-world-poster.jpg', alt: 'Walking through the virtual hazelnut orchard.' }}
+  vision="Redefining agricultural precision through immersive virtual environments and robotic simulation."
+  intro={[
+    'DEMETRA is an innovative research platform dedicated to the digitization of pruning techniques and the advancement of agricultural training. At its core, the project leverages a human-in-the-loop approach, placing the operator inside a highly immersive virtual environment.',
+    'By seamlessly integrating advanced technologies, such as omnidirectional locomotion systems and authentic haptic interfaces, DEMETRA allows users to move freely and physically interact with digital plants exactly as they would in a real orchard.',
   ]}
-  description={project.description}
+  chapters={[
+    {
+      kind: 'media',
+      label: 'Unlimited Locomotion',
+      text: 'Walk naturally through the virtual rows as if you were in the field. Explore the entire environment and select any tree with total freedom of movement.',
+      media: [
+        { video: '/videos/scroll/demetra-walker.mp4', poster: '/videos/scroll/demetra-walker-poster.jpg', alt: 'A person in a VR headset walking on the omnidirectional treadmill.', ratio: 1440 / 2200 },
+        { video: '/videos/scroll/demetra-world.mp4', poster: '/videos/scroll/demetra-world-poster.jpg', alt: 'What the person sees: the rows of the virtual orchard.', ratio: 1912 / 1220 },
+      ],
+    },
+    {
+      kind: 'model',
+      label: 'Digital Twin',
+      text: 'From high-resolution photogrammetry to high-fidelity virtual models. Real trees are reconstructed with absolute precision, allowing for realistic pruning simulations.',
+      model: '/models/tree_old.glb', modelOptions: { size: 1.45 }, side: 'right',
+    },
+    {
+      kind: 'model',
+      label: 'Real-Tool Integration',
+      text: 'Erase the boundary between simulation and practice by using real pruning tools. Experience one-to-one haptic feedback in a real-time, accelerating skill acquisition through a natural and familiar tactile experience.',
+      model: '/models/shear.glb', modelOptions: { build: false, anim: 'shears', size: 0.95, sizeMobile: 0.85 }, side: 'left',
+      media: [{ video: '/videos/scroll/demetra-pov.mp4', poster: '/videos/scroll/demetra-pov-poster.jpg', alt: 'First-person view: pruning a virtual hazelnut tree with a real pruning tool.', ratio: 1912 / 1076, focus: '50% 75%' }],
+    },
+    {
+      kind: 'statement',
+      lead: 'Beyond offering an unprecedented, safe, and optimized environment for upskilling agricultural workers, the platform serves a dual purpose.',
+      text: 'By combining high-fidelity physics simulations with precise digital twins, DEMETRA provides a robust, risk-free testing ground for validating and refining automated robotic pruning algorithms, shaping the future of smart agriculture.',
+    },
+  ]}
+  description="DEMETRA is an innovative research platform dedicated to the digitization of pruning techniques and the advancement of agricultural training. At its core, the project leverages a human-in-the-loop approach, placing the operator inside a highly immersive virtual environment. By seamlessly integrating advanced technologies, such as omnidirectional locomotion systems and authentic haptic interfaces, DEMETRA allows users to move freely and physically interact with digital plants exactly as they would in a real orchard. Beyond offering an unprecedented, safe, and optimized environment for upskilling agricultural workers, the platform serves a dual purpose. By combining high-fidelity physics simulations with precise digital twins, DEMETRA provides a robust, risk-free testing ground for validating and refining automated robotic pruning algorithms, shaping the future of smart agriculture."
   publications={publications}
-  funding={project.funding}
-  prevActivity={{ label: "AHBI", href: '/activities/ahbi/' }}
-  nextActivity={{ label: "Dynamica", href: '/activities/dynamica/' }}
+  funding="Produced within the NODES project, financed by the MUR on M4C2 funds - Investment 1.5 'Innovation Ecosystems', within the PNRR financed by the European Union - NextGenerationEU (Grant agreement Cod. n.ECS00000036)."
+  prevActivity={{ label: 'AHBI', href: '/activities/ahbi/' }}
+  nextActivity={{ label: 'Dynamica', href: '/activities/dynamica/' }}
 />

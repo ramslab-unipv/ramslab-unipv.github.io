@@ -1,57 +1,94 @@
 ---
-import ProjectScrollLayout from '../../components/ProjectScrollLayout.astro';
+import ProjectStoryLayout from '../../components/ProjectStoryLayout.astro';
 import { getProjectPublications } from '../../lib/publications';
 
-const project = {
-  title: "ROBOTIC LIQUID HANDLING",
-  subtitle: "Robots move containers, not fluids. We give them the vision to measure liquid dynamics and the algorithms to optimize transport, suppress sloshing, or enforce controlled mixing.",
-  description: `Industrial robots manipulate containers, not liquids. The fluid inside is typically treated as an unpredictable disturbance, leading to sluggish, conservative trajectories or uncontrolled sloshing that degrades cycle times. This research treats liquid dynamics differently: as a physical system to be measured, modeled, and actively controlled.
-
-Using a vision-based approach, the robot performs brief exploratory excitations to characterize the free-surface response of an unknown liquid. The extracted dynamic signature directly feeds numerical optimization algorithms to generate task-specific trajectories. 
-
-Motion is mathematically tailored to the fluid's physics. The objective can switch seamlessly from minimizing transfer time under strict sloshing constraints, to eliminating residual vibrations upon arrival, to actively exploiting resonance for in-transit mixing.
-
-By linking vision-based measurement with trajectory optimization, we eliminate trial-and-error programming. The result is an adaptive robotic system that observes the fluid, extracts its dominant dynamics, and executes the optimal motion strategy—regardless of the liquid or container.`,
-  funding: "This research was funded by MED4REPAIR - Smart advanced medical devices for tissue repair “Collabora e Innova” , R1.2024.0005575 27/11/2024, PR FESR 2021–2027 Regione Lombardia (Project ID 6064179)."
-};
 const publications = await getProjectPublications('robotic-liquid-handling');
 ---
 
-<ProjectScrollLayout
-  title={project.title}
-  subtitle={project.subtitle}
+<ProjectStoryLayout
+  title={"Robotic Liquid Handling"}
+  subtitle={"Robots move containers, not fluids. We give them the vision to measure liquid dynamics and the algorithms to optimize transport, suppress sloshing, or enforce controlled mixing."}
   accentColor="#f97316"
-  world={{ video: '/videos/scroll/liquid-world.mp4', poster: '/videos/scroll/liquid-world-poster.jpg' }}
-  sections={[
+  activity="robotic-liquid-handling"
+  cover={{
+    "video": "/videos/scroll/liquid-world.mp4",
+    "poster": "/videos/scroll/liquid-world-poster.jpg",
+    "alt": "A robotic arm transferring a liquid container."
+  }}
+  vision={"Turning liquid sloshing from an unpredictable disturbance into a physical system robots can measure and control."}
+  chapters={[
     {
-      label: "MOVING LIQUIDS IS NOT JUST MOVING CONTAINERS",
-      text: "Liquids are not rigid bodies. They oscillate, resonate, and spill. Yet, industrial robots still move them blindly. We give robots the ability to measure and anticipate fluid dynamics, turning chaotic sloshing into a controlled variable.",
-      video: '/videos/projects/Media2.mp4'
+      "kind": "media",
+      "label": "MOVING LIQUIDS IS NOT JUST MOVING CONTAINERS",
+      "text": "Liquids are not rigid bodies. They oscillate, resonate, and spill. Yet, industrial robots still move them blindly. We give robots the ability to measure and anticipate fluid dynamics, turning chaotic sloshing into a controlled variable.",
+      "media": [
+        {
+          "video": "/videos/projects/Media2.mp4",
+          "alt": "Side view of the liquid free surface sloshing inside the container.",
+          "ratio": 1.8276
+        }
+      ]
     },
     {
-      label: "CHARACTERIZE BEFORE OPTIMIZING",
-      text: "Forget slow manual tuning. When handling an unknown liquid, the robot performs a rapid set of exploratory motions. Through vision-based observation, it identifies the system's dynamic signature in seconds, extracting the exact parameters needed for optimization.",
-      image: '/images/projects/Picture2.png'
+      "kind": "media",
+      "label": "CHARACTERIZE BEFORE OPTIMIZING",
+      "text": "Forget slow manual tuning. When handling an unknown liquid, the robot performs a rapid set of exploratory motions. Through vision-based observation, it identifies the system's dynamic signature in seconds, extracting the exact parameters needed for optimization.",
+      "media": [
+        {
+          "image": "/images/projects/Picture2_white.png",
+          "alt": "Model of the liquid free surface: wave height η(x,t) in a container of length L filled to height h.",
+          "ratio": 1.6013,
+          "chart": true
+        }
+      ]
     },
     {
-      label: "OPTIMIZE THE MOTION FOR THE TASK",
-      text: "With the dynamics mapped, motion is no longer guesswork. Trajectories are numerically optimized to push physical limits: minimize transfer time without spilling, cancel out residual vibrations at the target, or deliberately excite resonance for controlled mixing.",
-      image: '/images/projects/Picture3.png'
+      "kind": "media",
+      "label": "OPTIMIZE THE MOTION FOR THE TASK",
+      "text": "With the dynamics mapped, motion is no longer guesswork. Trajectories are numerically optimized to push physical limits: minimize transfer time without spilling, cancel out residual vibrations at the target, or deliberately excite resonance for controlled mixing.",
+      "media": [
+        {
+          "image": "/images/projects/Picture3_white.png",
+          "alt": "Sloshing height over time: the acquired slosh compared with the residuals model, within the sloshing limit.",
+          "ratio": 1.6681,
+          "chart": true
+        }
+      ]
     },
     {
-      label: "FROM SAFE TRANSFER TO CONTROLLED MIXING",
-      text: "Sloshing is treated as a defect, but it is just energy. We use it. While most approaches try to suppress fluid motion, we actively shape it. The same robotic trajectory that guarantees zero-spill transport can be re-engineered to induce vigorous, controlled mixing.",
-      video: '/videos/projects/Media1.mp4'
+      "kind": "media",
+      "label": "FROM SAFE TRANSFER TO CONTROLLED MIXING",
+      "text": "Sloshing is treated as a defect, but it is just energy. We use it. While most approaches try to suppress fluid motion, we actively shape it. The same robotic trajectory that guarantees zero-spill transport can be re-engineered to induce vigorous, controlled mixing.",
+      "media": [
+        {
+          "video": "/videos/projects/Media1.mp4",
+          "alt": "The robot moving a liquid container along an optimized trajectory.",
+          "ratio": 1.7778
+        }
+      ]
     },
     {
-      label: "TOWARDS ADAPTIVE LIQUID-HANDLING ROBOTS",
-      text: "Hardcoded trajectories are obsolete. By integrating vision, dynamic modeling, and optimization, we build adaptive liquid-handling systems. The robot observes, models the physics, and computes the optimal path—regardless of the container or the fluid.",
-      image: '/images/projects/Picture4.png'
+      "kind": "media",
+      "label": "TOWARDS ADAPTIVE LIQUID-HANDLING ROBOTS",
+      "text": "Hardcoded trajectories are obsolete. By integrating vision, dynamic modeling, and optimization, we build adaptive liquid-handling systems. The robot observes, models the physics, and computes the optimal path—regardless of the container or the fluid.",
+      "media": [
+        {
+          "image": "/images/projects/Picture4.png",
+          "alt": "A liquid container held in the robot’s end-effector.",
+          "ratio": 1.0841
+        }
+      ]
     }
   ]}
-  description={project.description}
+  description={"Industrial robots manipulate containers, not liquids. The fluid inside is typically treated as an unpredictable disturbance, leading to sluggish, conservative trajectories or uncontrolled sloshing that degrades cycle times. This research treats liquid dynamics differently: as a physical system to be measured, modeled, and actively controlled.\n\nUsing a vision-based approach, the robot performs brief exploratory excitations to characterize the free-surface response of an unknown liquid. The extracted dynamic signature directly feeds numerical optimization algorithms to generate task-specific trajectories. \n\nMotion is mathematically tailored to the fluid's physics. The objective can switch seamlessly from minimizing transfer time under strict sloshing constraints, to eliminating residual vibrations upon arrival, to actively exploiting resonance for in-transit mixing.\n\nBy linking vision-based measurement with trajectory optimization, we eliminate trial-and-error programming. The result is an adaptive robotic system that observes the fluid, extracts its dominant dynamics, and executes the optimal motion strategy—regardless of the liquid or container."}
   publications={publications}
-  funding={project.funding}
-  prevActivity={{ label: "Airflow Dynamics", href: '/activities/air-flow-dynamic/' }}
-  nextActivity={{ label: "Human-Centric Skeleton Simulator", href: '/activities/human-centric-skeleton-simulator/' }}
+  funding={"This research was funded by MED4REPAIR - Smart advanced medical devices for tissue repair “Collabora e Innova” , R1.2024.0005575 27/11/2024, PR FESR 2021–2027 Regione Lombardia (Project ID 6064179)."}
+  prevActivity={{
+    "label": "Airflow Dynamics",
+    "href": "/activities/air-flow-dynamic/"
+  }}
+  nextActivity={{
+    "label": "Human-Centric Skeleton Simulator",
+    "href": "/activities/human-centric-skeleton-simulator/"
+  }}
 />
