@@ -4,5 +4,5 @@ authors: ["Todesca D.", "Fabiocchi D.", "Fuentes J.F.", "Giulietti N.", "Carneva
 year: 2025
 venue: "Conference Proceedings - 2025 IEEE International Conference on Metrology for eXtended Reality ; Artificial Intelligence and Neural Engineering ; MetroXRAINE 2025, pp. 417-422"
 doi: "10.1109/MetroXRAINE66377.2025.11340187"
-relatedProjects: ["3d-human-poses-estimation"]
+relatedProjects: ["3d-human-poses-estimation", "ahbi"]
 ---
