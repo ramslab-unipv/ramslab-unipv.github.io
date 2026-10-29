@@ -1,8 +1,10 @@
 ---
 title: "Design of an Environment for Virtual Training Based on Digital Reconstruction: From Real Vegetation to Its Tactile Simulation"
-authors: ["Martinelli A.", "Fabiocchi D.", "Picchio F.", "Giberti H.", "Carnevale M."]
+authors: ["A. Martinelli", "D. Fabiocchi", "F. Picchio", "H. Giberti", "M. Carnevale"]
 year: 2025
-venue: "Designs, vol. 9, no. 2, art. no. 32"
-url: "/pdfs/design-of-an-environment-for-virtual-training-based-on-digital-reconstruction-from-real-vegetation-to-its-tactile-simula.pdf"
+publicationDate: "2025-03-10"
+venue: "Designs, vol. 9, no. 2, Art. no. 32"
+url: "https://www.mdpi.com/2411-9660/9/2/32"
 doi: "10.3390/designs9020032"
+relatedProjects: ["demetra"]
 ---

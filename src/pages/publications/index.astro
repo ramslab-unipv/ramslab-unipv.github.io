@@ -4,8 +4,9 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PublicationItem from '../../components/PublicationItem.astro';
 import { getCollection } from 'astro:content';
+import { comparePublications } from '../../lib/publications';
 
-const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title));
+const publications = (await getCollection('publications')).sort((a, b) => comparePublications(a.data, b.data));
 const groupedPublications = Object.entries(
   publications.reduce<Record<string, typeof publications>>((groups, publication) => {
     const key = String(publication.data.year);
@@ -39,7 +40,6 @@ const groupedPublications = Object.entries(
                   year={publication.data.year}
                   venue={publication.data.venue}
                   url={publication.data.url}
-                  doi={publication.data.doi}
                 />
               ))}
             </div>

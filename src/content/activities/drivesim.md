@@ -1,6 +1,6 @@
 ---
 title: "Driving Simulator"
-excerpt: "An immersive driving simulator for rehabilitation therapy pathways, featuring multi-sensory feedback and adaptable modes for patients with psychophysical pathologies."
+excerpt: "A dynamic driving simulator with configurable exergames, physical feedback and recorded session measures for rehabilitation-oriented research."
 year: 2024
 status: "ONGOING"
 tags: ["simulation", "rehabilitation", "virtual reality", "haptics"]

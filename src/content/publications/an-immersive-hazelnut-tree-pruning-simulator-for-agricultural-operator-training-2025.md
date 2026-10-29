@@ -1,8 +1,10 @@
 ---
 title: "An Immersive Hazelnut Tree Pruning Simulator for Agricultural Operator Training"
-authors: ["Fabiocchi D.", "Sergenti C.", "Placa S.L.", "Carnevale M.", "Giberti H."]
+authors: ["D. Fabiocchi", "C. Sergenti", "S. La Placa", "M. Carnevale", "H. Giberti"]
 year: 2025
-venue: "Conference Proceedings - 2025 IEEE International Conference on Metrology for eXtended Reality ; Artificial Intelligence and Neural Engineering ; MetroXRAINE 2025, pp. 483-488"
-url: "/pdfs/an-immersive-hazelnut-tree-pruning-simulator-for-agricultural-operator-training-2025.pdf"
+publicationDate: "2025-10-22"
+venue: "In: 2025 IEEE International Conference on Metrology for eXtended Reality, Artificial Intelligence and Neural Engineering (MetroXRAINE), pp. 483–488"
+url: "https://ieeexplore.ieee.org/document/11340139"
 doi: "10.1109/MetroXRAINE66377.2025.11340139"
+relatedProjects: ["demetra"]
 ---

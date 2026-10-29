@@ -1,95 +1,66 @@
 ---
-import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
-import { withBase } from '../../lib/assets';
+import ProjectStoryLayout from '../../components/ProjectStoryLayout.astro';
+import { getProjectPublications } from '../../lib/publications';
 
-const project = {
-  title: "Human in the Loop Skeleton Simulator",
-  subtitle: "Train Smarter. Slide Faster. Perform Better",
-  accentColor: "#0ea5e9", // Sky blue for ice/winter theme
-  description: `This project brings skeleton training into a new era by combining immersive simulation, realistic sled dynamics, and advanced athlete monitoring in a single training environment.
-
-Access to high-quality skeleton training is often limited by the small number of tracks worldwide, seasonal conditions, travel costs, and the safety risks of high-speed descents. The simulator is designed to reduce these barriers, giving athletes the possibility to train more frequently, in safer, controlled, and repeatable conditions.
-
-Athletes interact with a physical sled mounted on a motion platform while sliding through virtual tracks that can replicate real-world courses or be custom-designed for specific training goals. This creates a realistic Human-in-the-Loop experience, where the athlete’s movements, posture, and steering actions directly influence the simulation.
-
-During each run, markerless cameras and load cells capture body motion, pressure inputs, and athlete–sled interaction. This data gives coaches a detailed view of the athlete’s technique, helping them analyze performance, identify recurring patterns, and detect areas for improvement.
-
-By transforming each simulated descent into a measurable training session, the system allows feedback to be supported by objective data rather than observation alone. The result is a safer, smarter, and more accessible way to improve skeleton performance.`
-};
+const publications = await getProjectPublications('human-centric-skeleton-simulator');
 ---
 
-<ProjectImmersiveLayout
-  title={project.title}
-  subtitle={project.subtitle}
-  accentColor={project.accentColor}
-  heroVideo={withBase('/videos/projects/POV_track.mp4')}
-  sectionA={{
-    label: "Train Beyond Track Limitations",
-    text: "Slide through iconic tracks around the world from a single training environment. Move freely, experience every second of sessions, and train beyond the geographical limits.",
-    bgImage: withBase('/images/projects/Pista_Sfondo.png'),
-    sideImage: withBase('/images/projects/Sim_skeleton.png'),
+<ProjectStoryLayout
+  title={"Human-in-the-Loop Skeleton Simulator"}
+  accentColor="#0ea5e9"
+  activity="human-centric-skeleton-simulator"
+  cover={{
+    "video": "/videos/scroll/skeleton-world.mp4",
+    "poster": "/videos/scroll/skeleton-world-poster.jpg",
+    "alt": "First-person view down the virtual skeleton track."
   }}
-  sectionB={{
-    label: "Capture Human Behaviour",
-    text: "Capture the athlete’s behavior in real time. Body movements and pressure inputs are tracked through cameras and load cells, allowing coaches to understand exactly how the athlete performed during the simulation and provide sharper, data-driven feedback.",
-    bgImage: withBase('/images/projects/Pista_Sfondo_2.png'),
-    sideVideoWide: withBase('/videos/projects/skeleton_animation.mp4'),
+  vision={"The simulator reproduces a skeleton descent in the laboratory while measuring the athlete's movements and interaction forces."}
+  chapters={[
+    {
+      "kind": "media",
+      "label": "Laboratory simulation",
+      "text": "The athlete lies on a physical sled mounted on a motion platform and views a virtual track. A sled dynamics model determines the simulated descent, providing a laboratory setting for investigating steering-related actions.",
+      "media": [
+        {
+          "image": "/images/projects/Sim_skeleton.png",
+          "alt": "An athlete wearing a VR headset lies on the skeleton sled mounted on the motion platform.",
+          "ratio": 1.3346
+        }
+      ]
+    },
+    {
+      "kind": "media",
+      "label": "Motion and force measurements",
+      "text": "Markerless cameras measure body movement while load cells record the athlete's interaction with the sled. The measurements support analysis of steering-related actions. Pose-estimation methods are evaluated against optical motion capture to examine their performance in the prone posture and under equipment occlusions.",
+      "media": [
+        {
+          "video": "/videos/scroll/skeleton-capture.mp4",
+          "poster": "/videos/scroll/skeleton-capture-poster.jpg",
+          "alt": "Animation: the athlete's tracked body points plotted in 3D during a run.",
+          "ratio": 1.0938
+        }
+      ]
+    },
+    {
+      "kind": "model",
+      "label": "Virtual track geometry",
+      "text": "GPS and satellite data are used to reconstruct track geometry for the virtual environment. The system also supports custom tracks, allowing researchers and coaches to define courses for a selected simulation task.",
+      "model": "/models/Cortina_track.glb",
+      "side": "right",
+      "modelOptions": {
+        "view": "top"
+      }
+    }
+  ]}
+  description={"This research platform combines a physical skeleton sled, a motion platform, a sled dynamics model and a virtual track. Camera-based body tracking and load-cell measurements are used to study athlete–sled interaction during simulated descents. Research includes evaluation of steering-related motion measurements and adaptation of pose-estimation models to the posture and occlusions encountered in the simulator."}
+  publications={publications}
+  funding={"The study of markerless motion measurement in the simulator is supported by the Italian Ministry of University and Research (MUR) through the complementary actions to the National Recovery and Resilience Plan (NRRP), \"Fit4MedRob — Fit for Medical Robotics\" (grant PNC0000007)."}
+  prevActivity={{
+    "label": "Robotic Liquid Handling",
+    "href": "/activities/robotic-liquid-handling/"
   }}
-  sectionC={{
-    label: "Build the Track",
-    text: "From satellite data to virtual tracks. Each course can be recreated from GPS and satellite data, transforming real-world geometry into an accurate digital mesh. Coaches can also design custom tracks tailored to specific training objectives, creating controlled environments built around the athlete’s needs.",
-    bgVideo: withBase('/videos/projects/POV_track.mp4'),
-    model3d: withBase('/models/Cortina_track.glb'), 
+  nextActivity={{
+    "label": "Real-time 3D Human Pose Estimation",
+    "href": "/activities/3d-human-poses-estimation/"
   }}
-  description={project.description}
-  prevActivity={{ label: "Robotic Liquid Handling", href: withBase('/activities/robotic-liquid-handling/') }}
-  nextActivity={{ label: "3D Human Poses Estimation", href: withBase('/activities/3d-human-poses-estimation/') }}
 />
-
-<style is:global>
-  /* Modifiche specifiche per la pagina Skeleton Simulator */
-  
-  /* Blocco 1: Rimpicciolisce e raddrizza la foto */
-  .locomotion-bg .tech-image-container {
-    max-width: 85%; 
-    margin: 0 auto;
-    transform: rotate(0deg); 
-    border-radius: 12px;
-  }
-
-  /* Blocco 2: Video quadrato e zoommato */
-  .section:nth-of-type(3) .side-wide-video {
-    aspect-ratio: 1 / 1 !important;
-    max-width: 500px; 
-    margin: 0 auto;
-  }
-  
-  .section:nth-of-type(3) .side-wide-video video {
-    transform: scale(1.6) translateY(12%); /* Effetto zoom + sposta l'inquadratura per centrare il soggetto più in basso */
-  }
-
-  /* Blocco 1 e 2: Sfondo più visibile */
-  .section:nth-of-type(2) .bg-media img,
-  .section:nth-of-type(3) .bg-media img {
-    opacity: 0.75 !important; 
-  }
-  
-  .section:nth-of-type(2) .bg-overlay,
-  .section:nth-of-type(3) .bg-overlay {
-    opacity: 0.6 !important; /* Rende il filtro nero meno pesante */
-  }
-
-  /* Blocco 2: Rimuove l'animazione di scorrimento (parallax) dallo sfondo */
-  .section:nth-of-type(3) .parallax-bg {
-    transform: none !important;
-  }
-
-  @media (max-width: 768px) {
-    .locomotion-bg .tech-image-container {
-      max-width: 100% !important;
-    }
-    .section:nth-of-type(3) .side-wide-video {
-      max-width: min(340px, 92vw) !important;
-    }
-  }
-</style>

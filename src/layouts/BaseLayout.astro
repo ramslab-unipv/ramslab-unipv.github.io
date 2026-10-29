@@ -25,7 +25,8 @@ const { title = site.siteTitle, description = site.siteDescription } = Astro.pro
     <slot />
     <script>
       function initMobileVideoAutoplay() {
-        const videos = document.querySelectorAll<HTMLVideoElement>('video');
+        // Scroll-scrubbed clips (data-scrub) are driven by the page, never autoplayed
+        const videos = document.querySelectorAll<HTMLVideoElement>('video:not([data-scrub])');
 
         videos.forEach((video) => {
           // Guarantee muted properties and inline attributes required by mobile browsers (iOS WebKit / Chrome)

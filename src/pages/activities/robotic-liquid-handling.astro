@@ -1,105 +1,93 @@
 ---
-import ProjectImmersiveLayout from '../../components/ProjectImmersiveLayout.astro';
-import { withBase } from '../../lib/assets';
+import ProjectStoryLayout from '../../components/ProjectStoryLayout.astro';
+import { getProjectPublications } from '../../lib/publications';
 
-const project = {
-  title: "ROBOTIC LIQUID HANDLING",
-  subtitle: "Robots move containers, not fluids. We give them the vision to measure liquid dynamics and the algorithms to optimize transport, suppress sloshing, or enforce controlled mixing.",
-  accentColor: "#f97316", // Orange
-  description: `Industrial robots manipulate containers, not liquids. The fluid inside is typically treated as an unpredictable disturbance, leading to sluggish, conservative trajectories or uncontrolled sloshing that degrades cycle times. This research treats liquid dynamics differently: as a physical system to be measured, modeled, and actively controlled.
-
-Using a vision-based approach, the robot performs brief exploratory excitations to characterize the free-surface response of an unknown liquid. The extracted dynamic signature directly feeds numerical optimization algorithms to generate task-specific trajectories. 
-
-Motion is mathematically tailored to the fluid's physics. The objective can switch seamlessly from minimizing transfer time under strict sloshing constraints, to eliminating residual vibrations upon arrival, to actively exploiting resonance for in-transit mixing.
-
-By linking vision-based measurement with trajectory optimization, we eliminate trial-and-error programming. The result is an adaptive robotic system that observes the fluid, extracts its dominant dynamics, and executes the optimal motion strategy—regardless of the liquid or container.`,
-  publications: [
-    {
-      title: "A Vision-Based marker-less measurement system for Real-Time Estimation of Human Body Inertial properties",
-      url: "https://doi.org/10.1016/j.measurement.2025.119843",
-      authors: "Giulietti N., Fabiocchi D., Todesca D., Carnevale M., Giberti H.",
-      venue: "Measurement: Journal of the International Measurement Confederation, 2026"
-    },
-    {
-      title: "On the use of low-cost 3D stereo depth camera to drive robot trajectories in contact-based applications",
-      url: "https://doi.org/10.1007/s00170-023-11851-x",
-      authors: "Zaki A.M.A., Carnevale M., Schlette C., Giberti H.",
-      venue: "International Journal of Advanced Manufacturing Technology, 2023"
-    },
-    {
-      title: "Trajectory Planning for Contact-Based Robotic Applications by Use of a 3D Stereo Depth Camera",
-      url: "https://doi.org/10.1109/ICRCV52986.2021.9546958",
-      authors: "Zaki A.M.A., Dmytriyev Y., Castelli K., Carnevale M., Giberti H.",
-      venue: "3rd International Conference on Robotics and Computer Vision, 2021"
-    }
-  ],
-  funding: "This research was funded by MED4REPAIR - Smart advanced medical devices for tissue repair “Collabora e Innova” , R1.2024.0005575 27/11/2024, PR FESR 2021–2027 Regione Lombardia (Project ID 6064179)."
-};
+const publications = await getProjectPublications('robotic-liquid-handling');
 ---
 
-<ProjectImmersiveLayout
-  title={project.title}
-  subtitle={project.subtitle}
-  accentColor={project.accentColor}
-  heroVideo={withBase('/videos/projects/Media1.mp4')}
-  sectionA={{
-    label: "MOVING LIQUIDS IS NOT JUST MOVING CONTAINERS",
-    text: "Liquids are not rigid bodies. They oscillate, resonate, and spill. Yet, industrial robots still move them blindly. We give robots the ability to measure and anticipate fluid dynamics, turning chaotic sloshing into a controlled variable.",
-    sideVideoWide: withBase('/videos/projects/Media2.mp4'),
-    bgImage: withBase('/images/projects/liquid-handling-bg.png')
+<ProjectStoryLayout
+  title={"Robotic Liquid Handling"}
+  accentColor="#f97316"
+  activity="robotic-liquid-handling"
+  cover={{
+    "video": "/videos/scroll/liquid-world.mp4",
+    "poster": "/videos/scroll/liquid-world-poster.jpg",
+    "alt": "A robotic arm transferring a liquid container."
   }}
-  sectionB={{
-    label: "CHARACTERIZE BEFORE OPTIMIZING",
-    text: "Forget slow manual tuning. When handling an unknown liquid, the robot performs a rapid set of exploratory motions. Through vision-based observation, it identifies the system's dynamic signature in seconds, extracting the exact parameters needed for optimization.",
-    sideImage: withBase('/images/projects/Picture2.png'),
-    bgImage: withBase('/images/projects/liquid-handling-bg.png')
-  }}
-  sectionC={{
-    label: "OPTIMIZE THE MOTION FOR THE TASK",
-    text: "With the dynamics mapped, motion is no longer guesswork. Trajectories are numerically optimized to push physical limits: minimize transfer time without spilling, cancel out residual vibrations at the target, or deliberately excite resonance for controlled mixing.",
-    sideImage: withBase('/images/projects/Picture3.png'),
-    bgImage: withBase('/images/projects/liquid-handling-bg.png')
-  }}
-  sectionD={{
-    label: "FROM SAFE TRANSFER TO CONTROLLED MIXING",
-    text: "Sloshing is treated as a defect, but it is just energy. We use it. While most approaches try to suppress fluid motion, we actively shape it. The same robotic trajectory that guarantees zero-spill transport can be re-engineered to induce vigorous, controlled mixing.",
-    sideVideoWide: withBase('/videos/projects/Media1.mp4'),
-    bgImage: withBase('/images/projects/liquid-handling-bg.png')
-  }}
-  sectionE={{
-    label: "TOWARDS ADAPTIVE LIQUID-HANDLING ROBOTS",
-    text: "Hardcoded trajectories are obsolete. By integrating vision, dynamic modeling, and optimization, we build adaptive liquid-handling systems. The robot observes, models the physics, and computes the optimal path—regardless of the container or the fluid.",
-    sideImage: withBase('/images/projects/Picture4.png'),
-    bgImage: withBase('/images/projects/liquid-handling-bg.png')
-  }}
-  description={project.description}
-  publications={project.publications}
-  funding={project.funding}
-  prevActivity={{ label: "Airflow Dynamics", href: withBase('/activities/air-flow-dynamic/') }}
-  nextActivity={{ label: "Human-Centric Skeleton Simulator", href: withBase('/activities/human-centric-skeleton-simulator/') }}
-/>
-
-<style is:global>
-  /* Increase visibility and adapt colors */
-  .bg-media img,
-  .bg-media video {
-    display: none;
-  }
-  .section .bg-media {
-    background-color: #000;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    inset: 0;
-  }
-  /* Shrink Picture 4 in Block 5 */
-  .section:nth-of-type(6) .tech-image-container {
-    max-width: 60%;
-    margin: 0 auto;
-  }
-  @media (max-width: 768px) {
-    .section:nth-of-type(6) .tech-image-container {
-      max-width: 92%;
+  vision={"The project investigates how measurements of liquid motion can support the design of robotic transport trajectories."}
+  chapters={[
+    {
+      "kind": "media",
+      "label": "Measuring the free surface",
+      "text": "Acceleration of a liquid-filled container produces free-surface oscillations, or sloshing. A vision-based measurement system records the liquid response while an industrial robot moves the container along prescribed trajectories.",
+      "media": [
+        {
+          "video": "/videos/projects/Media2.mp4",
+          "alt": "Side view of the liquid free surface sloshing inside the container.",
+          "ratio": 1.8276
+        }
+      ]
+    },
+    {
+      "kind": "media",
+      "label": "Experimental model assessment",
+      "text": "The measured response is compared with an analytical mass–spring–damper model. Repeated robotic trials provide data for examining the predicted surface motion and identifying discrepancies during transient oscillations.",
+      "media": [
+        {
+          "image": "/images/projects/Picture2_white.png",
+          "alt": "Model of the liquid free surface: wave height η(x,t) in a container of length L filled to height h.",
+          "ratio": 1.6013,
+          "chart": true
+        }
+      ]
+    },
+    {
+      "kind": "media",
+      "label": "Trajectory design",
+      "text": "A research objective is to use the measured dynamics when designing transport trajectories. Candidate objectives include limiting free-surface excursions during transfer and reducing residual oscillations at the destination.",
+      "media": [
+        {
+          "image": "/images/projects/Picture3_white.png",
+          "alt": "Sloshing height over time: the acquired slosh compared with the residuals model, within the sloshing limit.",
+          "ratio": 1.6681,
+          "chart": true
+        }
+      ]
+    },
+    {
+      "kind": "media",
+      "label": "Transport and mixing objectives",
+      "text": "The project also considers whether prescribed container motions could produce controlled mixing. This is a research objective alongside the reduction of unwanted oscillations during transport.",
+      "media": [
+        {
+          "video": "/videos/projects/Media1.mp4",
+          "alt": "A robot moves a liquid-filled container during an experimental trial.",
+          "ratio": 1.7778
+        }
+      ]
+    },
+    {
+      "kind": "media",
+      "label": "Adaptive methods under investigation",
+      "text": "The longer-term aim is to estimate liquid–container dynamics from visual measurements and use them to adapt motion planning. The experimental measurement pipeline provides data for investigating this approach across specified operating conditions.",
+      "media": [
+        {
+          "image": "/images/projects/Picture4.png",
+          "alt": "A liquid container held in the robot’s end-effector.",
+          "ratio": 1.0841
+        }
+      ]
     }
-  }
-</style>
+  ]}
+  description={"This activity studies liquid motion during robotic handling. A vision-based system measures the free-surface response of a container moved by an industrial manipulator. Published work compares experimental measurements with an analytical sloshing model. The wider project aims to use such measurements for system identification and trajectory design, including the investigation of transport with reduced oscillations and controlled mixing."}
+  publications={publications}
+  funding={"This activity is developed within MED4REPAIR — Smart advanced medical devices for tissue repair, co-funded by Regione Lombardia under the \"Collabora & Innova\" call, PR FESR 2021–2027 (project ID 6064179; application protocol R1.2024.0005575 of 27 November 2024)."}
+  prevActivity={{
+    "label": "Airflow Dynamics",
+    "href": "/activities/air-flow-dynamic/"
+  }}
+  nextActivity={{
+    "label": "Human-in-the-Loop Skeleton Simulator",
+    "href": "/activities/human-centric-skeleton-simulator/"
+  }}
+/>

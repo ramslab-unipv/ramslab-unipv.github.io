@@ -1,8 +1,9 @@
 ---
 title: "Neural Network Enabled Robotic Contact Measurement"
-authors: ["Zhou D.", "Furlan V.", "Giulietti N.", "Carnevale M.", "Giberti H."]
+authors: ["D. Zhou", "V. Furlan", "N. Giulietti", "M. Carnevale", "H. Giberti"]
 year: 2024
-venue: "2024 IEEE International Conference on Metrology for eXtended Reality ; Artificial Intelligence and Neural Engineering ; MetroXRAINE 2024 - Proceedings, pp. 19-23"
-url: "/pdfs/neural-network-enabled-robotic-contact-measurement-2024.pdf"
+publicationDate: "2024-10-21"
+venue: "In: 2024 IEEE International Conference on Metrology for eXtended Reality, Artificial Intelligence and Neural Engineering (MetroXRAINE), pp. 19–23"
+url: "https://ieeexplore.ieee.org/document/10796102"
 doi: "10.1109/MetroXRAINE62247.2024.10796102"
 ---

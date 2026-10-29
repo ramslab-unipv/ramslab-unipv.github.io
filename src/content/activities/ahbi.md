@@ -1,6 +1,6 @@
 ---
 title: "Advancing Human-Centric Bicycle Innovation (AHBI)"
-excerpt: "Combining multibody dynamics, advanced sensing and artificial intelligence to understand bicycle–rider interaction and enable more realistic cycling simulation."
+excerpt: "Camera-based measurement of cyclist posture, evaluated against an optoelectronic motion-capture reference."
 year: 2024
 status: "2025"
 tags: ["cycling", "biomechanics", "simulation", "AI"]

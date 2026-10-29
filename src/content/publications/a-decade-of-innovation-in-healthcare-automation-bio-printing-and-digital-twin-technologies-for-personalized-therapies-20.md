@@ -1,8 +1,9 @@
 ---
-title: "A decade of innovation in healthcare: Automation ; bio-printing and digital twin technologies for personalized therapies"
-authors: ["Ghavami D.", "Giulietti N.", "Sandri G.", "Giberti H."]
+title: "A decade of innovation in healthcare: Automation, bio-printing and digital twin technologies for personalized therapies"
+authors: ["D. Ghavami", "N. Giulietti", "G. Sandri", "H. Giberti"]
 year: 2026
-venue: "International Journal of Pharmaceutics: X, vol. 11, art. no. 100526"
-url: "/pdfs/a-decade-of-innovation-in-healthcare-automation-bio-printing-and-digital-twin-technologies-for-personalized-therapies-20.pdf"
+publicationDate: "2026-06"
+venue: "International Journal of Pharmaceutics: X, vol. 11, Art. no. 100526"
+url: "https://www.sciencedirect.com/science/article/pii/S2590156726000460"
 doi: "10.1016/j.ijpx.2026.100526"
 ---

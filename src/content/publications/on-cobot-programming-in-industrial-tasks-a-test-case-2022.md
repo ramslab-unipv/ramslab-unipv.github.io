@@ -1,8 +1,9 @@
 ---
 title: "On cobot programming in industrial tasks: a test case"
-authors: ["Dmytriyev Y.", "Carnevale M.", "Giberti H.", "Todeschini G."]
+authors: ["Y. Dmytriyev", "M. Carnevale", "H. Giberti", "G. Todeschini"]
 year: 2022
-venue: "HORA 2022 - 4th International Congress on Human-Computer Interaction ; Optimization and Robotic Applications ; Proceedings"
-url: "/pdfs/on-cobot-programming-in-industrial-tasks-a-test-case-2022.pdf"
+publicationDate: "2022-06-09"
+venue: "In: 2022 International Congress on Human-Computer Interaction, Optimization and Robotic Applications (HORA), pp. 1–9"
+url: "https://ieeexplore.ieee.org/document/9800018"
 doi: "10.1109/HORA55278.2022.9800018"
 ---

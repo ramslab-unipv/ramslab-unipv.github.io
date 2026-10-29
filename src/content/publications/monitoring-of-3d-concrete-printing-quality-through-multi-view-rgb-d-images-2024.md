@@ -1,8 +1,9 @@
 ---
 title: "Monitoring of 3D concrete printing quality through multi-view RGB-D images"
-authors: ["Zaki A.M.A.", "Carnevale M.", "Giberti H.", "Schlette C."]
+authors: ["A. M. A. Zaki", "M. Carnevale", "H. Giberti", "C. Schlette"]
 year: 2024
-venue: "Proceedings of the International Symposium on Automation and Robotics in Construction, pp. 980-987"
-url: "/pdfs/monitoring-of-3d-concrete-printing-quality-through-multi-view-rgb-d-images-2024.pdf"
+publicationDate: "2024-06-03"
+venue: "In: Proceedings of the 41st International Symposium on Automation and Robotics in Construction (ISARC), pp. 980–987"
+url: "https://www.iaarc.org/publications/2024_proceedings_of_the_41st_isarc_lille_france/monitoring_of_3d_concrete_printing_quality_through_multi-view_rgb-d_images.html"
 doi: "10.22260/ISARC2024/0127"
 ---

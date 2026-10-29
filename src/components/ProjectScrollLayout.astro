@@ -1,0 +1,408 @@
+---
+/**
+ * ProjectScrollLayout.astro
+ *
+ * The standard for every RAMSLAB project page, built on the scroll-craft
+ * engine (public/scrollcraft/, copied verbatim, never edited). Designed with
+ * Demetra and the Skeleton Simulator as the reference pages.
+ *
+ * The standard:
+ *   - black ground, white type, one accent colour per project
+ *   - one continuous "world": the project's video plays (autoplay, loop) behind
+ *     the whole story, and the scroll slowly walks the camera into it
+ *   - opening: the title (always upper case) with the subtitle right under it is
+ *     cut in two; the halves part and reveal the world
+ *   - first section: the text in a black card, the media rising beside it over the world
+ *   - next sections: black blocks, text card and media/3D model alternating sides;
+ *     they enter the same way (label, text, then media) as soon as they are on screen
+ *   - videos never follow the scroll: they autoplay in loop
+ *   - 3D models animate on their own and can be turned by dragging
+ *   - recap: description, and Publications / Funding always keep their place
+ *
+ * Usage:
+ *   <ProjectScrollLayout
+ *     title="DEMETRA" subtitle="..." accentColor="#22c55e"
+ *     world={{ video: '/videos/scroll/demetra-world.mp4', poster: '...' }}   (optional)
+ *     vision="..."                                                          (optional)
+ *     sections={[
+ *       { label, text, image: '/images/..' },            // image
+ *       { label, text, video: '/videos/..' },            // video
+ *       { label, text, model: '/models/x.glb', modelOptions: { build, anim, view, size } },
+ *       { label, text },                                 // text only
+ *     ]}
+ *     description="..." publications={[...]} funding="..." team={[...]}
+ *     prevActivity={{ label, href }} nextActivity={{ label, href }}
+ *   />
+ * Paths are site paths; the base path is added here.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import { withBase } from '../lib/assets';
+
+interface ModelOptions {
+  build?: boolean;            // points → wireframe → solid entrance (default true)
+  anim?: 'shears' | 'drive';  // shears: open/close swing · drive: the car follows the trajectory
+  view?: 'side' | 'top';      // camera angle (default side; 'top' for flat models such as a track)
+  size?: number;              // scale tweak (default 1)
+}
+interface Section {
+  label: string;
+  text: string;
+  image?: string;
+  imageAlt?: string;
+  video?: string;
+  poster?: string;
+  videoLabel?: string;
+  model?: string;
+  modelOptions?: ModelOptions;
+  mediaSide?: 'left' | 'right';   // black blocks: which side the media/model sits (default: alternating, starting right)
+}
+interface Publication { title: string; url: string; authors?: string; venue?: string; }
+interface TeamMember { name: string; role: string; }
+interface Props {
+  title: string;
+  subtitle?: string;
+  accentColor?: string;
+  world?: { video?: string; poster?: string; image?: string };
+  vision?: string;
+  sections: Section[];
+  description: string;
+  publications?: Publication[];
+  funding?: string;
+  team?: TeamMember[];
+  prevActivity?: { label: string; href: string };
+  nextActivity?: { label: string; href: string };
+}
+
+const {
+  title, subtitle, accentColor = '#22c55e', world, vision, sections,
+  description, publications = [], funding, team = [], prevActivity, nextActivity,
+} = Astro.props;
+
+const b = (p?: string) => (p ? withBase(p) : undefined);
+// title size follows its length so short and long titles both fill the opening
+const titleSize = title.length <= 10 ? 'xl' : title.length <= 40 ? 'lg' : 'md';
+const longSubtitle = (subtitle ?? '').length > 60;
+const [first, ...rest] = sections;
+---
+
+<BaseLayout title={`${title} — Immersive Experience`}>
+  <link rel="stylesheet" href={withBase('/scrollcraft/scrollcraft.css')} />
+  <div class="project-page-layout ps" style={`--accent: ${accentColor};`}>
+    <Header />
+    <span data-sc-progress></span>
+
+    <!-- THE WORLD · always playing, always behind; the scroll walks into it -->
+    <div class="ps-world" aria-hidden="true">
+      {world?.video
+        ? <video src={b(world.video)} poster={b(world.poster)} autoplay muted loop playsinline preload="auto"></video>
+        : world?.image && <img src={b(world.image)} alt="" />}
+      <div class="ps-world-light"></div>
+    </div>
+
+    <main id="main-content" class="ps-main">
+
+      <!-- OPENING · title and subtitle are cut in two and the halves part -->
+      <section class="ps-hero" data-ps data-sc-act="pin" data-sc-span="2.4" aria-labelledby="ps-title">
+        <div data-sc-stage class="ps-st ps-hero-st">
+          <h1 id="ps-title" class="sr-only">{title}</h1>
+          {subtitle && <p class="sr-only">{subtitle}</p>}
+          {['top', 'bot'].map((half) => (
+            <div class={`ps-half ps-half--${half}`} aria-hidden="true">
+              <div class="ps-word">
+                <div class="ps-head">
+                  <span class={`ps-title ps-title--${titleSize}`}>{title}</span>
+                  {subtitle && <p class={`ps-sub ${longSubtitle ? 'ps-sub--long' : ''}`}>{subtitle}</p>}
+                </div>
+              </div>
+            </div>
+          ))}
+          <span class="ps-slash" aria-hidden="true"></span>
+          {vision && <div class="ps-card ps-vision"><p>{vision}</p></div>}
+        </div>
+      </section>
+
+      <!-- FIRST SECTION · text card, the media rises beside it over the world -->
+      {first && (
+        <section class="ps-rise" data-ps data-sc-act="pin" data-sc-span="2.6" aria-labelledby="ps-s0">
+          <div data-sc-stage class="ps-st ps-rise-st">
+            <div class="ps-card ps-rise-text">
+              <h2 id="ps-s0" class="ps-label">{first.label}</h2>
+              <p class="ps-lede">{first.text}</p>
+            </div>
+            {(first.image || first.video) && (
+              <figure class="ps-rise-media">
+                {first.video
+                  ? <video src={b(first.video)} poster={b(first.poster)} autoplay muted loop playsinline preload="auto" aria-label={first.videoLabel ?? first.label}></video>
+                  : <img src={b(first.image)} alt={first.imageAlt ?? ''} />}
+              </figure>
+            )}
+          </div>
+        </section>
+      )}
+
+      <!-- NEXT SECTIONS · black blocks, text and media/model alternating sides -->
+      {rest.map((s, i) => {
+        const side = s.mediaSide ?? (i % 2 === 0 ? 'right' : 'left');
+        const flip = side === 'left';
+        const id = `ps-s${i + 1}`;
+        const opts = s.modelOptions ?? {};
+        return (
+          <section class={`ps-block ${flip ? 'ps-block--flip' : ''} ${!s.model && !s.image && !s.video ? 'ps-block--text' : ''}`} data-ps data-sc-act="pin" data-sc-span="2.6" aria-labelledby={id}>
+            <div data-sc-stage class="ps-st ps-block-st">
+              {s.model && (
+                <div class="ps-view ps-model" data-model={b(s.model)} data-build={opts.build === false ? '0' : '1'}
+                  data-anim={opts.anim ?? ''} data-view={opts.view ?? 'side'} data-size={opts.size ?? 1}></div>
+              )}
+              {!s.model && (s.image || s.video) && (
+                <div class="ps-view ps-view--media">
+                  {s.video
+                    ? <video src={b(s.video)} poster={b(s.poster)} autoplay muted loop playsinline preload="auto" aria-label={s.videoLabel ?? s.label}></video>
+                    : <img src={b(s.image)} alt={s.imageAlt ?? ''} loading="lazy" />}
+                </div>
+              )}
+              <div class="ps-card ps-block-text">
+                <h2 id={id} class="ps-label">{s.label}</h2>
+                <p class="ps-lede">{s.text}</p>
+              </div>
+            </div>
+          </section>
+        );
+      })}
+
+      <!-- RECAP · description; Publications, Team and Funding only when present -->
+      <section class="ps-recap">
+        <div class="container">
+          <div class="ps-info" data-sc-in>
+            <div class="ps-info-grid">
+              <div>
+                <h2 class="ps-info-label">Description</h2>
+                <p class="ps-info-description">{description}</p>
+              </div>
+              <div>
+                {publications.length > 0 && (
+                <div class="ps-info-group">
+                  <h3 class="ps-info-label">Publications</h3>
+                  <div class="dense-list">
+                    {publications.map((pub) => (
+                      <article class="ps-pub">
+                        <div class="text-list-title"><a href={pub.url} target="_blank" rel="noopener noreferrer" class="hover-underline">{pub.title}</a></div>
+                        {pub.authors && <div class="text-list-meta">{pub.authors}</div>}
+                        {pub.venue && <div class="text-emphasis">{pub.venue}</div>}
+                      </article>
+                    ))}
+                  </div>
+                </div>
+                )}
+                {team.length > 0 && (
+                  <div class="ps-info-group">
+                    <h3 class="ps-info-label">Team</h3>
+                    <ul class="ps-team">
+                      {team.map((m) => <li><strong>{m.name}</strong> · {m.role}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {funding && (
+                  <div class="ps-info-group">
+                    <h3 class="ps-info-label">Funding</h3>
+                    <p class="ps-funding">{funding}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <footer class="ps-info-footer">
+              {prevActivity ? <a href={b(prevActivity.href)} class="ps-nav">← <span>Previous Activity</span></a> : <span></span>}
+              {nextActivity ? <a href={b(nextActivity.href)} class="ps-nav"><span>Next Activity</span> →</a> : <span></span>}
+            </footer>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="ps-foot"><Footer /></div>
+  </div>
+
+  <script is:inline src={withBase('/scrollcraft/scrollcraft.js')}></script>
+  <script is:inline>
+    ScrollCraft.mount(document.body);
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // black blocks: mark each one "in" once it is well on screen (once)
+      var blocks = [].slice.call(document.querySelectorAll('.ps-block'));
+      function check() {
+        blocks.forEach(function (bl) {
+          if (!bl.classList.contains('is-in') && bl.getBoundingClientRect().top < innerHeight * 0.45) bl.classList.add('is-in');
+        });
+      }
+      window.addEventListener('scroll', check, { passive: true });
+      check();
+      // the walk: progress through the story drives the camera into the world
+      var root = document.querySelector('.ps');
+      var acts = [].slice.call(document.querySelectorAll('[data-ps]'));
+      if (!root || !acts.length) return;
+      var firstAct = acts[0], lastAct = acts[acts.length - 1];
+      (function tick() {
+        var top = firstAct.offsetTop, end = lastAct.offsetTop + lastAct.offsetHeight - innerHeight;
+        var w = reduce ? 0 : Math.max(0, Math.min(1, (scrollY - top) / Math.max(1, end - top)));
+        root.style.setProperty('--w', w.toFixed(4));
+        requestAnimationFrame(tick);
+      })();
+    })();
+  </script>
+
+  <script>
+    import '../scripts/projectModels';
+  </script>
+
+  <style is:global>
+    .ps, body:has(.ps) {
+      --sc-canvas: #000; --sc-surface: #0d0d0d; --sc-ink: #fff; --sc-ink-soft: rgb(255 255 255 / 0.75);
+      --sc-accent: var(--accent); --sc-accent-ink: #000;
+      --sc-font-display: var(--font-sans); --sc-font-text: var(--font-sans); --sc-font-mono: var(--font-sans);
+      --ps-top: 72px;
+      --w: 0;
+    }
+    body:has(.ps) { background: #000; font-size: 1rem; line-height: 1.45; letter-spacing: normal; }
+    html:has(.ps) { background: #000; scroll-behavior: auto; }
+    .ps [data-sc-progress] { background: var(--accent); }
+    .ps-main { position: relative; z-index: 1; color: #fff; font-family: var(--font-sans); }
+    .ps-st { --p: var(--sc-p, 0); background: transparent; overflow: hidden; }
+
+    /* ── the world ── */
+    .ps-world { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #000; }
+    .ps-world video, .ps-world img { width: 100%; height: 100%; object-fit: cover; display: block; max-width: none;
+      transform: scale(calc(1.06 + var(--w) * 0.5)) translateY(calc(var(--w) * -3%)); transform-origin: 50% 60%; }
+    .ps-world-light { position: absolute; inset: 0; background: radial-gradient(circle at center, rgb(0 0 0 / 0.15), rgb(0 0 0 / 0.7)); }
+
+    /* ── shared type ── */
+    .ps-label { margin: 0 0 1.1rem; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+    .ps-lede { margin: 0; font-size: clamp(1.2rem, 1.75vw, 1.75rem); line-height: 1.3; font-weight: 500; letter-spacing: -0.012em; }
+    .ps-card { background: #000; color: #fff; padding: clamp(1.5rem, 2.6vw, 2.5rem); box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8); }
+
+    /* ═══ opening ═══ */
+    .ps-hero-st {
+      --slash: clamp(0, (var(--p) - 0.02) / 0.12, 1);
+      --o: clamp(0, (var(--p) - 0.16) / 0.42, 1);
+      --open: calc(var(--o) * var(--o) * (3 - 2 * var(--o)));
+    }
+    .ps-half { position: absolute; left: 0; right: 0; z-index: 2; height: 50%; overflow: hidden; background: #000; }
+    .ps-half--top { top: 0; transform: translateY(calc(var(--open) * -118%)) rotate(calc(var(--open) * -3deg)); transform-origin: 0 100%; }
+    .ps-half--bot { bottom: 0; transform: translateY(calc(var(--open) * 118%)) rotate(calc(var(--open) * 2deg)); transform-origin: 100% 0; }
+    .ps-word { position: absolute; left: 0; right: 0; height: 200%; display: grid; place-items: center; }
+    .ps-half--top .ps-word { top: 0; }
+    .ps-half--bot .ps-word { bottom: 0; }
+    .ps-head { display: grid; justify-items: center; gap: clamp(1rem, 2.4vh, 1.75rem); text-align: center; padding: 0 var(--pad); }
+    .ps-title { display: block; font-weight: 900; text-transform: uppercase; letter-spacing: normal; color: var(--accent); text-align: center; }
+    .ps-title--xl { font-size: clamp(4.5rem, 16.5vw, 17rem); line-height: 0.8; }
+    .ps-title--lg { font-size: clamp(2.6rem, 6.2vw, 6.8rem); line-height: 0.95; max-width: 16ch; }
+    .ps-title--md { font-size: clamp(2.2rem, 4.6vw, 5rem); line-height: 0.98; max-width: 22ch; }
+    .ps-sub { margin: 0; font-size: clamp(0.9rem, 1.2vw, 1.15rem); font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #fff; }
+    .ps-sub--long { max-width: 60ch; font-size: clamp(1rem, 1.4vw, 1.3rem); font-weight: 400; letter-spacing: 0; text-transform: none; line-height: 1.4; color: rgb(255 255 255 / 0.85); }
+    .ps-slash { position: absolute; z-index: 3; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: #fff; pointer-events: none;
+      transform-origin: 0 50%; transform: scaleX(var(--slash)) rotate(-1.2deg); opacity: calc(1 - var(--open) * 2); }
+    .ps-vision { position: absolute; z-index: 1; left: var(--pad); bottom: clamp(2.5rem, 8vh, 5rem); max-width: 34rem;
+      opacity: clamp(0, (var(--p) - 0.55) / 0.2, 1); transform: translateY(calc((1 - clamp(0, (var(--p) - 0.55) / 0.2, 1)) * 4vh)); }
+    .ps-vision p { margin: 0; font-size: clamp(1.5rem, 2.6vw, 2.6rem); line-height: 1.14; font-weight: 700; letter-spacing: -0.02em; }
+
+    /* ═══ first section: rises over the world ═══ */
+    .ps-rise-st { --g: clamp(0, (var(--p) + 0.04) / 0.5, 1); --ge: calc(var(--g) * var(--g) * (3 - 2 * var(--g))); }
+    .ps-rise-text { position: absolute; z-index: 3; left: var(--pad); top: 50%; width: min(32rem, 38vw); transform: translateY(-50%); }
+    .ps-rise-media { position: absolute; z-index: 2; margin: 0; right: var(--pad); left: calc(var(--pad) + min(32rem, 38vw) + 3vw); top: calc(var(--ps-top) + 4vh); bottom: 4vh;
+      display: grid; place-items: center; transform: translateY(calc((1 - var(--ge)) * 95vh)) rotate(calc((1 - var(--ge)) * 3deg)); }
+    .ps-rise-media video, .ps-rise-media img { max-width: 100%; max-height: 100%; width: auto; height: auto; display: block; object-fit: contain;
+      border: 2px solid var(--accent); box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.8); background: #000; }
+
+    /* ═══ black blocks ═══ */
+    .ps-block-st { background: #000; color: #fff; }
+    .ps-view { position: absolute; z-index: 1; top: var(--ps-top); bottom: 0; left: 36%; right: 0; }
+    .ps-block-text { position: absolute; z-index: 2; left: var(--pad); top: 50%; width: min(32rem, 38vw); transform: translateY(-50%); }
+    .ps-block--flip .ps-view { left: 0; right: 36%; }
+    .ps-block--flip .ps-block-text { left: auto; right: var(--pad); }
+    .ps-model { cursor: grab; }
+    .ps-model:active { cursor: grabbing; }
+    .ps-model canvas { display: block; }
+    .ps-view--media { display: grid; place-items: center; padding: 6vh 4vw; }
+    .ps-block .ps-view--media { right: calc(min(32rem, 38vw) + var(--pad) + 1rem); left: var(--pad); }
+    .ps-block:not(.ps-block--flip) .ps-view--media { left: calc(min(32rem, 38vw) + var(--pad) + 1rem); right: var(--pad); }
+    .ps-view--media video, .ps-view--media img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; border-radius: 6px; }
+    /* media beside the text (desktop): large, centred on the same line as the text card,
+       tucked slightly under it; hovering the media brings it forward, whole */
+    @media (min-width: 769px) {
+      .ps-st { --ps-col: min(32rem, 38vw); --ps-tuck: 6vw; }
+      .ps-rise-media, .ps-block .ps-view--media, .ps-block:not(.ps-block--flip) .ps-view--media {
+        top: 0; bottom: 0; padding: calc(var(--ps-top) + 4vh) 0;
+        left: calc(var(--pad) + var(--ps-col) - var(--ps-tuck)); right: var(--pad);
+        display: grid; align-items: center; justify-items: start; }
+      .ps-block--flip .ps-view--media { left: var(--pad); right: calc(var(--pad) + var(--ps-col) - var(--ps-tuck)); justify-items: end; }
+      .ps-rise-media video, .ps-rise-media img, .ps-view--media video, .ps-view--media img {
+        transition: transform 700ms var(--sc-ease-out), box-shadow 700ms var(--sc-ease-out); }
+      .ps-rise-text, .ps-block-text { transition: opacity 600ms var(--sc-ease-out), translate 700ms var(--sc-ease-out); }
+      .ps-st:has(.ps-rise-media :is(img, video):hover) .ps-rise-media,
+      .ps-st:has(.ps-view--media :is(img, video):hover) .ps-view--media { z-index: 4; }
+      .ps-rise-media :is(img, video):hover, .ps-view--media :is(img, video):hover {
+        transform: scale(1.03); box-shadow: 0 50px 100px -30px rgb(0 0 0 / 0.9); }
+      .ps-st:has(.ps-rise-media :is(img, video):hover) .ps-rise-text,
+      .ps-st:has(.ps-view--media :is(img, video):hover) .ps-block-text { opacity: 0.25; translate: -3vw 0; }
+      .ps-block--flip .ps-st:has(.ps-view--media :is(img, video):hover) .ps-block-text { translate: 3vw 0; }
+    }
+    /* text-only block: the text takes the stage, centred */
+    .ps-block--text .ps-block-text { left: 50% !important; right: auto !important; width: min(46rem, 84vw); transform: translate(-50%, -50%); background: transparent; box-shadow: none; text-align: center; }
+    .ps-block--text .ps-lede { font-size: clamp(1.5rem, 2.6vw, 2.6rem); line-height: 1.2; }
+    @media (prefers-reduced-motion: no-preference) {
+      .ps-block .ps-label, .ps-block .ps-lede { opacity: 0; transform: translateY(18px); transition: opacity 700ms var(--sc-ease-out), transform 900ms var(--sc-ease-out); }
+      .ps-block .ps-lede { transition-delay: 140ms; }
+      .ps-block .ps-view { opacity: 0; transform: scale(0.94); transition: opacity 1100ms var(--sc-ease-out) 260ms, transform 1400ms var(--sc-ease-out) 260ms; }
+      .ps-block.is-in .ps-label, .ps-block.is-in .ps-lede { opacity: 1; transform: none; }
+      .ps-block.is-in .ps-view { opacity: 1; transform: none; }
+    }
+
+    /* ═══ recap ═══ */
+    .ps-recap { padding: 120px 0; background: #000; color: #fff; position: relative; z-index: 5; }
+    .ps-foot { position: relative; z-index: 5; }
+    .ps-info { background: #0d0d0d; border: 1px solid rgb(255 255 255 / 0.1); border-radius: 4px; padding: 60px; }
+    .ps-info-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; }
+    .ps-info-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; margin: 0 0 24px; color: var(--accent); font-weight: 700; }
+    .ps-info-description { font-size: 1.5rem; line-height: 1.35; font-weight: 400; color: #fff; white-space: pre-line; margin: 0; }
+    .ps-info-group { margin-bottom: 48px; }
+    .ps-pub { padding: 12px 0; border-top: 1px solid rgb(255 255 255 / 0.12); }
+    .ps-pub .text-list-title, .ps-pub a { color: #fff; text-decoration: none; }
+    .ps-pub .text-list-meta, .ps-pub .text-emphasis { color: rgb(255 255 255 / 0.6); font-size: 0.75rem; margin-top: 4px; line-height: 1.4; }
+    .ps-team { list-style: none; padding: 0; margin: 0; }
+    .ps-team li { padding: 12px 0; border-top: 1px solid rgb(255 255 255 / 0.12); color: rgb(255 255 255 / 0.85); }
+    .ps-funding { font-size: 1rem; line-height: 1.5; color: rgb(255 255 255 / 0.8); margin: 0; }
+    .ps-info-footer { margin-top: 60px; padding-top: 32px; border-top: 1px solid rgb(255 255 255 / 0.12); display: flex; justify-content: space-between; }
+    .ps-nav { color: rgb(255 255 255 / 0.7); text-decoration: none; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; transition: color 0.2s ease; }
+    .ps-nav:hover { color: #fff; text-decoration: underline; text-underline-offset: 0.2em; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ps-half { display: none; }
+      .ps-world video, .ps-world img { transform: none; }
+    }
+    @media (max-width: 1024px) {
+      .ps-info-grid { gap: 40px; }
+      .ps-info { padding: 40px; }
+    }
+    @media (max-width: 768px) {
+      .ps, body:has(.ps) { --ps-top: 64px; }
+      .ps-title--xl { font-size: 17.5vw; }
+      .ps-title--lg { font-size: 9.5vw; }
+      .ps-title--md { font-size: 7.4vw; }
+      .ps-sub { letter-spacing: 0.16em; }
+      .ps-sub--long { font-size: 0.95rem; letter-spacing: 0; }
+      .ps-vision { right: var(--pad); }
+      .ps-vision p { font-size: 1.4rem; }
+      .ps-lede { font-size: 1.02rem; }
+      .ps-rise-text { left: 1rem; right: 1rem; width: auto; top: calc(var(--ps-top) + 2vh); transform: none; }
+      .ps-rise-media { left: 1rem; right: 1rem; top: 46vh; bottom: 3vh; transform: translateY(calc((1 - var(--ge)) * 70vh)); }
+      .ps-block-text, .ps-block--flip .ps-block-text { left: 1rem; right: 1rem; width: auto; top: calc(var(--ps-top) + 2vh); transform: none; }
+      .ps-view, .ps-block--flip .ps-view { left: 0; right: 0; top: 40vh; bottom: 2vh; }
+      .ps-block .ps-view--media, .ps-block:not(.ps-block--flip) .ps-view--media { left: 0; right: 0; top: 46vh; padding: 2vh 1rem; }
+      .ps-block--text .ps-block-text { top: 50%; transform: translate(-50%, -50%); }
+      .ps-recap { padding: 50px 0 70px; }
+      .ps-info { padding: 28px 18px; border-radius: 6px; }
+      .ps-info-grid { grid-template-columns: 1fr; gap: 36px; }
+      .ps-info-description { font-size: 1.1rem; line-height: 1.5; }
+      .ps-info-footer { margin-top: 36px; padding-top: 20px; gap: 16px; }
+    }
+  </style>
+</BaseLayout>
