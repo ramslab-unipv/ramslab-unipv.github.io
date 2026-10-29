@@ -7,47 +7,48 @@ const v = (name: string) => ({ video: `/videos/scroll/dynamica-${name}.mp4`, pos
 ---
 
 <ProjectStoryLayout
-  title="Dynamica"
-  subtitle="Intuitive AI & AR Interface for Collaborative Robotics"
+  title="DYNAMICA"
+  subtitle="Language-guided robot programming and mixed-reality interaction"
   accentColor="#3b82f6"
   activity="dynamica"
   cover={{ ...v('cover'), alt: 'An operator wearing an AR headset works beside a collaborative robot.' }}
-  vision={"Teaching collaborative robots to understand natural language, through AI and augmented reality."}
+  vision={"DYNAMICA investigates how language, visual perception and operator review can support programming and coordination in collaborative robotics."}
   intro={[
-    'DYNAMICA is an advanced human-robot collaboration platform dedicated to making robot programming accessible to non-expert users while optimizing shared industrial workflows. At its core, the project integrates Large Language Models (LLMs) with immersive technologies, allowing operators to instruct collaborative robots using intuitive natural language.',
-    'By seamlessly combining spatial augmented reality with a precise digital twin, DYNAMICA enables users to visualize AI-generated manipulation points directly within the physical workspace, granting them the ability to manually grasp, adjust, and refine virtual trajectories prior to real-world execution.',
+    'The programming framework combines natural-language instructions with RGB-D observations of the workspace. Object references are converted into manipulation poses in the robot reference frame.',
+    'A mixed-reality interface displays these poses together with a digital model of the robot. The operator can inspect and correct the proposed actions before authorising physical execution.',
   ]}
   chapters={[
     {
       kind: 'media',
-      label: 'AI-Driven Programming & Refinement',
-      text: 'An AR-based programming interface that translates natural language commands into simulated robot actions via a digital twin. AI-generated manipulation points are projected directly into the physical workspace, allowing users to manually grasp, adjust, and correct virtual waypoints with their hands prior to real-world execution.',
-      media: [{ ...v('programming'), alt: 'AI-generated manipulation points projected into the workspace and adjusted by hand.', ratio: 16 / 9 }],
+      label: 'Programming and operator review',
+      text: 'Language and vision modules identify the requested objects and propose manipulation poses. These poses are displayed as overlays in the mixed-reality headset. Hand tracking allows the operator to adjust their position and orientation, then review the simulated task before execution.',
+      media: [{ ...v('programming'), alt: 'Manipulation poses displayed in mixed reality and adjusted through hand tracking.', ratio: 16 / 9 }],
     },
     {
       kind: 'media',
-      label: 'Augmented Reality-Driven Task Allocation',
-      text: 'A cycle-by-cycle task allocation system governed by execution-time optimization algorithms. Augmented reality provides the human operator with real-time visual instructions for manual operations, while the robot simultaneously executes its assigned tasks, ensuring an optimized and continuous collaborative workflow.',
+      label: 'Task allocation',
+      text: 'The task-allocation module assigns operations to the person and the robot on a cycle-by-cycle basis using execution-time optimisation. Visual instructions guide the operator through the manual operations assigned within the shared workflow.',
       media: [{ ...v('allocation'), alt: 'The operator follows AR instructions while the robot executes its own tasks.', ratio: 16 / 9 }],
     },
     {
       kind: 'statement',
-      lead: 'Beyond providing an accessible, zero-code programming environment, the platform serves as an intelligent orchestrator for human-robot teams.',
+      lead: 'Operator verification is part of the programming workflow.',
+      text: 'The interface allows the person to check object selection, manipulation poses and the simulated sequence before authorising the robot to act.',
     },
     {
       kind: 'media',
-      label: 'Markerless Pose Estimation for Safety',
-      text: "A dynamic safety monitoring framework that leverages 3D markerless human pose estimation via a four-camera triangulation setup. While designated operators collaborate at nominal speeds, the system tracks any additional personnel entering the workspace, automatically scaling the robot's speed to comply with the Speed and Separation Monitoring (SSM) paradigm.",
+      label: 'Workspace monitoring',
+      text: 'A four-camera markerless system reconstructs the positions of people in the workspace. These measurements inform robot speed modulation within the research implementation of Speed and Separation Monitoring (SSM).',
       media: [{ ...v('safety'), alt: 'Markerless pose estimation tracking people in the shared workspace.', ratio: 16 / 9 }],
     },
   ]}
-  description="DYNAMICA is an advanced human-robot collaboration platform dedicated to making robot programming accessible to non-expert users while optimizing shared industrial workflows. At its core, the project integrates Large Language Models (LLMs) with immersive technologies, allowing operators to instruct collaborative robots using intuitive natural language. By seamlessly combining spatial augmented reality with a precise digital twin, DYNAMICA enables users to visualize AI-generated manipulation points directly within the physical workspace, granting them the ability to manually grasp, adjust, and refine virtual trajectories prior to real-world execution. Beyond providing an accessible, zero-code programming environment, the platform serves as an intelligent orchestrator for human-robot teams. By coupling execution-time optimization algorithms for cycle-by-cycle AR task allocation with a robust, four-camera markerless pose estimation system for dynamic Speed and Separation Monitoring (SSM), DYNAMICA ensures both operational efficiency and safety in dynamic manufacturing environments."
+  description="DYNAMICA studies programming and coordination methods for collaborative robotic tasks. The framework combines language interpretation, visual grounding and mixed-reality operator review before robot execution. Additional modules address task allocation and camera-based workspace monitoring. The research examines how these components can support the definition, inspection and execution of shared human–robot workflows."
   publications={publications}
-  funding={`This research was funded by PIANO NAZIONALE DI RIPRESA E RESILIENZA (PNRR); Missione 4 "Istruzione e Ricerca"—Componente C2; Investimento 1.1, "Fondo per il Programma Nazionale di Ricerca e Progetti di Rilevante Interesse Nazionale (PRIN)" -D.D. n. 104 del 2 febbraio 2022, Bando PRIN 2022—CUP I53D23001930006—Cod. prog: 2022XXH9JZ_002/ERC: PE8— Project title: "DYNamic Assessment and Mitigation of the Impact of Collaborative Applications (DYNAMICA)".`}
+  funding={`Funded by the European Union — NextGenerationEU under the Italian National Recovery and Resilience Plan (PNRR), Mission 4 "Istruzione e Ricerca", Component 2, Investment 1.1, PRIN 2022 (D.D. n. 104 of 2 February 2022). Project: "DYNamic Assessment and Mitigation of the Impact of Collaborative Applications (DYNAMICA)"; grant 2022XXH9JZ_002; CUP I53D23001930006.`}
   team={[
     { name: 'Università Politecnica delle Marche', role: 'Partner' },
     { name: 'Università degli Studi di Padova', role: 'Partner' },
   ]}
-  prevActivity={{ label: 'Demetra', href: '/activities/demetra/' }}
+  prevActivity={{ label: 'DEMETRA', href: '/activities/demetra/' }}
   nextActivity={{ label: 'Airflow Dynamics', href: '/activities/air-flow-dynamic/' }}
 />

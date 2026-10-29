@@ -7,7 +7,7 @@ const publications = await getProjectPublications('drivesim');
 
 <ProjectStoryLayout
   title={"Driving Simulator"}
-  subtitle={"Driving Simulator for Rehabilitation"}
+  subtitle={"A dynamic platform for rehabilitation-oriented exergames and driving research"}
   accentColor="#dc2626"
   activity="drivesim"
   cover={{
@@ -15,12 +15,12 @@ const publications = await getProjectPublications('drivesim');
     "poster": "/videos/scroll/drivesim-world-poster.jpg",
     "alt": "The driver’s view in the simulator: urban streets and exergame instructions."
   }}
-  vision={"Bringing patients back behind the wheel through immersive, safe and multi-sensory driving rehabilitation."}
+  vision={"DriveSim combines vehicle simulation, physical feedback and configurable tasks to study driving-related motor and cognitive performance."}
   chapters={[
     {
       "kind": "media",
-      "label": "A MULTI-MODE EXPERIENCE",
-      "text": "Whether you wish to drive freely around the streets, engage in mini exergames, or circulate within realistic traffic, the driving experience can be tailored to meet your specific needs and rehabilitation objectives.",
+      "label": "Driving modes and exergames",
+      "text": "Free Driving supports familiarisation with the simulator. Test Mode provides four configurable exergames: Slalom, Speed Control, Linekeeping and Reaction Test. Traffic Mode introduces other vehicles and road rules within an urban scenario.",
       "media": [
         {
           "image": "/images/projects/DriveSim_principale_blocco1.png",
@@ -31,15 +31,15 @@ const publications = await getProjectPublications('drivesim');
     },
     {
       "kind": "model",
-      "label": "ADAPTIVE MULTI_FEEDBACK SYSTEM",
-      "text": "To accommodate every specific need of both you and your patient, the system features a fully adjustable multi-feedback system. The 3 DOF platform, steering wheel, and pedals replicate all the sensations experienced during actual driving, while the virtual environment is completely visualized on the screen.",
+      "label": "Motion and haptic feedback",
+      "text": "A three-degree-of-freedom motion platform, force-feedback steering wheel and instrumented pedals are coupled to the vehicle model. The simulated vehicle state drives the platform, steering feedback and visual scene. Exercise parameters and feedback settings can be adjusted for the selected protocol.",
       "model": "/models/DriveSim_seat_blocco2.glb",
       "side": "right"
     },
     {
       "kind": "model",
-      "label": "TRACK YOUR PERFORMANCE",
-      "text": "In any selected mode and scenario, the system enables the measurement of all metrics. Through high-frequency sampling of steering and pedal inputs, it records your performance during exergames as well as your driving behavior in realistic traffic.",
+      "label": "Session measurements",
+      "text": "The system records time-stamped control inputs, vehicle states and task events. Automated session reports summarise exergame performance and driving behaviour, including speed, trajectory control and responses to events in the virtual environment.",
       "model": "/models/DriveSim_fiat_blocco3.glb",
       "side": "left",
       "modelOptions": {
@@ -50,9 +50,9 @@ const publications = await getProjectPublications('drivesim');
       }
     }
   ]}
-  description={"DriveSim represents a significant asset to rehabilitation therapy pathways for patients suffering from psychophysical pathologies. The objective is to present an immersive and effective experience, enabling patients to rebuild confidence in their coordination and reflexes within a familiar daily-life context. The immersive environment and multi-sensory (haptic and visual) feedback provide an enhanced sense of presence, faithfully reproducing urban driving scenarios. The three available modes allow for a differentiated experience across sessions: Free Driving, to navigate without obstacles and gain familiarity with the vehicle; Test Mode, which introduces four distinct mini-games (exergames) designed to evaluate user performance; and Traffic Mode, to re-accustom the patient to actual road driving with active traffic and road signs. Every component of the system and its operational modes can be calibrated to accommodate the precise requirements of both the therapist and the user. This operates within a totally secure, controlled environment that guarantees trial replicability for tracking performance and learning progress, which are available via a detailed data collection system."}
+  description={"DriveSim is a compact dynamic driving simulator developed for rehabilitation-oriented research. It combines a motion platform, haptic steering, instrumented pedals and a virtual urban environment. Configurable exergames and traffic scenarios provide tasks with recorded performance measures. Experimental evaluation has focused on healthy participants; the research examines task design, the interpretation of session metrics and the integration of visual and physical feedback."}
   publications={publications}
-  funding={"Supported by Fit4MedRob framework"}
+  funding={"Supported by the Italian Ministry of University and Research through the complementary actions to the National Recovery and Resilience Plan, 'Fit4MedRob — Fit for Medical Robotics' (grant PNC0000007)."}
   prevActivity={{
     "label": "Balance Platform Simulator",
     "href": "/activities/balance-platform-simulator/"

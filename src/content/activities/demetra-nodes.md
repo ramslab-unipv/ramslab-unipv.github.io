@@ -1,6 +1,6 @@
 ---
-title: "Hazelnut Pruning Simulator"
-excerpt: "Precision agriculture and robotic monitoring platform developed as part of the NODES network."
+title: "DEMETRA — Hazelnut Pruning Simulator"
+excerpt: "An immersive pruning simulator combining reconstructed trees, a physical pruning tool and operator monitoring."
 year: 2024
 status: "2025"
 tags: ["smart agriculture", "virtual-reality", "haptic"]

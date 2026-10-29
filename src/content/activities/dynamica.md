@@ -1,6 +1,6 @@
 ---
-title: "Intuitive AI & AR Interface for Collaborative Robotics"
-excerpt: "An AI-driven augmented reality framework that empowers non-expert users to program collaborative robots using intuitive natural language, turning spoken intent into verified physical actions."
+title: "DYNAMICA — Collaborative Robot Programming"
+excerpt: "Language-guided robot programming with visual perception, mixed-reality operator review and shared-task coordination."
 year: 2023
 status: "2026"
 tags: ["robotics", "AI", "AR", "collaboration"]

@@ -6,21 +6,21 @@ const publications = await getProjectPublications('demetra');
 ---
 
 <ProjectStoryLayout
-  title="Demetra"
-  subtitle="Pruning Virtual Training Simulator"
+  title="DEMETRA"
+  subtitle="Virtual-reality simulation of hazelnut-tree pruning"
   accentColor="#22c55e"
   activity="demetra-nodes"
   cover={{ video: '/videos/scroll/demetra-world.mp4', poster: '/videos/scroll/demetra-world-poster.jpg', alt: 'Walking through the virtual hazelnut orchard.' }}
-  vision="Redefining agricultural precision through immersive virtual environments and robotic simulation."
+  vision="DEMETRA combines reconstructed trees, a physical pruning tool and operator monitoring in an immersive simulation environment."
   intro={[
-    'DEMETRA is an innovative research platform dedicated to the digitization of pruning techniques and the advancement of agricultural training. At its core, the project leverages a human-in-the-loop approach, placing the operator inside a highly immersive virtual environment.',
-    'By seamlessly integrating advanced technologies, such as omnidirectional locomotion systems and authentic haptic interfaces, DEMETRA allows users to move freely and physically interact with digital plants exactly as they would in a real orchard.',
+    'DEMETRA is a research platform for simulating hazelnut-tree pruning. The virtual environment uses models reconstructed from real trees and allows an operator to select and cut branches with a physical pruning tool.',
+    'The platform supports the development of training tasks and the study of operator behaviour. Body tracking and signals from the head-mounted display provide measurements during simulated pruning.',
   ]}
   chapters={[
     {
       kind: 'media',
-      label: 'Unlimited Locomotion',
-      text: 'Walk naturally through the virtual rows as if you were in the field. Explore the entire environment and select any tree with total freedom of movement.',
+      label: 'Movement in the virtual orchard',
+      text: 'An omnidirectional treadmill allows the operator to move through the virtual orchard while wearing a head-mounted display. Locomotion and tree interaction are combined within the same simulation environment.',
       media: [
         { video: '/videos/scroll/demetra-walker.mp4', poster: '/videos/scroll/demetra-walker-poster.jpg', alt: 'A person in a VR headset walking on the omnidirectional treadmill.', ratio: 1440 / 2200 },
         { video: '/videos/scroll/demetra-world.mp4', poster: '/videos/scroll/demetra-world-poster.jpg', alt: 'What the person sees: the rows of the virtual orchard.', ratio: 1912 / 1220 },
@@ -28,26 +28,26 @@ const publications = await getProjectPublications('demetra');
     },
     {
       kind: 'model',
-      label: 'Digital Twin',
-      text: 'From high-resolution photogrammetry to high-fidelity virtual models. Real trees are reconstructed with absolute precision, allowing for realistic pruning simulations.',
+      label: 'Tree reconstruction',
+      text: 'Photogrammetry and laser scanning provide the geometry used to reconstruct hazelnut trees. The resulting models are prepared for interaction in the virtual environment, including branch selection and cutting.',
       model: '/models/tree_old.glb', modelOptions: { size: 1.45 }, side: 'right',
     },
     {
       kind: 'model',
-      label: 'Real-Tool Integration',
-      text: 'Erase the boundary between simulation and practice by using real pruning tools. Experience one-to-one haptic feedback in a real-time, accelerating skill acquisition through a natural and familiar tactile experience.',
+      label: 'Physical pruning tool',
+      text: 'An instrumented pruning shear is synchronised with its virtual counterpart. The operator handles the physical tool while its blade state is used to control cutting actions in the simulation.',
       model: '/models/shear.glb', modelOptions: { build: false, anim: 'shears', size: 0.95, sizeMobile: 0.85 }, side: 'left',
       media: [{ video: '/videos/scroll/demetra-pov.mp4', poster: '/videos/scroll/demetra-pov-poster.jpg', alt: 'First-person view: pruning a virtual hazelnut tree with a real pruning tool.', ratio: 1912 / 1076, focus: '50% 75%' }],
     },
     {
       kind: 'statement',
-      lead: 'Beyond offering an unprecedented, safe, and optimized environment for upskilling agricultural workers, the platform serves a dual purpose.',
-      text: 'By combining high-fidelity physics simulations with precise digital twins, DEMETRA provides a robust, risk-free testing ground for validating and refining automated robotic pruning algorithms, shaping the future of smart agriculture.',
+      lead: 'The simulator also provides an experimental setting for observing operator behaviour during a tool-based task.',
+      text: 'The published assessment framework combines body kinematics and eye-related measurements during simulated pruning. Preliminary work demonstrates the acquisition of these signals; comparison with pruning in a physical orchard remains a separate validation task.',
     },
   ]}
-  description="DEMETRA is an innovative research platform dedicated to the digitization of pruning techniques and the advancement of agricultural training. At its core, the project leverages a human-in-the-loop approach, placing the operator inside a highly immersive virtual environment. By seamlessly integrating advanced technologies, such as omnidirectional locomotion systems and authentic haptic interfaces, DEMETRA allows users to move freely and physically interact with digital plants exactly as they would in a real orchard. Beyond offering an unprecedented, safe, and optimized environment for upskilling agricultural workers, the platform serves a dual purpose. By combining high-fidelity physics simulations with precise digital twins, DEMETRA provides a robust, risk-free testing ground for validating and refining automated robotic pruning algorithms, shaping the future of smart agriculture."
+  description="DEMETRA is an immersive hazelnut-pruning simulator developed for agricultural training research and operator assessment. It combines tree reconstruction, virtual branch-cutting logic, an instrumented physical pruning tool and operator monitoring. The platform allows researchers to examine movements and interactions during simulated pruning, with body kinematics and eye-related signals acquired during the task."
   publications={publications}
-  funding="Produced within the NODES project, financed by the MUR on M4C2 funds - Investment 1.5 'Innovation Ecosystems', within the PNRR financed by the European Union - NextGenerationEU (Grant agreement Cod. n.ECS00000036)."
+  funding="Developed within the NODES project, funded by the Italian Ministry of University and Research (MUR) under PNRR Mission 4, Component 2, Investment 1.5, 'Innovation Ecosystems', financed by the European Union — NextGenerationEU (grant agreement ECS00000036)."
   prevActivity={{ label: 'AHBI', href: '/activities/ahbi/' }}
-  nextActivity={{ label: 'Dynamica', href: '/activities/dynamica/' }}
+  nextActivity={{ label: 'DYNAMICA', href: '/activities/dynamica/' }}
 />

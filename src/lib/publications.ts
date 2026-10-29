@@ -19,11 +19,11 @@ export async function getProjectPublications(project: string) {
 export const projectNames: Record<string, string> = {
   'demetra': 'DEMETRA',
   'drivesim': 'Driving Simulator',
-  '3d-human-poses-estimation': '3D Human Poses Estimation',
+  '3d-human-poses-estimation': 'Real-time 3D Human Pose Estimation',
   'balance-platform-simulator': 'Balance Platform Simulator',
-  'human-centric-skeleton-simulator': 'Human-Centric Skeleton Simulator',
+  'human-centric-skeleton-simulator': 'Human-in-the-Loop Skeleton Simulator',
   'robotic-liquid-handling': 'Robotic Liquid Handling',
   'air-flow-dynamic': 'Airflow Dynamics',
-  'dynamica': 'Dynamica',
+  'dynamica': 'DYNAMICA',
   'ahbi': 'AHBI',
 };

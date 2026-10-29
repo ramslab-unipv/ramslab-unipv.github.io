@@ -6,8 +6,8 @@ const publications = await getProjectPublications('3d-human-poses-estimation');
 ---
 
 <ProjectStoryLayout
-  title={"3D Real-time Human Poses Estimation"}
-  subtitle={"Markerless vision‑based human motion capture"}
+  title={"Real-time 3D Human Pose Estimation"}
+  subtitle={"Markerless motion measurement from multiple camera views"}
   accentColor="#3ba776"
   activity="3d-human-poses-estimation"
   cover={{
@@ -15,12 +15,12 @@ const publications = await getProjectPublications('3d-human-poses-estimation');
     "poster": "/videos/scroll/poses-world-poster.jpg",
     "alt": "The reconstructed 3D skeleton of a subject moving on the platform."
   }}
-  vision={"Capturing human motion in 3D, in real time, without a single marker on the body."}
+  vision={"The system reconstructs three-dimensional body keypoints from camera images for use in human-in-the-loop simulators."}
   chapters={[
     {
       "kind": "media",
-      "label": "Camera Acquisition",
-      "text": "Cameras are the starting point of the entire reconstruction process. Each camera is synchronized through a digital trigger that starts the sensor exposure at the same acquisition instant, keeping the inter‑camera delay below 0.4 ms. Reliable and temporally aligned frames allow 2D detections from different viewpoints to be converted into consistent 3D body keypoints. After being positioned around the subject to minimize joint occlusions, the cameras are calibrated to define their relative positions and orientations.",
+      "label": "Multi-camera acquisition",
+      "text": "Calibrated cameras record the person from different viewpoints. Their relative positions and orientations define a common reference frame for reconstruction. Synchronised acquisition allows detections of the same body keypoint to be compared across views.",
       "media": [
         {
           "video": "/videos/projects/CameraAcquisition.mp4",
@@ -31,8 +31,8 @@ const publications = await getProjectPublications('3d-human-poses-estimation');
     },
     {
       "kind": "media",
-      "label": "2D Pose Detection",
-      "text": "Each acquired frame is processed to identify the main body keypoints of the subject. A YOLO‑pose model is used to detect joints directly from the camera images, combining short inference time with reliable accuracy. These 2D keypoints represent the visual foundation of the system, allowing the same joint observed from different viewpoints to be later matched and reconstructed in 3D.",
+      "label": "2D keypoint detection",
+      "text": "A pretrained YOLO pose-estimation model identifies body keypoints in each camera image. Temporal filtering reduces fluctuations in the detections before the observations from different views are combined.",
       "media": [
         {
           "video": "/videos/projects/2DPoseDetection.mp4",
@@ -44,7 +44,7 @@ const publications = await getProjectPublications('3d-human-poses-estimation');
     {
       "kind": "media",
       "label": "Triangulation",
-      "text": "Combining the observations of the same keypoint, from multiple calibrated camera views, it is estimated the 3D position in the world reference frame. By using a Weighted Direct Linear Transform solved through SVD, the system gives greater importance to more reliable detections and limits the influence of uncertain keypoints. This process turns multi‑view 2D information into a coherent 3D skeleton suitable for motion analysis, inverse kinematics and ergonomic evaluation.",
+      "text": "Weighted Direct Linear Triangulation estimates the three-dimensional position of each keypoint from its two-dimensional observations. The weighting accounts for the consistency of detections across frames, reducing the influence of less reliable observations.",
       "media": [
         {
           "video": "/videos/projects/Triangulation.mp4",
@@ -55,8 +55,8 @@ const publications = await getProjectPublications('3d-human-poses-estimation');
     },
     {
       "kind": "media",
-      "label": "Application Cases",
-      "text": "The developed markerless acquisition system can be adapted to different real‑world scenarios, where 3D human pose reconstruction becomes the basis for motion analysis, ergonomic assessment and human‑machine interaction. Each case highlights a specific use of the same acquisition and reconstruction pipeline, from body tracking to quantitative evaluation.",
+      "label": "Integration with motion platforms",
+      "text": "The reconstructed body pose provides an input to human-in-the-loop simulators. The published work includes integration with a three-degree-of-freedom platform for exergames, where measured body movement contributes to the platform motion reference.",
       "media": [
         {
           "video": "/videos/scroll/poses-cases.mp4",
@@ -67,10 +67,10 @@ const publications = await getProjectPublications('3d-human-poses-estimation');
       ]
     }
   ]}
-  description={"This project brings real‑time 3D human pose estimation into a more accessible and flexible dimension by combining synchronized multi‑camera acquisition, AI‑based 2D pose detection, robust 3D reconstruction, and inverse kinematic filtering in a single markerless system. Traditional motion capture technologies often require wearable markers, dedicated suits, expensive hardware, or highly controlled laboratory environments. These requirements can limit their use in real‑world applications, especially when the goal is to observe natural movement without interfering with the subject. The developed system is designed to reduce these barriers, allowing human motion to be captured without physical sensors on the body and with a setup that can be adapted to different environments, tasks, and application needs."}
+  description={"RAMSLAB develops a camera-based system for real-time 3D human pose estimation without markers attached to the body. The processing pipeline combines pretrained 2D pose detection, temporal filtering and weighted triangulation. The system has been evaluated using the Human3.6M dataset and integrated with a motion platform for exergames. Its output supports the study of interactions between a person and a simulated dynamic system."}
   publications={publications}
   prevActivity={{
-    "label": "Human-Centric Skeleton Simulator",
+    "label": "Human-in-the-Loop Skeleton Simulator",
     "href": "/activities/human-centric-skeleton-simulator/"
   }}
   nextActivity={{
