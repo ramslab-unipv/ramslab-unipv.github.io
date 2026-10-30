@@ -181,10 +181,15 @@ ol {
   align-items: center;
 }
 
-.site-brand img,
-.site-indicator img {
+.site-brand img {
   display: block;
   height: 30px;
+  width: auto;
+}
+
+.site-indicator img {
+  display: block;
+  height: 40px;
   width: auto;
 }
 
@@ -734,9 +739,14 @@ ol {
   justify-content: flex-start;
 }
 
-.footer-left img,
-.footer-right img {
+.footer-left img {
   height: 30px;
+  width: auto;
+  display: block;
+}
+
+.footer-right img {
+  height: 44px;
   width: auto;
   display: block;
 }
@@ -905,7 +915,7 @@ ol {
   }
 
   .site-indicator img {
-    height: 24px;
+    height: 30px;
     width: auto;
   }
 
@@ -992,11 +1002,17 @@ ol {
     justify-content: flex-end;
   }
 
-  .footer-left img,
-  .footer-right img {
+  .footer-left img {
     height: 18px;
     width: auto;
     max-height: 18px;
+    max-width: 100%;
+    display: block;
+  }
+
+  .footer-right img {
+    height: 26px;
+    width: auto;
     max-width: 100%;
     display: block;
   }
