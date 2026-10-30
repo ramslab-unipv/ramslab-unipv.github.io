@@ -1,6 +1,6 @@
 ---
 /*
-  About 4: the RAMSLAB story as defined in Contents.docx (Hero, What we do,
+  The RAMSLAB story as defined in Contents.docx (What we do,
   Human centric robotics, Human in the loop, Lab facilities, Long-term vision),
   built on the scroll-craft engine (public/scrollcraft/, copied verbatim,
   never edited). All white, in the site's own style: the page header and the
@@ -112,7 +112,7 @@ const whatWeDo = [
 const longTerm = 'Instead of programming robot motions, the operator will simply specify the product to manufacture, while the system determines how to accomplish the task.';
 ---
 
-<BaseLayout title={`About — ${site.siteTitle}`} description="Welcome to RAMSLAB, where human intuition meets robotic innovation: human-centric robotics and human-in-the-loop simulation at the University of Pavia.">
+<BaseLayout title={`About — ${site.siteTitle}`} description="Human-centric robotics and human-in-the-loop simulation at RAMSLAB, University of Pavia.">
   <link rel="stylesheet" href={withBase('/scrollcraft/scrollcraft.css')} />
   <div class="a4">
   <Header />
@@ -120,30 +120,7 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
 
   <main id="main-content" class="projects-page-main a4-main">
 
-    <!-- ─── Page header, as on every other page ─── -->
-    <section class="projects-header-section">
-      <div class="projects-header-container">
-        <div class="projects-header-content a4-pagehead">
-          <h1 class="projects-title-big">About RAMSLAB</h1>
-          <p class="text-link-header a4-motto">{site.siteMotto}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ 1 · HERO · the RAMSLAB mark is a person: it draws itself, then we step into its head ═══ -->
-    <section class="a4-act a4-hero" data-a4 data-sc-act="pin" data-sc-span="2.5" aria-labelledby="a4-hero-t">
-      <div data-sc-stage class="a4-st a4-hero-st">
-        <p class="text-heading-2 a4-hero-k">Welcome to RAMSLAB</p>
-        <h2 id="a4-hero-t" class="a4-hero-grid">
-          <span class="a4-hero-l">Where human intuition</span>
-          <svg class="a4-mark" viewBox="-1 -1 32 32" aria-hidden="true">
-            <path class="a4-mark-body" pathLength="1" d="M29.6472 29.6504C29.6472 29.6504 29.5272 23.2262 29.5233 21.7608C29.5188 21.7608 29.5143 21.7608 29.5091 21.7608C24.8497 22.0872 14.7858 19.4446 14.7858 14.9613C14.7858 7.58898 29.5227 7.57479 29.5227 7.57479L29.5085 0.0954281C29.5085 0.0954281 23.9938 0.0257687 22.1575 0.0954281C10.2612 0.548214 10.5566 11.0139 11.2248 14.5433C11.6131 16.5963 12.6083 19.1976 14.3027 21.6608L7.41999 21.6989C2.57415 21.8247 -0.393476 26.199 0.0406056 29.8252L7.36388 29.7678C7.36388 29.7678 7.60704 22.6586 14.7845 22.3316C17.7393 26.2725 22.5574 29.6859 29.6465 29.6504H29.6472Z" />
-            <circle class="a4-mark-head" cx="3.735" cy="7.575" r="3.693" />
-          </svg>
-          <span class="a4-hero-r">meets <em>robotic innovation.</em></span>
-        </h2>
-      </div>
-    </section>
+    <h1 class="sr-only">About RAMSLAB</h1>
 
     <!-- ═══ 2 · WHAT WE DO · split screen: looping animation left, title + definition right; the two slides travel sideways ═══ -->
     <section class="a4-act a4-what" data-a4 data-sc-act="pin" data-sc-span="4.4" aria-labelledby="a4-what-t">
@@ -367,32 +344,6 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
     .a4 .chapter-label { display: flex; gap: 12px; margin-bottom: 20px; color: var(--muted); }
     .a4-label { color: var(--a4-red) !important; }
     .a4-h2 { font-weight: 700; font-size: clamp(1.9rem, 3.6vw, 3.25rem); line-height: 1.08; letter-spacing: -0.0265em; margin: 0; max-width: 22ch; }
-    .a4-pagehead { align-items: flex-end; gap: 32px; }
-    .a4-motto { color: var(--muted); max-width: 34ch; text-align: right; padding-bottom: 14px; }
-
-    /* ═══ 1 · HERO ═══ */
-    .a4-hero-st {
-      display: grid; align-content: center; justify-items: center; padding: var(--a4-top) var(--pad) 0;
-      --draw: clamp(0, (var(--p) - 0.015) / 0.24, 1);
-      --fill: clamp(0, (var(--p) - 0.2) / 0.08, 1);
-      --say: clamp(0, (var(--p) - 0.24) / 0.14, 1);
-      --zoom: clamp(0, (var(--p) - 0.58) / 0.36, 1);
-    }
-    .a4-hero-k { color: var(--muted); margin: 0 0 3vh; opacity: calc(1 - var(--zoom) * 3); }
-    .a4-hero-grid {
-      margin: 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: clamp(1.5rem, 3vw, 3.5rem); width: 100%;
-      font-weight: 700; font-size: clamp(1.9rem, 4vw, 4.2rem); line-height: 1.04; letter-spacing: -0.0265em;
-    }
-    .a4-hero-l, .a4-hero-r { opacity: calc(var(--say) * (1 - var(--zoom) * 3)); }
-    .a4-hero-l { text-align: right; transform: translateX(calc((1 - var(--say)) * -8vw)); }
-    .a4-hero-r { text-align: left; transform: translateX(calc((1 - var(--say)) * 8vw)); }
-    .a4-mark {
-      width: clamp(10rem, 34vh, 22rem); height: auto; overflow: visible;
-      transform-origin: 15% 27%;
-      transform: scale(calc(1 + var(--zoom) * var(--zoom) * var(--zoom) * 90));
-    }
-    .a4-mark-body { fill: #111; fill-opacity: var(--fill); stroke: #111; stroke-opacity: min(1, var(--draw) * 30); stroke-width: 0.35; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw)); }
-    .a4-mark-head { fill: #111; transform-box: fill-box; transform-origin: center; transform: translateY(calc((1 - var(--fill)) * -14px)) scale(var(--fill)); }
 
     /* ═══ 2 · WHAT WE DO ═══ */
     .a4-what-st {
@@ -490,7 +441,6 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
 
     /* ── reduced motion ── */
     @media (prefers-reduced-motion: reduce) {
-      .a4-mark { transform: none; opacity: 1; }
       .a4-ch { transform: none; }
       .a4-tw { opacity: 1; }
       .a4-track { transform: none; flex-direction: column; width: 100%; position: relative; }
@@ -516,10 +466,6 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
     /* ── phones ── */
     @media (max-width: 860px) {
       .a4, body:has(.a4) { --a4-top: 64px; }
-      .a4-pagehead { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .a4-motto { text-align: left; padding-bottom: 0; }
-      .a4-hero-grid { grid-template-columns: 1fr; justify-items: center; row-gap: 3vh; text-align: center; font-size: 8.4vw; }
-      .a4-hero-l, .a4-hero-r { text-align: center; }
       .a4-wp { grid-template-columns: 1fr; grid-template-rows: auto auto; align-content: center; gap: 3vh; padding-top: calc(var(--a4-top) + 6vh); }
       .a4-wp-video { height: 32vh; }
       .a4-wp--0 .a4-wp-video { height: 26vh; }

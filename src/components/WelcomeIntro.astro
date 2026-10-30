@@ -1,0 +1,154 @@
+---
+// The opening sequence formerly shown on About. It leads into the existing homepage.
+---
+
+<section class="welcome-intro" aria-labelledby="welcome-title">
+  <div class="welcome-stage">
+    <p class="text-heading-2 welcome-kicker">Welcome to RAMSLAB</p>
+    <h2 id="welcome-title" class="welcome-grid">
+      <span class="welcome-left">Where human intuition</span>
+          <svg class="welcome-mark" viewBox="-1 -1 32 32" aria-hidden="true">
+            <path class="welcome-mark-body" pathLength="1" d="M29.6472 29.6504C29.6472 29.6504 29.5272 23.2262 29.5233 21.7608C29.5188 21.7608 29.5143 21.7608 29.5091 21.7608C24.8497 22.0872 14.7858 19.4446 14.7858 14.9613C14.7858 7.58898 29.5227 7.57479 29.5227 7.57479L29.5085 0.0954281C29.5085 0.0954281 23.9938 0.0257687 22.1575 0.0954281C10.2612 0.548214 10.5566 11.0139 11.2248 14.5433C11.6131 16.5963 12.6083 19.1976 14.3027 21.6608L7.41999 21.6989C2.57415 21.8247 -0.393476 26.199 0.0406056 29.8252L7.36388 29.7678C7.36388 29.7678 7.60704 22.6586 14.7845 22.3316C17.7393 26.2725 22.5574 29.6859 29.6465 29.6504H29.6472Z" />
+            <circle class="welcome-mark-head" cx="3.735" cy="7.575" r="3.693" />
+          </svg>
+      <span class="welcome-right">meets <em>robotic innovation.</em></span>
+    </h2>
+  </div>
+</section>
+
+<script>
+  const intro = document.querySelector<HTMLElement>('.welcome-intro');
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (intro) {
+    const stage = intro.querySelector<HTMLElement>('.welcome-stage')!;
+    let pending = 0;
+
+    const update = () => {
+      pending = 0;
+      const headerHeight = header?.getBoundingClientRect().height ?? 0;
+      intro.style.setProperty('--welcome-header-height', `${headerHeight}px`);
+      intro.closest('main')?.style.setProperty('--welcome-header-height', `${headerHeight}px`);
+      intro.classList.toggle('is-enhanced', !motion.matches);
+      if (motion.matches) {
+        intro.style.removeProperty('--welcome-progress');
+        return;
+      }
+      const travel = intro.offsetHeight - stage.offsetHeight;
+      const progress = Math.max(0, Math.min(1, (headerHeight - intro.getBoundingClientRect().top) / Math.max(1, travel)));
+      intro.style.setProperty('--welcome-progress', String(progress));
+    };
+    const schedule = () => {
+      if (!pending) pending = requestAnimationFrame(update);
+    };
+    const observer = new ResizeObserver(schedule);
+    if (header) observer.observe(header);
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    window.addEventListener('pageshow', schedule);
+    motion.addEventListener('change', schedule);
+    update();
+
+    document.addEventListener('astro:before-swap', () => {
+      observer.disconnect();
+      cancelAnimationFrame(pending);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      window.removeEventListener('pageshow', schedule);
+      motion.removeEventListener('change', schedule);
+    }, { once: true });
+  }
+</script>
+
+<style>
+  .welcome-intro {
+    --welcome-header-height: 112px;
+    --welcome-height: calc(100svh - var(--welcome-header-height));
+    --p: 0;
+    position: relative;
+    background: #fff;
+  }
+  .welcome-intro.is-enhanced {
+    --p: var(--welcome-progress, 0);
+    height: calc(var(--welcome-height) * 3.2);
+  }
+  .welcome-stage {
+    --draw: clamp(0, (var(--p) - 0.015) / 0.24, 1);
+    --fill: clamp(0, (var(--p) - 0.2) / 0.08, 1);
+    --say: clamp(0, (var(--p) - 0.24) / 0.14, 1);
+    --zoom: clamp(0, (var(--p) - 0.58) / 0.36, 1);
+    --lift: clamp(0, (var(--p) - 0.015) / 0.18, 1);
+    --welcome-lift: calc(20vh + 2rem);
+    position: sticky;
+    top: var(--welcome-header-height);
+    height: var(--welcome-height);
+    min-height: 26rem;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    padding: 2rem var(--pad) 5rem;
+    overflow: hidden;
+    background: #fff;
+  }
+  .welcome-kicker {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    color: var(--muted);
+    margin: 0;
+    white-space: nowrap;
+    transform: translate(-50%, -50%) translateY(calc(var(--lift) * var(--welcome-lift) * -1));
+    opacity: clamp(0, 1 - var(--zoom) * 3, 1);
+  }
+  .welcome-grid {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    column-gap: clamp(1.5rem, 3vw, 3.5rem);
+    width: min(100%, 1512px);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 4.2rem);
+    line-height: 1.04;
+    letter-spacing: -0.0265em;
+  }
+  .welcome-left, .welcome-right { opacity: calc(var(--say) * (1 - var(--zoom) * 3)); }
+  .welcome-left { text-align: right; transform: translateX(calc((1 - var(--say)) * -8vw)); }
+  .welcome-right { text-align: left; transform: translateX(calc((1 - var(--say)) * 8vw)); }
+  .welcome-right em { font-style: normal; color: #b2284b; }
+  .welcome-mark {
+    width: clamp(10rem, 34vh, 22rem);
+    height: auto;
+    overflow: visible;
+    transform-origin: 15% 27%;
+    transform: scale(calc(1 + var(--zoom) * var(--zoom) * var(--zoom) * 90));
+  }
+  .welcome-mark-body {
+    fill: #111;
+    fill-opacity: var(--fill);
+    stroke: #111;
+    stroke-opacity: min(1, var(--draw) * 30);
+    stroke-width: 0.35;
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--draw));
+  }
+  .welcome-mark-head {
+    fill: #111;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: translateY(calc((1 - var(--fill)) * -14px)) scale(var(--fill));
+  }
+  @media (max-width: 860px) {
+    .welcome-grid { grid-template-columns: 1fr; justify-items: center; gap: 2vh; text-align: center; font-size: clamp(1.8rem, 7vw, 3.2rem); }
+    .welcome-left, .welcome-right { text-align: center; }
+    .welcome-mark { width: min(25vh, 12rem); }
+    .welcome-stage { padding-bottom: 5rem; --welcome-lift: 29vh; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-intro { --p: 0.4; }
+    .welcome-stage { position: relative; }
+    .welcome-mark { transform: none; }
+  }
+</style>
