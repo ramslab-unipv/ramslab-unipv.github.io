@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
+import WelcomeIntro from '../components/WelcomeIntro.astro';
 import Footer from '../components/Footer.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
@@ -38,11 +39,13 @@ const publications = (await getCollection('publications')).sort((a, b) => compar
 
 <BaseLayout title={site.siteTitle}>
   <Header />
-  <main id="main-content" class="projects-page-main">
+  <main id="main-content" class="projects-page-main home-main">
     <h1 class="sr-only">RAMSLAB — Research on Advanced Mechanical Systems</h1>
+    <WelcomeIntro />
+    <div class="home-content">
 
     <!-- ─── Laboratory Section ─── -->
-    <section class="home-intro">
+    <section id="laboratory" class="home-intro">
       <div class="home-intro-grid">
         <div class="home-intro-label">
           <div class="text-heading-2">Laboratory</div>
@@ -147,6 +150,13 @@ const publications = (await getCollection('publications')).sort((a, b) => compar
       </div>
     </section>
 
+    </div>
   </main>
   <Footer />
+  <style>
+    .home-main { overflow-x: visible; max-width: none; }
+    .home-content { position: relative; z-index: 1; width: 100%; background: var(--bg); }
+    .home-content > section { width: 100%; max-width: 1512px; margin-inline: auto; }
+    #laboratory { scroll-margin-top: 120px; position: relative; background: var(--bg); }
+  </style>
 </BaseLayout>
