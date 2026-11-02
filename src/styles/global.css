@@ -181,15 +181,10 @@ ol {
   align-items: center;
 }
 
-.site-brand img {
-  display: block;
-  height: 30px;
-  width: auto;
-}
-
+.site-brand img,
 .site-indicator img {
   display: block;
-  height: 40px;
+  height: 30px;
   width: auto;
 }
 
@@ -739,14 +734,9 @@ ol {
   justify-content: flex-start;
 }
 
-.footer-left img {
-  height: 30px;
-  width: auto;
-  display: block;
-}
-
+.footer-left img,
 .footer-right img {
-  height: 44px;
+  height: 30px;
   width: auto;
   display: block;
 }
@@ -915,7 +905,7 @@ ol {
   }
 
   .site-indicator img {
-    height: 30px;
+    height: 24px;
     width: auto;
   }
 
@@ -1002,17 +992,11 @@ ol {
     justify-content: flex-end;
   }
 
-  .footer-left img {
+  .footer-left img,
+  .footer-right img {
     height: 18px;
     width: auto;
     max-height: 18px;
-    max-width: 100%;
-    display: block;
-  }
-
-  .footer-right img {
-    height: 26px;
-    width: auto;
     max-width: 100%;
     display: block;
   }
