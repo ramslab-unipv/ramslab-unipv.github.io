@@ -2,6 +2,19 @@
 // The opening sequence formerly shown on About. It leads into the existing homepage.
 ---
 
+<!-- Inline so nothing flashes. Opening the site or reloading starts from the intro; coming back
+     from another page of the site opens on the text below, with the intro still above it. -->
+<script is:inline>
+  (function () {
+    var root = document.documentElement;
+    var type = (performance.getEntriesByType('navigation')[0] || {}).type;
+    if (type === 'reload' || type === 'back_forward' || (type === 'navigate' && document.referrer.indexOf(location.origin + '/') === 0)) {
+      root.classList.add('welcome-hold');
+      setTimeout(function () { root.classList.remove('welcome-hold'); }, 1500);
+    }
+  })();
+</script>
+
 <section class="welcome-intro" aria-labelledby="welcome-title">
   <div class="welcome-stage">
     <p class="text-heading-2 welcome-kicker">Welcome to RAMSLAB</p>
@@ -13,6 +26,10 @@
           </svg>
       <span class="welcome-right">meets <em>robotic innovation.</em></span>
     </h2>
+    <div class="welcome-scroll" aria-hidden="true">
+      <span class="text-heading-2">Scroll</span>
+      <span class="welcome-scroll-line"></span>
+    </div>
   </div>
 </section>
 
@@ -20,6 +37,8 @@
   const intro = document.querySelector<HTMLElement>('.welcome-intro');
   const header = document.querySelector<HTMLElement>('.site-header');
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const root = document.documentElement;
 
   if (intro) {
     const stage = intro.querySelector<HTMLElement>('.welcome-stage')!;
@@ -33,11 +52,16 @@
       intro.classList.toggle('is-enhanced', !motion.matches);
       if (motion.matches) {
         intro.style.removeProperty('--welcome-progress');
+        intro.classList.remove('is-dissolved');
+        intro.closest('main')?.style.removeProperty('--welcome-rest');
         return;
       }
       const travel = intro.offsetHeight - stage.offsetHeight;
       const progress = Math.max(0, Math.min(1, (headerHeight - intro.getBoundingClientRect().top) / Math.max(1, travel)));
       intro.style.setProperty('--welcome-progress', String(progress));
+      intro.classList.toggle('is-dissolved', progress >= 0.98);
+      // holds the page below still behind the stage until the stage has dissolved
+      intro.closest('main')?.style.setProperty('--welcome-rest', `${(1 - progress) * travel}px`);
     };
     const schedule = () => {
       if (!pending) pending = requestAnimationFrame(update);
@@ -49,6 +73,41 @@
     window.addEventListener('pageshow', schedule);
     motion.addEventListener('change', schedule);
     update();
+
+    // The browser's own scroll restoration would bring a reload back to the old place, so the page
+    // does it: a reload starts from the intro, the back button returns to the reader's place
+    // but never into the intro, and a link from the site opens on the text below it.
+    history.scrollRestoration = 'manual';
+    const type = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type;
+    const textTop = () => {
+      const introTop = intro.getBoundingClientRect().top + window.scrollY - (header?.getBoundingClientRect().height ?? 0);
+      const rest = intro.classList.contains('is-enhanced') ? intro.offsetHeight - stage.offsetHeight : intro.offsetHeight;
+      return introTop + rest;
+    };
+    const place = (persisted = false) => {
+      let top = 0;
+      if (persisted) {
+        top = Math.max(window.scrollY, textTop());
+      } else if (type === 'back_forward') {
+        let saved = 0;
+        try { saved = Number(sessionStorage.getItem('ramslab-home-scroll')) || 0; } catch {}
+        top = Math.max(saved, textTop());
+      } else if (root.classList.contains('welcome-hold') && type !== 'reload') {
+        top = textTop();
+      } else if (type !== 'reload') {
+        return;
+      }
+      window.scrollTo({ top, behavior: 'instant' });
+      update();
+    };
+    place();
+    root.classList.remove('welcome-hold');
+    window.addEventListener('pagehide', () => {
+      try { sessionStorage.setItem('ramslab-home-scroll', String(window.scrollY)); } catch {}
+    });
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) place(true);
+    });
 
     document.addEventListener('astro:before-swap', () => {
       observer.disconnect();
@@ -62,6 +121,7 @@
 </script>
 
 <style>
+  :global(html.welcome-hold .home-main) { visibility: hidden; }
   .welcome-intro {
     --welcome-header-height: 112px;
     --welcome-height: calc(100svh - var(--welcome-header-height));
@@ -72,13 +132,20 @@
   .welcome-intro.is-enhanced {
     --p: var(--welcome-progress, 0);
     height: calc(var(--welcome-height) * 3.2);
+    /* the page below slides under the stage (see index.astro) and the black dissolves onto it */
+    z-index: 2;
+    background: transparent;
+    pointer-events: none;
   }
+  .welcome-intro.is-enhanced .welcome-stage { opacity: calc(1 - var(--fade)); pointer-events: auto; }
+  .welcome-intro.is-dissolved .welcome-stage { pointer-events: none; }
   .welcome-stage {
     --draw: clamp(0, (var(--p) - 0.015) / 0.24, 1);
     --fill: clamp(0, (var(--p) - 0.2) / 0.08, 1);
     --say: clamp(0, (var(--p) - 0.24) / 0.14, 1);
     --zoom: clamp(0, (var(--p) - 0.58) / 0.36, 1);
     --lift: clamp(0, (var(--p) - 0.015) / 0.18, 1);
+    --fade: clamp(0, (var(--p) - 0.74) / 0.24, 1);
     --welcome-lift: calc(20vh + 2rem);
     position: sticky;
     top: var(--welcome-header-height);
@@ -101,6 +168,38 @@
     white-space: nowrap;
     transform: translate(-50%, -50%) translateY(calc(var(--lift) * var(--welcome-lift) * -1));
     opacity: clamp(0, 1 - var(--zoom) * 3, 1);
+  }
+  .welcome-scroll {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 4rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--muted);
+    transform: translateX(-50%);
+    opacity: clamp(0, 1 - var(--p) / 0.04, 1);
+    pointer-events: none;
+  }
+  .welcome-intro.is-enhanced .welcome-scroll { display: flex; }
+  .welcome-scroll-line {
+    position: relative;
+    width: 1px;
+    height: 2.5rem;
+    overflow: hidden;
+    background: var(--line);
+  }
+  .welcome-scroll-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--text);
+    animation: welcome-scroll-cue 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  @keyframes welcome-scroll-cue {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(100%); }
   }
   .welcome-grid {
     margin: 0;

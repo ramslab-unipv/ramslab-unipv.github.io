@@ -156,6 +156,7 @@ const publications = (await getCollection('publications')).sort((a, b) => compar
   <style>
     .home-main { overflow-x: visible; max-width: none; }
     .home-content { position: relative; z-index: 1; width: 100%; background: var(--bg); }
+    :global(.welcome-intro.is-enhanced) ~ .home-content { margin-top: calc(-1 * max(100svh - var(--welcome-header-height, 112px), 26rem)); transform: translateY(calc(var(--welcome-rest, 0px) * -1)); }
     .home-content > section { width: 100%; max-width: 1512px; margin-inline: auto; }
     #laboratory { scroll-margin-top: 120px; position: relative; background: var(--bg); }
   </style>
