@@ -81,13 +81,14 @@ const hitlPillars = [
 /* pillar i of n is on screen from at(i) to at(i+1); the first is there on arrival */
 const at = (i: number, n: number) => (i === 0 ? -1 : (i / n) * 0.8).toFixed(3);
 
-/* The HITL clip shows five simulators in sequence; times are clip seconds. */
+/* The HITL clip shows six simulators in sequence; times are clip seconds. */
 const devices = [
   { word: 'Pruning', from: 0 },
   { word: 'Cycling', from: 2.3 },
   { word: 'Skeleton', from: 5.1 },
   { word: 'Driving', from: 7.4 },
   { word: 'Balance', from: 9.7 },
+  { word: 'Hexapod', from: 12.1 },
 ];
 
 const facilities = [
@@ -187,13 +188,13 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
     <RelatedRail id="a4-hcr-rel" items={hcrActivities} />
 
     <!-- ═══ 4 · HUMAN IN THE LOOP · the peak: every simulator rises over its own word ═══ -->
-    <section id="hitl" class="a4-act a4-scene a4-hitl" data-a4 data-a4-scene data-sc-act="pin" data-sc-span="6.4" aria-labelledby="a4-hitl-t">
+    <section id="hitl" class="a4-act a4-scene a4-hitl" data-a4 data-a4-scene data-sc-act="pin" data-sc-span="8.4" aria-labelledby="a4-hitl-t">
       <div data-sc-stage class="a4-st">
         <div class="a4-words" aria-hidden="true">
           {devices.map((d, i) => <span class="a4-word" data-device={i}>{d.word}</span>)}
         </div>
         <div class="a4-media">
-          <video data-scrub data-from="0.3" data-to="11.5" data-src={v4('hitl.mp4')} data-src-mobile={v4('hitl-m.mp4')} poster={v4('hitl-poster.jpg')} muted playsinline preload="none" aria-label="Animation: the lab's human-in-the-loop simulators assemble one after another: hazelnut pruning, cycling, skeleton, driving and balance platforms."></video>
+          <video data-scrub data-src={v4('hitl.mp4')} data-src-mobile={v4('hitl-m.mp4')} poster={v4('hitl-poster.jpg')} muted playsinline preload="none" aria-label="Animation: the lab's human-in-the-loop simulators assemble one after another: hazelnut pruning, cycling, skeleton, driving, balance and hexapod motion platforms."></video>
         </div>
         <div class="a4-scene-head">
           <div class="chapter-label text-heading-2 a4-label">Human in the loop</div>
@@ -278,7 +279,7 @@ const longTerm = 'Instead of programming robot motions, the operator will simply
         }
         if (!c.v.duration || c.seeking || c.v.seeking) return;
         var from = parseFloat(c.v.dataset.from) || 0;
-        var to = Math.min(parseFloat(c.v.dataset.to) || c.v.duration, c.v.duration - 0.05);
+        var to = Math.min(parseFloat(c.v.dataset.to) || c.v.duration, c.v.duration - 0.02);
         var target = from + clamp(pOf(c.act) / 0.97) * (to - from);
         var delta = target - c.v.currentTime;
         if (Math.abs(delta) > 0.015) { c.seeking = true; c.v.currentTime += reduce ? delta : delta * 0.2; }
