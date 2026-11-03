@@ -22,11 +22,13 @@
  *     model      label + text beside a 3D model (side: 'left' | 'right'), optionally
  *                followed by media as wide as the text
  *     statement  two sentences, a rule drawing between them (or one sentence, large)
+ *     part       opens a part of a project made of several: name, one large sentence, optional text
  *   chapters with images, videos or a 3D model fill one screen; text-only ones and
  *   statements take only the room their text needs
  *   close     the original summary card, in the light tint of the project colour:
- *             description beside project facts, publications, team, funding (only
- *             what exists), previous / next activity in its footer
+ *             description, transfer, schedule and outreach beside project facts,
+ *             publications, team, contacts, funding, credits (only what exists),
+ *             previous / next activity in its footer
  *
  * Chapter labels are small, upper case, in the project colour. Hovering an image or a video
  * (not the cover) shows its description (alt) in a frosted-glass bar along the bottom.
@@ -42,9 +44,12 @@ interface ModelOptions { build?: boolean; anim?: 'shears' | 'drive'; view?: 'sid
 type Chapter =
   | { kind: 'media'; label: string; text: string; media?: Media[] }
   | { kind: 'model'; label: string; text: string; model: string; modelOptions?: ModelOptions; side?: 'left' | 'right'; media?: Media[] }
-  | { kind: 'statement'; lead: string; text?: string };
+  | { kind: 'statement'; lead: string; text?: string }
+  | { kind: 'part'; label: string; lead: string; text?: string };
 interface Publication { title: string; url?: string; authors?: string; venue?: string; }
-interface TeamMember { name: string; role: string; }
+interface TeamMember { name: string; role?: string; }
+interface SchedulePhase { name: string; period: string; }
+interface Contact { name: string; role: string; email?: string; }
 interface Props {
   title: string;
   accentColor: string;
@@ -55,16 +60,25 @@ interface Props {
   chapters: Chapter[];
   description: string;
   publications?: Publication[];
-  funding?: string;
+  funding?: string | string[];
+  fundingLogos?: { image: string; alt: string };
   team?: TeamMember[];
+  teamLabel?: string;
+  transfer?: string;
+  schedule?: SchedulePhase[];
+  outreach?: string[];
+  contacts?: Contact[];
+  credits?: string;
   prevActivity?: { label: string; href: string };
   nextActivity?: { label: string; href: string };
 }
 
 const {
   title, accentColor, activity, cover, vision, intro = [], chapters, description,
-  publications = [], funding, team = [], prevActivity, nextActivity,
+  publications = [], funding, fundingLogos, team = [], teamLabel = 'Team', transfer, schedule = [], outreach = [],
+  contacts = [], credits, prevActivity, nextActivity,
 } = Astro.props;
+const fundingParagraphs = funding ? [funding].flat() : [];
 
 const b = (p?: string) => (p ? withBase(p) : undefined);
 // the light tints the original card used; other colours get a 7% mix of the accent
@@ -177,6 +191,13 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
             )}
           </section>
         );
+        if (c.kind === 'part') return (
+          <section class="pd-part pd-wrap" aria-labelledby={id}>
+            <h2 id={id} class="pd-part-name" data-sc-in>{c.label}</h2>
+            <p class="pd-part-lead" data-sc-in style="--d:140ms">{c.lead}</p>
+            {c.text && <p class="pd-part-text" data-sc-in style="--d:280ms">{c.text}</p>}
+          </section>
+        );
         return (
           <section class={`pd-chapter pd-dual pd-wrap ${c.text ? '' : 'pd-dual--one'}`} aria-label="Statement">
             {!c.text && <span class="pd-dual-line" data-sc-in aria-hidden="true"></span>}
@@ -195,6 +216,24 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
               <div>
                 <h2 class="pd-card-label">Description</h2>
                 <p class="pd-card-desc">{description}</p>
+                {transfer && (
+                  <div class="pd-card-more">
+                    <h3 class="pd-card-label">Transferable innovation</h3>
+                    <p class="pd-card-funding">{transfer}</p>
+                  </div>
+                )}
+                {schedule.length > 0 && (
+                  <div class="pd-card-more">
+                    <h3 class="pd-card-label">Project phases</h3>
+                    <ul class="pd-card-team">{schedule.map((p) => <li class="pd-card-phase"><span>{p.name}</span><span class="pd-card-period">{p.period}</span></li>)}</ul>
+                  </div>
+                )}
+                {outreach.length > 0 && (
+                  <div class="pd-card-more">
+                    <h3 class="pd-card-label">Dissemination</h3>
+                    <ul class="pd-card-team">{outreach.map((o) => <li>{o}</li>)}</ul>
+                  </div>
+                )}
               </div>
               <div>
                 {(period || areas.length > 0) && (
@@ -218,14 +257,27 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
                 )}
                 {team.length > 0 && (
                   <div class="pd-card-group">
-                    <h3 class="pd-card-label">Team</h3>
-                    <ul class="pd-card-team">{team.map((m) => <li><strong>{m.name}</strong> · {m.role}</li>)}</ul>
+                    <h3 class="pd-card-label">{teamLabel}</h3>
+                    <ul class="pd-card-team">{team.map((m) => <li><strong>{m.name}</strong>{m.role && ` · ${m.role}`}</li>)}</ul>
                   </div>
                 )}
-                {funding && (
+                {contacts.length > 0 && (
+                  <div class="pd-card-group">
+                    <h3 class="pd-card-label">Contacts</h3>
+                    <ul class="pd-card-team">{contacts.map((m) => <li><strong>{m.name}</strong> · {m.role}{m.email && <> · <a href={`mailto:${m.email}`} class="hover-underline">{m.email}</a></>}</li>)}</ul>
+                  </div>
+                )}
+                {fundingParagraphs.length > 0 && (
                   <div class="pd-card-group">
                     <h3 class="pd-card-label">Funding</h3>
-                    <p class="pd-card-funding">{funding}</p>
+                    {fundingLogos && <img class="pd-card-logos" src={b(fundingLogos.image)} alt={fundingLogos.alt} loading="lazy" />}
+                    {fundingParagraphs.map((t) => <p class="pd-card-funding">{t}</p>)}
+                  </div>
+                )}
+                {credits && (
+                  <div class="pd-card-group">
+                    <h3 class="pd-card-label">Image credits</h3>
+                    <p class="pd-card-funding">{credits}</p>
                   </div>
                 )}
               </div>
@@ -439,6 +491,15 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
     .pd-card-team { list-style: none; padding: 0; margin: 0; }
     .pd-card-team li { padding: 12px 0; border-top: 1px solid rgb(0 0 0 / 0.05); font-size: 1rem; color: #334155; }
     .pd-card-funding { font-size: 1rem; line-height: 1.5; color: #333; margin: 0; }
+    .pd-card-funding + .pd-card-funding { margin-top: 1em; }
+    .pd-card-more { margin-top: 48px; }
+    .pd-card-phase { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .pd-card-period { flex: none; color: #64748b; }
+    .pd-card-logos { display: block; width: 100%; height: auto; margin-bottom: 20px; background: #fff; padding: 12px; box-sizing: border-box; }
+    .pd-part { padding-top: clamp(5rem, 11vw, 9rem); padding-bottom: clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--line); }
+    .pd-part-name { margin: 0 0 1.25rem; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pd-green); }
+    .pd-part-lead { margin: 0; max-width: 52rem; font-size: clamp(1.8rem, 3.2vw, 3.2rem); line-height: 1.12; font-weight: 700; letter-spacing: -0.025em; }
+    .pd-part-text { margin: 1.5rem 0 0; max-width: 44rem; font-size: clamp(1.05rem, 1.25vw, 1.2rem); line-height: 1.6; color: var(--text-soft); }
     .pd-cap { text-transform: capitalize; }
     .pd-venue { font-style: italic; }
     .pd-card-footer { margin-top: 60px; padding-top: 32px; border-top: 1px solid rgb(0 0 0 / 0.08); display: flex; justify-content: space-between; }
@@ -465,7 +526,7 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
       .pd-model, .pd-model--right { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 3rem; padding-bottom: 3rem; }
       .pd-model-text { order: -1; }
       .pd-model--right .pd-model-box { order: 0; }
-      .pd-model-box { height: 58vh; }
+      .pd-model.pd-chapter .pd-model-box, .pd-model--with-media.pd-chapter .pd-model-box { height: 58vh; }
       .pd-dual { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 3.5rem; padding-bottom: 4rem; }
       .pd-dual-line { width: 3rem; height: 2px; transform-origin: 0 50%; }
       .pd-close { padding: 50px 0 70px; }
