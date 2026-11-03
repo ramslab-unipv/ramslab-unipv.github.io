@@ -11,7 +11,7 @@ const img = (name: string) => withBase(`/images/about/${name}`);
 
 /* ── Activities with a dedicated page (same routing as /activities/) ── */
 const routes: Record<string, string> = {
-  'demetra-nodes': '/activities/demetra/',
+  'lidia': '/activities/lidia/',
   'dynamica': '/activities/dynamica/',
   'air-flow-dynamic': '/activities/air-flow-dynamic/',
   'robotic-liquid-handling': '/activities/robotic-liquid-handling/',
@@ -35,7 +35,7 @@ const pick = (slugs: string[]) =>
       meta: [a!.data.year ? String(a!.data.year) : null, a!.data.status?.replace(/ongoing/i, 'ONGOING')].filter(Boolean),
     }));
 
-const hitlActivities = pick(['drivesim', 'balance-platform-simulator', 'human-centric-skeleton-simulator', '3d-human-poses-estimation', 'ahbi', 'demetra-nodes']);
+const hitlActivities = pick(['drivesim', 'balance-platform-simulator', 'human-centric-skeleton-simulator', '3d-human-poses-estimation', 'ahbi', 'lidia']);
 const agentActivities = pick(['dynamica', 'robotic-liquid-handling']);
 const industryActivities = pick(['air-flow-dynamic']);
 

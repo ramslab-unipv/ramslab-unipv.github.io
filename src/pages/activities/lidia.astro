@@ -1,0 +1,141 @@
+---
+import ProjectStoryLayout from '../../components/ProjectStoryLayout.astro';
+import { getProjectPublications } from '../../lib/publications';
+
+const publications = await getProjectPublications('lidia');
+---
+
+<ProjectStoryLayout
+  title="LIDIA – Innovation Lines for the Digital Development of Hazelnut Growing in Lombardy"
+  accentColor="#0c3e1b"
+  activity="lidia"
+  cover={{ video: '/videos/scroll/demetra-world.mp4', poster: '/videos/scroll/demetra-world-poster.jpg', alt: 'Walking through the virtual hazelnut orchard.' }}
+  vision="The project wants to make hazelnut growing in Lombardy more competitive and more sustainable, with two digital tools: one to learn pruning in virtual reality, the other to estimate the harvest well ahead of time."
+  intro={[
+    "In Lombardy, hazelnuts are on the rise: between 2018 and 2021 the land planted went from about 127 to about 347 hectares, as small and medium farms made room for this crop. This growth has created a clear need for technological tools that support these farms in two areas: reskilling operators and planning their activities.",
+    "The project answers with two results of research by RAMSLAB within the NODES project: the Hazelnut Pruning Simulator and Hazelnut Counting. For 24 months, university, agronomists and farms work on them together, taking them from the laboratory to the orchard.",
+  ]}
+  chapters={[
+    {
+      kind: 'part',
+      label: 'Hazelnut Pruning Simulator',
+      lead: "The first need: training operators beyond the limits of the season.",
+      text: "Preparing an agricultural operator requires repeated practice in the field, possible only at specific times of year. The time a new hire needs to become autonomous depends on seasonal cycles and weather, and training costs are high and hard to plan. Pruning exercises are also destructive, because they consume plant material.",
+    },
+    {
+      kind: 'media',
+      label: "Movement in the virtual orchard",
+      text: "A multidirectional treadmill lets the operator move freely through the virtual environment, so the training combines real locomotion with interaction with the plants.",
+      media: [
+        { video: '/videos/scroll/demetra-walker.mp4', poster: '/videos/scroll/demetra-walker-poster.jpg', alt: 'A person in a VR headset walking on the omnidirectional treadmill.', ratio: 1440 / 2200 },
+        { video: '/videos/scroll/demetra-world.mp4', poster: '/videos/scroll/demetra-world-poster.jpg', alt: 'What the person sees: the rows of the virtual orchard.', ratio: 1912 / 1220 },
+      ],
+    },
+    {
+      kind: 'model',
+      label: "Trees taken from real orchards",
+      text: "The virtual orchard is the digital reconstruction of real ones. During the project, its trees come to match the ones growing in Lombardy: the same varieties, the same shapes.",
+      model: '/models/tree_old.glb', modelOptions: { size: 1.45 }, side: 'right',
+    },
+    {
+      kind: 'model',
+      label: "Real pruning tools",
+      text: "The operator holds a tool used in real agricultural practice and uses it to interact with the virtual environment and prune the plant.",
+      model: '/models/shear.glb', modelOptions: { build: false, anim: 'shears', size: 0.95, sizeMobile: 0.85 }, side: 'left',
+      media: [{ video: '/videos/scroll/demetra-pov.mp4', poster: '/videos/scroll/demetra-pov-poster.jpg', alt: 'First-person view: pruning a virtual hazelnut tree with a real pruning tool.', ratio: 1912 / 1076, focus: '50% 75%' }],
+    },
+    {
+      kind: 'media',
+      label: "An instructor inside the simulator",
+      text: "Agronomists and partner farms define shared protocols for pruning. An avatar instructor brings this agronomic content into the simulator, giving technical instructions, demonstrations and real-time feedback.",
+    },
+    {
+      kind: 'statement',
+      lead: "Training that does not wait for the season and does not consume plants.",
+      text: "Less time and lower costs, up to 30% less for each participating farm. The same training for everyone, whatever their language or culture. Fewer risks for those learning, and less impact on the plants.",
+    },
+    {
+      kind: 'part',
+      label: 'Hazelnut Counting',
+      lead: "The second need: knowing the expected yield early enough to plan.",
+      text: "Farms need quantitative and objective tools to plan agronomic operations and commercial strategies according to the expected yield. Without fast and accurate methods for early estimation, and with high variability within plots, they cannot predict harvest volumes in time or optimise the use of resources.",
+    },
+    {
+      kind: 'media',
+      label: 'A flower a few millimetres long',
+      text: "The clue lies in the female flowers. But they are only a few millimetres long, hard to tell apart from buds and often hidden among the branches. Counting them by hand can take up to an hour for a single plant, with differences of around 19% from one operator to another.",
+      media: [{ image: '/images/projects/lidia/flower-types.jpg', alt: 'Hazelnut branch with three circled details: a female flower, a cluster of male flowers and a bud.', ratio: 716 / 493, beside: true }],
+    },
+    {
+      kind: 'media',
+      label: "An eye for tiny things",
+      text: "High-resolution images are taken in the field, and an artificial intelligence designed specifically for the hazelnut finds the flowers in the images and counts them. During the project it learns from many more pictures: different varieties, different light, different weather.",
+      media: [{ image: '/images/projects/lidia/detections.jpg', alt: 'Nine image tiles with boxes marking the detected female flowers.', ratio: 726 / 725 }],
+    },
+    {
+      kind: 'media',
+      label: "From flowers to harvest",
+      text: "The count is then combined with what is known about the orchard and the climate. The result is an estimate of the harvest in February, right after flowering, together with how reliable it is.",
+      media: [{ image: '/images/projects/lidia/counting-workflow.png', alt: 'Workflow: image acquisition, high-resolution image, sliding-window object detection, female flower estimation.', ratio: 2678 / 927, chart: true }],
+    },
+    {
+      kind: 'media',
+      label: "Out in the orchard",
+      text: "The system goes to work on the partner farms, and its estimates are compared with what is really harvested. The goal: at least 90% less time spent on surveys than with manual counting. What is learned becomes guidelines to help farms adopt it.",
+    },
+    {
+      kind: 'statement',
+      lead: "Planning about three months earlier.",
+      text: "Knowing early means organising orchard work, labour, supplies and sales agreements with greater precision, and talking to customers and processors in good time. Planning ahead also helps reduce energy use and emissions from travel and machinery.",
+    },
+    {
+      kind: 'part',
+      label: 'On the farms',
+      lead: "Two tools, built together with the people who will use them.",
+      text: "Le Nocciole di Greta, a one-hectare orchard that turns its own hazelnuts into spreads and sweets, hosts training and validation. Tenuta Mora, in Sartirana Lomellina, with about 36 hectares of hazelnut trees, puts the counting system to the test. Three agronomists bring their experience in the field, and two open days on the partner farms will let other growers see it all for themselves.",
+    },
+  ]}
+  description={"Hazelnut growing in Lombardy is expanding quickly, and the farms behind this growth need new tools to train their people and plan their work. The project is developing two of them, together with farms and agronomists, and testing them in real orchards.\n\nThe Hazelnut Pruning Simulator aims to make pruning something that can be learned in virtual reality at any time of year, with real tools and without consuming plants, at lower cost and in the same way for everyone. Hazelnut Counting aims to read the coming harvest in the female flowers, giving farms an early estimate that lets them organise work, supplies and sales in good time.\n\nTogether, they can strengthen the Lombard hazelnut sector and make it more attractive to new skilled workers. And both can go further: the simulator to training bodies and agricultural schools, the counting system to other tree crops such as vine, olive and apple."}
+  transfer="The Hazelnut Pruning Simulator can be adopted by farms, training bodies and agricultural schools thanks to its modular structure and customisable content. Hazelnut Counting relies on standard cameras, with no dedicated instruments, and can be adapted to other tree crops such as vine, olive and apple after recalibration."
+  schedule={[
+    { name: 'Coordination and administration', period: 'Jul 2026 – Jul 2028' },
+    { name: 'Agronomic content and simulator adaptation', period: 'Jul 2026 – Feb 2027' },
+    { name: 'Simulator testing and adoption', period: 'Feb 2027 – Jan 2028' },
+    { name: 'Automatic flower counting', period: 'Jul 2026 – Jul 2028' },
+    { name: 'Early yield estimation model', period: 'Dec 2026 – Mar 2028' },
+    { name: 'Validation in real operating conditions', period: 'Jun 2027 – Jul 2028' },
+    { name: 'Dissemination of results', period: 'Jul 2026 – Jul 2028' },
+  ]}
+  outreach={[
+    'Two open days at the partner farms, also streamed (mid 2027 and mid 2028)',
+    'Territorial workshop and technical table, also streamed (autumn 2027)',
+    'Final seminar on results and adoption, also streamed (mid 2028)',
+    'Sector conferences and international scientific publications',
+  ]}
+  publications={publications}
+  teamLabel="Partnership"
+  team={[
+    { name: 'RDKORE S.r.l.' },
+    { name: 'University of Pavia' },
+    { name: 'Le Nocciole di Greta' },
+    { name: 'Casa Ducale di Savoia Aosta – Tenuta Mora' },
+    { name: 'Davide Vancetti' },
+    { name: 'Alberto Pansecchi' },
+    { name: 'Claudio Sonnati' },
+  ]}
+  contacts={[
+    { name: 'Marco Carnevale', email: 'marco.carnevale@unipv.it' },
+  ]}
+  fundingLogos={[
+    { image: '/images/projects/lidia/funding-eu.png', alt: 'Co-funded by the European Union' },
+    { image: '/images/projects/lidia/funding-italy.png', alt: 'Italian Republic' },
+    { image: '/images/projects/lidia/funding-psr.png', alt: 'PSR Lombardia' },
+    { image: '/images/projects/lidia/funding-lombardia.png', alt: 'Regione Lombardia' },
+  ]}
+  funding={[
+    'The project is funded by the European Union through the European Agricultural Fund for Rural Development (EAFRD), under the Rural Development Complement of Regione Lombardia for the CAP 2023–2027, Intervention SRG08 "Support for pilot actions and innovation testing". Total project value: €393,773.40.',
+    'The research behind the Hazelnut Pruning Simulator and Hazelnut Counting was developed within NODES, Spoke 6, funded by the Italian Ministry of University and Research (MUR) under the Italian National Recovery and Resilience Plan (PNRR), Mission 4, Component 2, Investment 1.5 "Innovation Ecosystems", financed by the European Union — NextGenerationEU (grant agreement ECS00000036).',
+  ]}
+  prevActivity={{ label: 'AHBI', href: '/activities/ahbi/' }}
+  nextActivity={{ label: 'DYNAMICA', href: '/activities/dynamica/' }}
+/>

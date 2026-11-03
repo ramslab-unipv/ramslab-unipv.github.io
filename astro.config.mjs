@@ -3,6 +3,9 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://ramslab-unipv.github.io',
   trailingSlash: 'always',
+  redirects: {
+    '/activities/demetra/': '/activities/lidia/',
+  },
   vite: {
     optimizeDeps: {
       include: [

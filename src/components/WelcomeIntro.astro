@@ -53,15 +53,12 @@
       if (motion.matches) {
         intro.style.removeProperty('--welcome-progress');
         intro.classList.remove('is-dissolved');
-        intro.closest('main')?.style.removeProperty('--welcome-rest');
         return;
       }
       const travel = intro.offsetHeight - stage.offsetHeight;
       const progress = Math.max(0, Math.min(1, (headerHeight - intro.getBoundingClientRect().top) / Math.max(1, travel)));
       intro.style.setProperty('--welcome-progress', String(progress));
       intro.classList.toggle('is-dissolved', progress >= 0.98);
-      // holds the page below still behind the stage until the stage has dissolved
-      intro.closest('main')?.style.setProperty('--welcome-rest', `${(1 - progress) * travel}px`);
     };
     const schedule = () => {
       if (!pending) pending = requestAnimationFrame(update);
@@ -125,6 +122,8 @@
   .welcome-intro {
     --welcome-header-height: 112px;
     --welcome-height: calc(100svh - var(--welcome-header-height));
+    /* the stage runs past the bottom of the screen, whatever a phone's browser bars do; the content stays put */
+    --welcome-bar: calc(100lvh - 100svh + 15lvh);
     --p: 0;
     position: relative;
     background: #fff;
@@ -146,21 +145,21 @@
     --zoom: clamp(0, (var(--p) - 0.58) / 0.36, 1);
     --lift: clamp(0, (var(--p) - 0.015) / 0.18, 1);
     --fade: clamp(0, (var(--p) - 0.74) / 0.24, 1);
-    --welcome-lift: calc(20vh + 2rem);
+    --welcome-lift: calc(20svh + 2rem);
     position: sticky;
     top: var(--welcome-header-height);
-    height: var(--welcome-height);
+    height: calc(var(--welcome-height) + var(--welcome-bar));
     min-height: 26rem;
     display: grid;
     align-content: center;
     justify-items: center;
-    padding: 2rem var(--pad) 5rem;
+    padding: 2rem var(--pad) calc(5rem + var(--welcome-bar));
     overflow: hidden;
     background: #fff;
   }
   .welcome-kicker {
     position: absolute;
-    top: 50%;
+    top: calc(50% - var(--welcome-bar) / 2);
     left: 50%;
     z-index: 1;
     color: var(--muted);
@@ -173,7 +172,7 @@
     display: none;
     position: absolute;
     left: 50%;
-    bottom: 4rem;
+    bottom: calc(4rem + var(--welcome-bar));
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
@@ -243,7 +242,7 @@
     .welcome-grid { grid-template-columns: 1fr; justify-items: center; gap: 2vh; text-align: center; font-size: clamp(1.8rem, 7vw, 3.2rem); }
     .welcome-left, .welcome-right { text-align: center; }
     .welcome-mark { width: min(25vh, 12rem); }
-    .welcome-stage { padding-bottom: 5rem; --welcome-lift: 29vh; }
+    .welcome-stage { --welcome-lift: 29svh; }
   }
   @media (prefers-reduced-motion: reduce) {
     .welcome-intro { --p: 0.4; }

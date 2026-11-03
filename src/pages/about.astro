@@ -33,7 +33,7 @@ const v4 = (name: string) => withBase(`/videos/about_4/${name}`);
 
 /* ── Activity cards: same data and routing as /activities/ ── */
 const routes: Record<string, string> = {
-  'demetra-nodes': '/activities/demetra/',
+  'lidia': '/activities/lidia/',
   'dynamica': '/activities/dynamica/',
   'air-flow-dynamic': '/activities/air-flow-dynamic/',
   'robotic-liquid-handling': '/activities/robotic-liquid-handling/',
@@ -60,7 +60,7 @@ const pick = (slugs: string[]) =>
       };
     });
 const hcrActivities = pick(['air-flow-dynamic', 'robotic-liquid-handling', 'dynamica', 'carbon-fiber', 'fiber-placement']);
-const hitlActivities = pick(['human-centric-skeleton-simulator', '3d-human-poses-estimation', 'drivesim', 'balance-platform-simulator', 'demetra-nodes', 'ahbi']);
+const hitlActivities = pick(['human-centric-skeleton-simulator', '3d-human-poses-estimation', 'drivesim', 'balance-platform-simulator', 'lidia', 'ahbi']);
 
 /* ── Scenes: pillars share one timing scheme, all finished by 0.8 ── */
 const hcrPillars = [

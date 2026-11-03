@@ -43,7 +43,7 @@ export async function getProjectPublications(project: string) {
 
 /** Names of the project pages a publication can link to (keys are /activities/<key>/). */
 export const projectNames: Record<string, string> = {
-  'demetra': 'DEMETRA',
+  'lidia': 'LIDIA',
   'drivesim': 'Driving Simulator',
   '3d-human-poses-estimation': 'Real-time 3D Human Pose Estimation',
   'balance-platform-simulator': 'Balance Platform Simulator',
