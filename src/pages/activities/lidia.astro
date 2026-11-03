@@ -95,7 +95,7 @@ const publications = await getProjectPublications('lidia');
       text: "Le Nocciole di Greta, a one-hectare orchard that turns its own hazelnuts into spreads and sweets, hosts training and validation. Tenuta Mora, in Sartirana Lomellina, with about 36 hectares of hazelnut trees, puts the counting system to the test. Three agronomists bring their experience in the field, and two open days on the partner farms will let other growers see it all for themselves.",
     },
   ]}
-  description="The project, Innovation Lines for the Digital Development of Hazelnut Growing in Lombardy, brings digital tools to hazelnut growing, to make the sector in Lombardy more competitive and more sustainable. The Hazelnut Pruning Simulator teaches pruning in virtual reality. Hazelnut Counting counts female flowers from photographs and, together with a predictive model, gives an early estimate of the harvest. Both come from research within the NODES project and are now developed further and tested with farms and agronomists, in real working conditions."
+  description={"Hazelnut growing in Lombardy is expanding quickly, and the farms behind this growth need new tools to train their people and plan their work. The project is developing two of them, together with farms and agronomists, and testing them in real orchards.\n\nThe Hazelnut Pruning Simulator aims to make pruning something that can be learned in virtual reality at any time of year, with real tools and without consuming plants, at lower cost and in the same way for everyone. Hazelnut Counting aims to read the coming harvest in the female flowers, giving farms an early estimate that lets them organise work, supplies and sales in good time.\n\nTogether, they can strengthen the Lombard hazelnut sector and make it more attractive to new skilled workers. And both can go further: the simulator to training bodies and agricultural schools, the counting system to other tree crops such as vine, olive and apple."}
   transfer="The Hazelnut Pruning Simulator can be adopted by farms, training bodies and agricultural schools thanks to its modular structure and customisable content. Hazelnut Counting relies on standard cameras, with no dedicated instruments, and can be adapted to other tree crops such as vine, olive and apple after recalibration."
   schedule={[
     { name: 'Coordination and administration', period: 'Jul 2026 – Jul 2028' },
@@ -124,9 +124,14 @@ const publications = await getProjectPublications('lidia');
     { name: 'Claudio Sonnati' },
   ]}
   contacts={[
-    { name: 'Marco Carnevale', role: 'Scientific lead, University of Pavia', email: 'marco.carnevale@unipv.it' },
+    { name: 'Marco Carnevale', email: 'marco.carnevale@unipv.it' },
   ]}
-  fundingLogos={{ image: '/images/projects/lidia/funding-logos.png', alt: 'Funded by the European Union, Italian Republic, PSR Lombardia and Regione Lombardia logos.' }}
+  fundingLogos={[
+    { image: '/images/projects/lidia/funding-eu.png', alt: 'Co-funded by the European Union' },
+    { image: '/images/projects/lidia/funding-italy.png', alt: 'Italian Republic' },
+    { image: '/images/projects/lidia/funding-psr.png', alt: 'PSR Lombardia' },
+    { image: '/images/projects/lidia/funding-lombardia.png', alt: 'Regione Lombardia' },
+  ]}
   funding={[
     'The project is funded by the European Union through the European Agricultural Fund for Rural Development (EAFRD), under the Rural Development Complement of Regione Lombardia for the CAP 2023–2027, Intervention SRG08 "Support for pilot actions and innovation testing". Total project value: €393,773.40.',
     'The research behind the Hazelnut Pruning Simulator and Hazelnut Counting was developed within NODES, Spoke 6, funded by the Italian Ministry of University and Research (MUR) under the Italian National Recovery and Resilience Plan (PNRR), Mission 4, Component 2, Investment 1.5 "Innovation Ecosystems", financed by the European Union — NextGenerationEU (grant agreement ECS00000036).',

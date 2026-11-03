@@ -122,8 +122,8 @@
   .welcome-intro {
     --welcome-header-height: 112px;
     --welcome-height: calc(100svh - var(--welcome-header-height));
-    /* what a phone's browser bar frees when it retracts: the stage covers it, the content stays put */
-    --welcome-bar: calc(100lvh - 100svh);
+    /* the stage runs past the bottom of the screen, whatever a phone's browser bars do; the content stays put */
+    --welcome-bar: calc(100lvh - 100svh + 15lvh);
     --p: 0;
     position: relative;
     background: #fff;

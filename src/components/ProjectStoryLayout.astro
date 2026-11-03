@@ -49,7 +49,7 @@ type Chapter =
 interface Publication { title: string; url?: string; authors?: string; venue?: string; }
 interface TeamMember { name: string; role?: string; }
 interface SchedulePhase { name: string; period: string; }
-interface Contact { name: string; role: string; email?: string; }
+interface Contact { name: string; role?: string; email?: string; }
 interface Props {
   title: string;
   accentColor: string;
@@ -61,7 +61,7 @@ interface Props {
   description: string;
   publications?: Publication[];
   funding?: string | string[];
-  fundingLogos?: { image: string; alt: string };
+  fundingLogos?: { image: string; alt: string }[];
   team?: TeamMember[];
   teamLabel?: string;
   transfer?: string;
@@ -264,13 +264,12 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
                 {contacts.length > 0 && (
                   <div class="pd-card-group">
                     <h3 class="pd-card-label">Contacts</h3>
-                    <ul class="pd-card-team">{contacts.map((m) => <li><strong>{m.name}</strong> · {m.role}{m.email && <> · <a href={`mailto:${m.email}`} class="hover-underline">{m.email}</a></>}</li>)}</ul>
+                    <ul class="pd-card-team">{contacts.map((m) => <li><strong>{m.name}</strong>{m.role && <> · {m.role}</>}{m.email && <> · <a href={`mailto:${m.email}`} class="hover-underline">{m.email}</a></>}</li>)}</ul>
                   </div>
                 )}
                 {fundingParagraphs.length > 0 && (
                   <div class="pd-card-group">
                     <h3 class="pd-card-label">Funding</h3>
-                    {fundingLogos && <img class="pd-card-logos" src={b(fundingLogos.image)} alt={fundingLogos.alt} loading="lazy" />}
                     {fundingParagraphs.map((t) => <p class="pd-card-funding">{t}</p>)}
                   </div>
                 )}
@@ -282,6 +281,9 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
                 )}
               </div>
             </div>
+            {fundingLogos && fundingLogos.length > 0 && (
+              <div class="pd-card-logos">{fundingLogos.map((l) => <img src={b(l.image)} alt={l.alt} loading="lazy" />)}</div>
+            )}
             <footer class="pd-card-footer">
               {prevActivity ? <a href={b(prevActivity.href)} class="pd-card-nav" aria-label={`Previous activity: ${prevActivity.label}`}>← <span>Previous Activity</span></a> : <span></span>}
               {nextActivity ? <a href={b(nextActivity.href)} class="pd-card-nav" aria-label={`Next activity: ${nextActivity.label}`}><span>Next Activity</span> →</a> : <span></span>}
@@ -477,25 +479,27 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
 
     /* ═══ close: the original summary card, in the light tint of the project colour ═══ */
     .pd-close { padding: 120px 0; }
-    .pd-card { background: var(--surface, #f2f2f2); border-radius: 4px; padding: 60px; color: #111; }
+    .pd-card { background: var(--surface, #f2f2f2); border-radius: 4px; padding: 60px; color: #000; }
     .pd-card-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; }
-    .pd-card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; margin: 0 0 24px; color: #666; font-weight: 700; }
-    .pd-card-desc { font-size: 1.75rem; line-height: 1.3; font-weight: 400; color: #111; white-space: pre-line; margin: 0; }
+    .pd-card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; margin: 0 0 24px; color: #000; font-weight: 700; }
+    .pd-card-desc { font-size: 1.75rem; line-height: 1.3; font-weight: 400; color: #000; white-space: pre-line; margin: 0; }
     .pd-card-group { margin-bottom: 48px; }
     .pd-card-group:last-child { margin-bottom: 0; }
-    .pd-card-row { margin: 0; padding: 12px 0; border-top: 1px solid rgb(0 0 0 / 0.08); color: #334155; }
+    .pd-card-row { margin: 0; padding: 12px 0; border-top: 1px solid rgb(0 0 0 / 0.08); color: #000; }
     .pd-card-pub { padding: 16px 0; border-top: 1px solid rgb(0 0 0 / 0.08); }
-    .pd-card-pub a, .pd-card-pub span { display: block; width: fit-content; color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.9375rem; line-height: 1.3; }
-    .pd-card-meta { color: var(--muted); font-size: 0.75rem; margin-top: 8px; line-height: 1.4; }
+    .pd-card-pub a, .pd-card-pub span { display: block; width: fit-content; color: #000; text-decoration: none; font-weight: 700; font-size: 0.9375rem; line-height: 1.3; }
+    .pd-card-meta { color: #000; font-size: 0.75rem; margin-top: 8px; line-height: 1.4; }
     .pd-card-meta + .pd-card-meta { margin-top: 2px; }
     .pd-card-team { list-style: none; padding: 0; margin: 0; }
-    .pd-card-team li { padding: 12px 0; border-top: 1px solid rgb(0 0 0 / 0.05); font-size: 1rem; color: #334155; }
-    .pd-card-funding { font-size: 1rem; line-height: 1.5; color: #333; margin: 0; }
+    .pd-card-team li { padding: 12px 0; border-top: 1px solid rgb(0 0 0 / 0.05); font-size: 1rem; color: #000; }
+    .pd-card-funding { font-size: 1rem; line-height: 1.5; color: #000; margin: 0; }
     .pd-card-funding + .pd-card-funding { margin-top: 1em; }
     .pd-card-more { margin-top: 48px; }
     .pd-card-phase { display: flex; justify-content: space-between; gap: 1.5rem; }
-    .pd-card-period { flex: none; color: #64748b; }
-    .pd-card-logos { display: block; width: 100%; height: auto; margin-bottom: 20px; background: #fff; padding: 12px; box-sizing: border-box; }
+    .pd-card-period { flex: none; color: #000; }
+    .pd-card-logos { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px 40px; margin-top: 60px; padding-top: 32px; border-top: 1px solid rgb(0 0 0 / 0.08); }
+    .pd-card-logos + .pd-card-footer { margin-top: 32px; }
+    .pd-card-logos img { height: 48px; width: auto; max-width: 100%; }
     .pd-part { padding-top: clamp(5rem, 11vw, 9rem); padding-bottom: clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--line); }
     .pd-part-name { margin: 0 0 1.25rem; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pd-green); }
     .pd-part-lead { margin: 0; max-width: 52rem; font-size: clamp(1.8rem, 3.2vw, 3.2rem); line-height: 1.12; font-weight: 700; letter-spacing: -0.025em; }
@@ -503,7 +507,7 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
     .pd-cap { text-transform: capitalize; }
     .pd-venue { font-style: italic; }
     .pd-card-footer { margin-top: 60px; padding-top: 32px; border-top: 1px solid rgb(0 0 0 / 0.08); display: flex; justify-content: space-between; }
-    .pd-card-nav { color: #666; text-decoration: none; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; transition: color 0.2s ease; }
+    .pd-card-nav { color: #000; text-decoration: none; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; transition: color 0.2s ease; }
     .pd-card-nav:hover { color: #000; text-decoration: underline; text-underline-offset: 0.2em; }
 
     @media (max-width: 768px) {
@@ -534,6 +538,9 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
       .pd-card-grid { grid-template-columns: 1fr; gap: 36px; }
       .pd-card-desc { font-size: 1rem; line-height: 1.5; }
       .pd-card-footer { margin-top: 36px; padding-top: 20px; gap: 16px; }
+      .pd-card-logos { margin-top: 36px; padding-top: 20px; gap: 18px 20px; justify-content: flex-start; }
+      .pd-card-logos + .pd-card-footer { margin-top: 20px; }
+      .pd-card-logos img { height: 34px; }
     }
   </style>
 </BaseLayout>
