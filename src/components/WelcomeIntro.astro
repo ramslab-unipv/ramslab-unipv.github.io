@@ -2,8 +2,8 @@
 // The opening sequence formerly shown on About. It leads into the existing homepage.
 ---
 
-<!-- Inline so nothing flashes. Opening the site or reloading starts from the intro; coming back
-     from another page of the site opens on the text below, with the intro still above it. -->
+<!-- Inline so nothing flashes. Opening the site or reloading starts from the intro;
+     coming back from another page of the site opens directly on the text. -->
 <script is:inline>
   (function () {
     var root = document.documentElement;
@@ -42,10 +42,27 @@
 
   if (intro) {
     const stage = intro.querySelector<HTMLElement>('.welcome-stage')!;
+    const content = intro.parentElement?.querySelector<HTMLElement>('.home-content');
     let pending = 0;
+    let completed = false;
+
+    // Once the text is revealed, remove the intro's scroll space. Keeping the content
+    // at the same viewport position avoids a jump and makes its start the page's top.
+    const complete = (preservePosition = true) => {
+      if (completed || !content) return;
+      const contentTop = content.getBoundingClientRect().top;
+      completed = true;
+      intro.hidden = true;
+      intro.classList.remove('is-enhanced');
+      if (preservePosition) {
+        const top = window.scrollY + content.getBoundingClientRect().top - contentTop;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+      }
+    };
 
     const update = () => {
       pending = 0;
+      if (completed) return;
       const headerHeight = header?.getBoundingClientRect().height ?? 0;
       intro.style.setProperty('--welcome-header-height', `${headerHeight}px`);
       intro.closest('main')?.style.setProperty('--welcome-header-height', `${headerHeight}px`);
@@ -53,12 +70,14 @@
       if (motion.matches) {
         intro.style.removeProperty('--welcome-progress');
         intro.classList.remove('is-dissolved');
+        if (content && content.getBoundingClientRect().top <= headerHeight) complete();
         return;
       }
       const travel = intro.offsetHeight - stage.offsetHeight;
       const progress = Math.max(0, Math.min(1, (headerHeight - intro.getBoundingClientRect().top) / Math.max(1, travel)));
       intro.style.setProperty('--welcome-progress', String(progress));
       intro.classList.toggle('is-dissolved', progress >= 0.98);
+      if (progress >= 0.98) complete();
     };
     const schedule = () => {
       if (!pending) pending = requestAnimationFrame(update);
@@ -71,26 +90,20 @@
     motion.addEventListener('change', schedule);
     update();
 
-    // The browser's own scroll restoration would bring a reload back to the old place, so the page
-    // does it: a reload starts from the intro, the back button returns to the reader's place
-    // but never into the intro, and a link from the site opens on the text below it.
+    // A reload replays the intro. Internal links skip it, while the back button restores
+    // the reader's position within the text after removing the intro's scroll space.
     history.scrollRestoration = 'manual';
     const type = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type;
-    const textTop = () => {
-      const introTop = intro.getBoundingClientRect().top + window.scrollY - (header?.getBoundingClientRect().height ?? 0);
-      const rest = intro.classList.contains('is-enhanced') ? intro.offsetHeight - stage.offsetHeight : intro.offsetHeight;
-      return introTop + rest;
-    };
     const place = (persisted = false) => {
       let top = 0;
       if (persisted) {
-        top = Math.max(window.scrollY, textTop());
+        complete();
+        return;
       } else if (type === 'back_forward') {
-        let saved = 0;
-        try { saved = Number(sessionStorage.getItem('ramslab-home-scroll')) || 0; } catch {}
-        top = Math.max(saved, textTop());
+        complete(false);
+        try { top = Number(sessionStorage.getItem('ramslab-home-scroll')) || 0; } catch {}
       } else if (root.classList.contains('welcome-hold') && type !== 'reload') {
-        top = textTop();
+        complete(false);
       } else if (type !== 'reload') {
         return;
       }
@@ -100,7 +113,8 @@
     place();
     root.classList.remove('welcome-hold');
     window.addEventListener('pagehide', () => {
-      try { sessionStorage.setItem('ramslab-home-scroll', String(window.scrollY)); } catch {}
+      const top = completed ? window.scrollY : 0;
+      try { sessionStorage.setItem('ramslab-home-scroll', String(top)); } catch {}
     });
     window.addEventListener('pageshow', (event) => {
       if (event.persisted) place(true);
