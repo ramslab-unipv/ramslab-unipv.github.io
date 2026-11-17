@@ -9,6 +9,8 @@ interface Props {
 }
 
 const { title = site.siteTitle, description = site.siteDescription } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const sitemapURL = new URL(`${import.meta.env.BASE_URL}sitemap-index.xml`, Astro.site);
 ---
 
 <!doctype html>
@@ -18,6 +20,8 @@ const { title = site.siteTitle, description = site.siteDescription } = Astro.pro
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="sitemap" type="application/xml" href={sitemapURL} />
     <link rel="icon" type="image/png" href={withBase('/images/brand/ramslab-icon-black.png')} />
   </head>
   <body>

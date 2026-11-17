@@ -54,7 +54,7 @@ interface Props {
   title: string;
   accentColor: string;
   activity?: string;
-  cover: { video?: string; poster?: string; image?: string; alt: string };
+  cover: { video?: string; poster?: string; image?: string; alt: string; fit?: 'cover' | 'contain'; ratio?: number };
   vision?: string;
   intro?: string[];
   chapters: Chapter[];
@@ -112,7 +112,7 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
     <main id="main-content">
 
       <!-- OPENING: the site's page header, then the cover edge to edge, filling the first screen -->
-      <div class="pd-first">
+      <div class:list={['pd-first', { 'pd-first--contain': cover.fit === 'contain' }]} style={`--cover-ratio: ${cover.ratio ?? 16 / 9}`}>
         <section class="projects-header-section pd-head" aria-labelledby="pd-title">
           <div class="projects-header-content">
             <h1 id="pd-title" class="projects-title-big pd-title">{title}</h1>
@@ -372,6 +372,8 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
     .pd-head .pd-title { font-size: clamp(2rem, 3.1vw, 3.1rem); line-height: 1.1; letter-spacing: -0.02em; }
     .pd-cover { flex: 1 1 auto; min-height: 0; margin: 0; position: relative; overflow: hidden; }
     .pd-cover video, .pd-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; max-width: none; }
+    .pd-first--contain .pd-cover { animation: none; }
+    .pd-first--contain .pd-cover video, .pd-first--contain .pd-cover img { object-fit: contain; }
 
     /* titles: always upper case; the header and cover arrive on load */
     @media (prefers-reduced-motion: no-preference) {
@@ -511,6 +513,8 @@ const modelAttrs = (src: string, o: ModelOptions = {}, light = true) => ({
     .pd-card-nav:hover { color: #000; text-decoration: underline; text-underline-offset: 0.2em; }
 
     @media (max-width: 768px) {
+      .pd-first--contain { height: auto; min-height: 0; }
+      .pd-first--contain .pd-cover { flex: none; aspect-ratio: var(--cover-ratio); }
       .pd, body:has(.pd) { --pd-top: 64px; }
       .pd-head .projects-header-content { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
       .pd-head .projects-title-big { max-width: none; }

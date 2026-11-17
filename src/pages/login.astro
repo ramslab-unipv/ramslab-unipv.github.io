@@ -2,6 +2,7 @@
 import { withBase } from '../lib/assets';
 
 const home = withBase('/');
+const canonicalURL = new URL(import.meta.env.BASE_URL, Astro.site);
 ---
 
 <!doctype html>
@@ -10,7 +11,7 @@ const home = withBase('/');
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="refresh" content={`0; url=${home}`} />
-    <link rel="canonical" href={home} />
+    <link rel="canonical" href={canonicalURL} />
     <title>RAMSLAB</title>
     <script is:inline define:vars={{ home }}>
       window.location.replace(home);

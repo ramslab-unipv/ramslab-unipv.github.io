@@ -1,8 +1,15 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://ramslab-unipv.github.io',
   trailingSlash: 'always',
+  integrations: [
+    sitemap({
+      // These routes only redirect visitors to another page.
+      filter: (page) => !['/login/', '/activities/demetra/'].includes(new URL(page).pathname),
+    }),
+  ],
   redirects: {
     '/activities/demetra/': '/activities/lidia/',
   },
